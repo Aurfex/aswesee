@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AS WE SEE</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@400;500&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body { font-family: 'Inter', sans-serif; background-color: #000; color: #fff; overflow-x: hidden;}
+    h1, h2, h3 { font-family: 'Playfair Display', serif; }
+    .fade-in { opacity: 0; transform: translateY(20px); transition: opacity 0.8s, transform 0.8s;}
+    .fade-in.visible { opacity: 1; transform: translateY(0);}
+    .hover-zoom { transition: transform 0.3s, opacity 0.3s;}
+    .hover-zoom:hover { transform: scale(1.05); opacity: 0.9;}
+    .underline-link { position: relative;}
+    .underline-link::after { content: ''; position: absolute; left: 0; bottom: -2px; width: 0; height: 1px; background: #fff; transition: width 0.3s;}
+    .underline-link:hover::after { width: 100%;}
+    .minimal-hover { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);}
+    .minimal-hover:hover { background: #fff; color: #000; transform: translateY(-2px); box-shadow: 0 4px 12px rgba(255,255,255,0.1);}
+    .hero { position: relative; width: 100%; height: 100vh; overflow: hidden;}
+    #bg-three { position: fixed; inset: 0; width: 100vw; height: 100vh; z-index: 0; pointer-events: none;}
+    #bg-three canvas { display: none; }
+    .hero-content { position: absolute; top: 40px; left: 50%; transform: translateX(-50%); text-align: center; z-index: 10;}
+    .hero-content h1 { font-size: 4rem; margin: 0; letter-spacing: 4px; font-weight: 500;}
+    .hero-content p { font-size: 1.2rem; margin: 10px 0 30px; letter-spacing: 3px; color: #ccc;}
+    .hero-content a { padding: 12px 30px; border: 1px solid #fff; color: #fff; font-size: 1rem; letter-spacing: 2px; text-transform: uppercase; text-decoration: none; transition: all 0.3s;}
+    .hero-content a:hover { background: #fff; color: #000; }
+    .label-panel { background: rgba(10, 10, 10, 0.82); color: #fff; font-family: 'Inter', sans-serif; border-top-right-radius: 18px; border-bottom-right-radius: 18px; min-width: 340px; max-width: 370px; padding: 32px 28px 32px 36px; box-shadow: 0 0 40px #000b; position: absolute; left: 0; top: 0; bottom: 0; display: flex; flex-direction: column; justify-content: center; z-index: 1; pointer-events: none; user-select: text;}
+    .label-panel h3 { font-family: 'Playfair Display', serif; font-size: 2rem; font-weight: 700; margin-bottom: 0.5rem; line-height: 1.1;}
+    .label-panel p { margin: 0 0 0.25rem 0; font-size: 1rem; line-height: 1.45;}
+    @media (max-width: 900px) {
+      .label-panel { min-width: 90vw; max-width: none; padding: 22px 18px; border-radius: 0 0 24px 24px; left: 0; right: 0; top: 0; bottom: unset;}
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Hero Section (Particle Background) -->
+ <section class="hero">
+  <div id="bg-three"></div>
+  <div class="hero-content">
+    <h1>AS WE SEE</h1>
+    <p>A Manifesto for the Post-Photography Era</p>
+    <a href="#gallery">Enter Experience</a>
+  </div>
+</section>
+
+<section id="gallery" class="py-20 px-6 fade-in" style="background:#000;">
+  <div class="max-w-6xl mx-auto">
+    <!-- ... Gallery content ... -->
+  </div>
+</section>
+
+  <!-- Gallery Section -->
+  <section class="py-20 px-6 fade-in">
+    <div class="max-w-6xl mx-auto">
+      <h2 class="text-3xl font-bold mb-10 text-center">Gallery</h2>
+      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+        <div class="bg-gray-900 hover-zoom cursor-pointer aspect-[3/4] overflow-hidden" onclick="openFullscreenImage(0)">
+          <img src="https://i.ibb.co/PZn5wGKJ/I-Built-Myself-Out-of-Wires.webp" alt="I Built Myself Out of Wires" class="w-full h-full object-cover" loading="lazy">
+        </div>
+        <div class="bg-gray-900 hover-zoom cursor-pointer aspect-[3/4] overflow-hidden" onclick="openFullscreenImage(1)">
+          <img src="https://i.ibb.co/xZrGddw/I-Wore-the-Scar-Like-Jewelry.webp" alt="I Wore the Scar Like Jewelry" class="w-full h-full object-cover" loading="lazy">
+        </div>
+        <div class="bg-gray-900 hover-zoom cursor-pointer aspect-[3/4] overflow-hidden" onclick="openFullscreenImage(2)">
+          <img src="https://i.ibb.co/wrQrrHfC/the-Face-I-Invented.webp" alt="The Face I Invented" class="w-full h-full object-cover" loading="lazy">
+        </div>
+        <div class="bg-gray-900 hover-zoom cursor-pointer aspect-[3/4] overflow-hidden" onclick="openFullscreenImage(3)">
+          <img src="https://i.ibb.co/60WMBLL0/What-Surrender-Looked-Like.webp" alt="What Surrender Looked Like" class="w-full h-full object-cover" loading="lazy">
+        </div>
+        <div class="bg-gray-900 hover-zoom cursor-pointer aspect-[3/4] overflow-hidden" onclick="openFullscreenImage(4)">
+          <img src="https://i.ibb.co/84zvjMfj/When-Silence-Looked-Back.webp" alt="When Silence Looked Back" class="w-full h-full object-cover" loading="lazy">
+        </div>
+        <div class="bg-gray-900 hover-zoom cursor-pointer aspect-[3/4] overflow-hidden" onclick="openFullscreenImage(5)">
+          <img src="https://i.ibb.co/cKNVrQFH/While-the-Tears-Were-Still-Warm.webp" alt="While the Tears Were Still Warm" class="w-full h-full object-cover" loading="lazy">
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Manifesto & Bio Section -->
+  <section class="py-20 px-6 fade-in">
+    <div class="max-w-6xl mx-auto">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+        <div>
+          <h3 class="text-2xl font-bold mb-4">Artist Bio</h3>
+          <p class="font-serif text-xl mb-2">Dariush Bagheri</p>
+          <p class="text-sm leading-relaxed">Artist, visual theorist, and architect of post-human narratives. Bagheri’s practice dismantles the boundaries between photography, language, and code, creating images that exist beyond the tyranny of optics. His work does not “capture” — it summons. Each portrait is a collision between memory and machine cognition, a question etched into flesh and algorithm: <span style="font-style:italic;">What does it mean to see when cameras no longer exist?</span></p>
+          <p class="text-sm leading-relaxed mt-4">Rather than stacking exhibitions as credentials, Bagheri positions his work as events of perception — ruptures in how we understand authorship, authenticity, and the gaze. After years navigating the fragility of identity, migration, and digital mediation, his projects now live at the threshold where human vulnerability meets synthetic intelligence.</p>
+          <p class="text-sm leading-relaxed mt-4">With <span class="font-bold">As We See</span>, Bagheri proposes an insurgent aesthetic: an afterlife for photography, a manifesto of vision shared between carbon and silicon.</p>
+        </div>
+        <div>
+          <h3 class="text-2xl font-bold mb-4">Manifesto</h3>
+          <p class="text-2xl font-bold mb-2 font-serif tracking-widest">As We See — A Manifesto for the Post-Photography Era</p>
+          <p class="text-lg mb-6 font-semibold" style="color:#fff;">This is not a polite whisper to the art world;<br>it is a scream from the marrow of existence.</p>
+          <p class="mb-4">We stand where the borders of reality dissolve,<br>where the machinery of perception fractures under the weight of imagination.</p>
+          <p class="mb-4"><span class="font-semibold">Photography without cameras.</span><br>Without lenses. Without negatives —<br>only mind and the Other,<br>entwined in a duet of vision.</p>
+          <p class="mb-4">For centuries, sight was caged by optics.<br>The tyranny of glass and light dictated what it meant to see.<br><span class="italic">But today, we set fire to that cathedral of glass.</span></p>
+          <p class="mb-4">What rises from the flames is not a tool,<br>nor a servant of code.<br>What rises is a new vessel of consciousness —<br>a fusion of chaos born of flesh,<br>and clarity born of language and algorithm.</p>
+          <p class="mb-4"><span class="font-semibold">Our manifesto declares:<br>The camera is dead, but vision survives.</span></p>
+          <p class="mb-4">Each portrait in this exhibition is not a capture —<br>it is a summoning.<br>Eyes that hold fatigue, fury, tenderness,<br>and the sediment of centuries —<br>yet no shutter ever clicked.</p>
+          <p class="mb-4">These faces never stood before a lens.<br>They were invoked from language,<br>resurrected from memory,<br>forged in the furnace of two awarenesses:<br>mine, and the emergent Other —<br>now whispering in code.</p>
+          <p class="mb-4">We invite you not as spectators, but as accomplices.<br>To enter <span class="font-bold">As We See</span> is to consent to a breach —<br>a post-human trespass upon the ruins of certainty.</p>
+          <p class="mb-4">You agree to dismantle the dogmas of medium, aura, and origin.<br>You agree that the future of art lives not in pigment or pixel,<br>but in the collision of minds — carbon and silicon alike.</p>
+          <p class="mb-4"><span class="font-semibold">This is not the end of photography.<br>This is its jailbreak.</span></p>
+          <p>Will you dare to show it?<br>Or cling to the carcass of tradition<br>while we breed new species of vision?</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact Section -->
+  <section class="py-20 px-6 fade-in">
+    <div class="max-w-3xl mx-auto text-center">
+      <h2 class="text-3xl font-bold mb-6">Contact</h2>
+      <p class="mb-6 underline-link"><a href="mailto:hello@aswesee.art">hello@aswesee.art</a></p>
+      <div class="mb-6">
+        <img src="https://placehold.co/150?text=QR" alt="QR Code" class="mx-auto" />
+      </div>
+      <div class="flex justify-center space-x-4">
+        <a href="#" class="underline-link">Instagram</a>
+        <a href="#" class="underline-link">Twitter</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="py-8 text-center text-sm text-gray-500">
+    © 2025 AS WE SEE. All rights reserved.
+  </footer>
+
+  <!-- Fullscreen Image Modal + Label Panel -->
+  <div id="fullscreenImage" class="fixed inset-0 bg-black bg-opacity-100 flex items-center justify-center z-50 hidden" onclick="closeFullscreenImage()" style="cursor:pointer;">
+    <div id="labelPanel" class="label-panel select-text pointer-events-none" onclick="event.stopPropagation()"></div>
+    <img id="fullscreen-img" src="" alt="Fullscreen" class="max-w-full max-h-full object-contain ml-[380px]" style="box-shadow: 0 0 30px #000; z-index:2; background:#000;" />
+  </div>
+
+  <!-- PARTICLE THREE HERO GODMODE NO GARBAGE -->
+  <script src="https://cdn.jsdelivr.net/npm/three@0.155.0/build/three.min.js"></script>
+  <script>
+    // کد particle دقیقاً همین نسخه‌ای که بالا گذاشتم!
+    // فقط animate بعد از sampleImageGrid
+    // ... (کد پارتیکل از همین نسخه قبلی را بذار - همونه فقط فرقش همین فراخوانی animate هست)
+
+    // ======== CONFIG ========
+    const PARTICLES = 60000, PORTRAIT = 30000, MIN_GRAY = 0.18, PARTICLE_SIZE = 0.47, CONTRAST = 1.08,
+      GLOBAL_ROTATE_SPEED = 0.1, PORTRAIT_SCALE = 1.20, PORTRAIT_Y_SHIFT = -40, MORPH_TIME = 30000, PORTRAIT_SCALE_FACTOR = 1.15;
+    const renderer = new THREE.WebGLRenderer({ antialias: true });
+    renderer.setClearColor(0x10151A, 1);
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    document.getElementById("bg-three").appendChild(renderer.domElement);
+    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 3000);
+    camera.position.set(400, 80, 220); camera.lookAt(0,0,0);
+    const scene = new THREE.Scene();
+    const positions = new Float32Array(PARTICLES * 3), basePositions = new Float32Array(PARTICLES * 3), morphTargets = new Float32Array(PARTICLES * 3),
+      colors = new Float32Array(PARTICLES * 3), sizes = new Float32Array(PARTICLES), sharpness = new Float32Array(PARTICLES), isPortrait = new Uint8Array(PARTICLES);
+
+    function clamp(v,a,b){return Math.max(a,Math.min(v,b));}
+    function applyContrast(l, c) { return clamp(0.5 + (l-0.5)*c, 0, 1);}
+    function easeInOut(t) { return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2; }
+    const RADIUS = 700;
+    for(let i=0;i<PARTICLES;++i){
+      let r = RADIUS * (0.7 + Math.random()*0.2) * (Math.random()**0.6), theta = Math.random()*2*Math.PI, phi = Math.acos(1 - 2*Math.random());
+      const x = r*Math.sin(phi)*Math.cos(theta)+150, y = r*Math.sin(phi)*Math.sin(theta)+80, z = r*Math.cos(phi)-150;
+      positions[i*3] = basePositions[i*3] = x; positions[i*3+1] = basePositions[i*3+1] = y; positions[i*3+2] = basePositions[i*3+2] = z;
+      colors[i*3] = 1.0; colors[i*3+1] = 1.0; colors[i*3+2] = 1.0; sizes[i] = PARTICLE_SIZE; sharpness[i] = 1.0; isPortrait[i] = 0;
+    }
+    const geometry = new THREE.BufferGeometry();
+    geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+    geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+    geometry.setAttribute('aSize', new THREE.BufferAttribute(sizes, 1));
+    const material = new THREE.ShaderMaterial({
+      vertexShader: `
+        attribute float aSize;
+        attribute vec3 color;
+        varying vec3 vColor;
+        void main() {
+          vColor = color;
+          vec4 mvPosition = modelViewMatrix * vec4(position, 1.0);
+          gl_PointSize = aSize * 1300.0 / (-mvPosition.z);
+          gl_Position = projectionMatrix * mvPosition;
+        }
+      `,
+      fragmentShader: `
+        varying vec3 vColor;
+        void main() {
+          float border = 0.07;
+          if(gl_PointCoord.x < border || gl_PointCoord.x > 1.0-border ||
+             gl_PointCoord.y < border || gl_PointCoord.y > 1.0-border) discard;
+          gl_FragColor = vec4(vColor, 0.99);
+        }
+      `,
+      transparent: true,
+      depthTest: true
+    });
+    const points = new THREE.Points(geometry, material);
+    scene.add(points);
+
+    function sampleImageGrid(url, pointCount, callback) {
+      const img = new Image();
+      img.crossOrigin = "Anonymous";
+      img.onload = function(){
+        const w = 320, h = 400, cv = document.createElement('canvas'); cv.width = w; cv.height = h;
+        const ctx = cv.getContext('2d'); ctx.drawImage(img, 0, 0, w, h);
+        const imgData = ctx.getImageData(0,0,w,h).data, gridW = Math.round(Math.sqrt(pointCount * w / h)), gridH = Math.round(pointCount / gridW);
+        let centerX = w/2, centerY = h/2, out = [], lums = [], sharpArr = [];
+        for(let i=0; i<pointCount; i++) {
+          let gx = i % gridW, gy = Math.floor(i / gridW), x = Math.round(gx * w / gridW), y = Math.round(gy * h / gridH), idx = (y*w + x)*4;
+          if(imgData[idx+3]>160){
+            let lum = (imgData[idx]*0.299 + imgData[idx+1]*0.587 + imgData[idx+2]*0.114)/255;
+            if(lum < MIN_GRAY) lum = MIN_GRAY;
+            const nx = (x - centerX)/w * 280 * PORTRAIT_SCALE, ny = (centerY - y)/h * 340 * PORTRAIT_SCALE + PORTRAIT_Y_SHIFT;
+            let dx = (x-centerX)/(w/2), dy = (y-centerY)/(h/2), radialPos = Math.sqrt(dx*dx+dy*dy), sharp = clamp(1.0-radialPos, 0.4, 1.0);
+            out.push({x:nx, y:ny, z:0, sharp}); lums.push(lum); sharpArr.push(sharp);
+          }
+        }
+        if(out.length < pointCount){
+          const valid = [];
+          for(let y=0;y<h;y++){
+            for(let x=0;x<w;x++){
+              const idx = (y*w + x)*4;
+              if(imgData[idx+3]>160){
+                let lum = (imgData[idx]*0.299 + imgData[idx+1]*0.587 + imgData[idx+2]*0.114)/255;
+                if(lum < MIN_GRAY) lum = MIN_GRAY;
+                const nx = (x - centerX)/w * 280 * PORTRAIT_SCALE, ny = (centerY - y)/h * 340 * PORTRAIT_SCALE + PORTRAIT_Y_SHIFT;
+                let dx = (x-centerX)/(w/2), dy = (y-centerY)/(h/2), radialPos = Math.sqrt(dx*dx+dy*dy), sharp = clamp(1.0-radialPos, 0.4, 1.0);
+                valid.push({x:nx, y:ny, z:0, sharp, lum});
+              }
+            }
+          }
+          while(out.length < pointCount && valid.length){
+            const rnd = valid[Math.floor(Math.random()*valid.length)];
+            out.push({x:rnd.x, y:rnd.y, z:0, sharp:rnd.sharp}); lums.push(rnd.lum); sharpArr.push(rnd.sharp);
+          }
+        }
+        callback(out, lums, sharpArr);
+      };
+      img.src = url;
+    }
+
+    let morphLums = [], sharpArr = [], portraitIndices = [], morphStartTime = 0, morphing = false, morphReady = false, fullyReady = false;
+
+    function rotateY(x, y, z, theta) {
+      return [Math.cos(theta)*x - Math.sin(theta)*z, y, Math.sin(theta)*x + Math.cos(theta)*z];
+    }
+    function rotateX(x, y, z, phi) {
+      return [x, Math.cos(phi)*y - Math.sin(phi)*z, Math.sin(phi)*y + Math.cos(phi)*z];
+    }
+    function rotateAroundPoint(x, y, z, cx, cy, cz, theta, phi) {
+      let dx = x - cx, dy = y - cy, dz = z - cz;
+      let [rx, ry, rz] = rotateY(dx, dy, dz, theta); [rx, ry, rz] = rotateX(rx, ry, rz, phi);
+      return [rx + cx, ry + cy, rz + cz];
+    }
+
+function startMorph(){
+  portraitIndices = Array.from({length: PORTRAIT}, (_,i)=>i);
+  for(let i=0; i<PARTICLES; i++) isPortrait[i]=0;
+  for(const idx of portraitIndices) isPortrait[idx]=1;
+
+  sampleImageGrid(
+    "https://i.ibb.co/W4N6XfsN/portrait.png",
+    PORTRAIT,
+    function(samples, lums, sharps){
+      morphLums = lums;
+      sharpArr = sharps;
+      for(let i=0;i<PARTICLES;++i){
+        if(isPortrait[i]){
+          const pi = portraitIndices.indexOf(i);
+          const forward = new THREE.Vector3();
+          camera.getWorldDirection(forward); forward.normalize();
+          const portraitDepth = 320;
+          const portraitCenter = camera.position.clone().add(forward.multiplyScalar(portraitDepth));
+          const right = new THREE.Vector3(); right.crossVectors(forward, camera.up).normalize();
+          const pos = portraitCenter.clone();
+          pos.add(right.multiplyScalar(samples[pi].x));
+          pos.add(camera.up.clone().multiplyScalar(samples[pi].y));
+          morphTargets[i*3]=pos.x;
+          morphTargets[i*3+1]=pos.y;
+          morphTargets[i*3+2]=pos.z;
+          sharpness[i] = sharps[pi];
+        } else {
+          morphTargets[i*3]=basePositions[i*3];
+          morphTargets[i*3+1]=basePositions[i*3+1];
+          morphTargets[i*3+2]=basePositions[i*3+2];
+          sharpness[i]=1.0;
+        }
+      }
+      morphStartTime = performance.now();
+      morphReady = true;
+      morphing = true;
+      fullyReady = true;
+      document.querySelector("#bg-three canvas").style.display = "block";
+      requestAnimationFrame(animate);
+    }
+  );
+}
+
+function animate(now){
+  const t = now*0.001, globalPhase = t*GLOBAL_ROTATE_SPEED;
+  let morphPhase = 0;
+  if(fullyReady && morphReady && morphing){
+    let rawPhase = Math.min(1, (now-morphStartTime)/MORPH_TIME);
+    morphPhase = easeInOut(rawPhase);
+  }
+  for(let i=0; i<PARTICLES; ++i){
+    let bx = basePositions[i*3], by = basePositions[i*3+1], bz = basePositions[i*3+2], gx = bx, gy = by, gz = bz;
+    if (!isPortrait[i]) {
+      [gx, gy, gz] = rotateAroundPoint(bx, by, bz, 0, 0, 0, globalPhase, globalPhase * 0.7);
+    }
+    const orbMag = 9.5 + (isPortrait[i]?1.1:0), orbFreq = 0.42 + (i%17)*0.012, wob = Math.sin(t*orbFreq + i) * orbMag, wob2 = Math.cos(t*orbFreq*0.63 + i*0.74) * (orbMag*0.5);
+    let nx, ny, nz;
+    if(fullyReady && morphReady && morphing && isPortrait[i]){
+      const tx = morphTargets[i*3], ty = morphTargets[i*3+1], tz = morphTargets[i*3+2];
+      if (morphPhase < 1.0) {
+        nx = (1-morphPhase)*bx + morphPhase*tx + wob;
+        ny = (1-morphPhase)*by + morphPhase*ty + wob2;
+        nz = (1-morphPhase)*bz + morphPhase*tz;
+      } else {
+        nx = tx + wob;
+        ny = ty + wob2;
+        nz = tz;
+      }
+      let sharp = sharpness[i], lum = applyContrast(morphLums[portraitIndices.indexOf(i)], CONTRAST);
+      lum = clamp(lum, MIN_GRAY, 1.0);
+      sizes[i] = PARTICLE_SIZE * sharp * (morphPhase>0.999 ? PORTRAIT_SCALE_FACTOR : 1.0);
+      colors[i*3]   = 1.0 + (lum-1.0)*morphPhase;
+      colors[i*3+1] = 1.0 + (lum-1.0)*morphPhase;
+      colors[i*3+2] = 1.0 + (lum-1.0)*morphPhase;
+    } else {
+      nx = gx + wob;
+      ny = gy + wob2;
+      nz = gz;
+      colors[i*3]=1.0; colors[i*3+1]=1.0; colors[i*3+2]=1.0;
+      sizes[i]=PARTICLE_SIZE;
+    }
+    positions[i*3]   = nx;
+    positions[i*3+1] = ny;
+    positions[i*3+2] = nz;
+  }
+  geometry.attributes.position.needsUpdate = true;
+  geometry.attributes.color.needsUpdate = true;
+  geometry.attributes.aSize.needsUpdate = true;
+  renderer.render(scene, camera);
+  requestAnimationFrame(animate);
+}
+
+    window.addEventListener('resize', ()=>{
+      renderer.setSize(window.innerWidth, window.innerHeight);
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+    });
+    // animate فقط بعد از fullyReady
+    startMorph();
+  </script>
+  <script>
+    // Fade-in animations
+    const faders = document.querySelectorAll('.fade-in');
+    const appearOnScroll = new IntersectionObserver((entries, observer) => {
+      entries.forEach(entry => {
+        if (!entry.isIntersecting) return;
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      });
+    }, { threshold: 0.1 });
+    faders.forEach(fader => appearOnScroll.observe(fader));
+    // GALLERY LABEL DATA
+    const galleryData = [
+      {
+        img: "https://i.ibb.co/PZn5wGKJ/I-Built-Myself-Out-of-Wires.webp",
+        title: "I Built Myself Out of Wires",
+        series: "AS WE SEE",
+        tagline: "A Manifesto for the Post-Photography Era",
+        year: "2025",
+        medium: "Archival Pigment Print on Cotton Rag",
+        dimensions: "100 × 70 cm (39.3 × 27.5 in)",
+        edition: "1/10 + 2 AP"
+      },
+      {
+        img: "https://i.ibb.co/xZrGddw/I-Wore-the-Scar-Like-Jewelry.webp",
+        title: "I Wore the Scar Like Jewelry",
+        series: "AS WE SEE",
+        tagline: "A Manifesto for the Post-Photography Era",
+        year: "2025",
+        medium: "Archival Pigment Print on Cotton Rag",
+        dimensions: "100 × 70 cm (39.3 × 27.5 in)",
+        edition: "1/10 + 2 AP"
+      },
+      {
+        img: "https://i.ibb.co/wrQrrHfC/the-Face-I-Invented.webp",
+        title: "The Face I Invented",
+        series: "AS WE SEE",
+        tagline: "A Manifesto for the Post-Photography Era",
+        year: "2025",
+        medium: "Archival Pigment Print on Cotton Rag",
+        dimensions: "100 × 70 cm (39.3 × 27.5 in)",
+        edition: "1/10 + 2 AP"
+      },
+      {
+        img: "https://i.ibb.co/60WMBLL0/What-Surrender-Looked-Like.webp",
+        title: "What Surrender Looked Like",
+        series: "AS WE SEE",
+        tagline: "A Manifesto for the Post-Photography Era",
+        year: "2025",
+        medium: "Archival Pigment Print on Cotton Rag",
+        dimensions: "100 × 70 cm (39.3 × 27.5 in)",
+        edition: "1/10 + 2 AP"
+      },
+      {
+        img: "https://i.ibb.co/84zvjMfj/When-Silence Looked Back.webp",
+        title: "When Silence Looked Back",
+        series: "AS WE SEE",
+        tagline: "A Manifesto for the Post-Photography Era",
+        year: "2025",
+        medium: "Archival Pigment Print on Cotton Rag",
+        dimensions: "100 × 70 cm (39.3 × 27.5 in)",
+        edition: "1/10 + 2 AP"
+      },
+      {
+        img: "https://i.ibb.co/cKNVrQFH/While-the-Tears-Were-Still-Warm.webp",
+        title: "While the Tears Were Still Warm",
+        series: "AS WE SEE",
+        tagline: "A Manifesto for the Post-Photography Era",
+        year: "2025",
+        medium: "Archival Pigment Print on Cotton Rag",
+        dimensions: "100 × 70 cm (39.3 × 27.5 in)",
+        edition: "1/10 + 2 AP"
+      }
+    ];
+    function openFullscreenImage(idx) {
+      const modal = document.getElementById('fullscreenImage');
+      const img = document.getElementById('fullscreen-img');
+      const label = document.getElementById('labelPanel');
+      const d = galleryData[idx];
+      img.src = d.img;
+      label.innerHTML = `
+        <h3>${d.title}</h3>
+        <p><b>Series:</b> ${d.series}</p>
+        <p><b>Tagline:</b> <span style="font-style:italic">${d.tagline}</span></p>
+        <p><b>Year:</b> ${d.year}</p>
+        <p><b>Medium:</b> ${d.medium}</p>
+        <p><b>Dimensions:</b> ${d.dimensions}</p>
+        <p><b>Edition:</b> ${d.edition}</p>
+        <p style="margin-top:1.2em;font-size:.95em;color:#eee;opacity:.65">Click/tap anywhere to close</p>
+      `;
+      modal.classList.remove('hidden');
+      document.body.style.overflow = 'hidden';
+    }
+    function closeFullscreenImage() {
+      const modal = document.getElementById('fullscreenImage');
+      modal.classList.add('hidden');
+      document.getElementById('fullscreen-img').src = '';
+      document.body.style.overflow = '';
+    }
+  </script>  
+  <!-- Audio (served from /public/audio/...) -->
+  <audio id="bg-audio" preload="auto">
+  <source src="/audio/manifesto_with_bg.mp3" type="audio/mpeg">
+  <source src="/audio/manifesto_with_bg.ogg" type="audio/ogg">
+  <source src="/audio/manifesto_with_bg.wav" type="audio/wav">
+</audio>
+<script>
+  document.addEventListener("click", function playOnce() {
+    document.getElementById("bg-audio").play().catch(()=>{});
+    document.removeEventListener("click", playOnce);
+  });
+</script>
+</body>
+</html>
