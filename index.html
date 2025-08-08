@@ -9,10 +9,22 @@
 <style>
     body { 
       font-family: 'Inter', sans-serif; 
-      background: linear-gradient(to top, #000 0%, rgba(0,0,0,0) 80%), #000; 
+      background-color: #000; 
       color: #fff; 
       overflow-x: hidden;
     }
+
+    .page-gradient {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(to top, #000 0%, rgba(0,0,0,0) 80%);
+      pointer-events: none;
+      z-index: 2;
+    }
+
     h1, h2, h3 { font-family: 'Playfair Display', serif; }
     .fade-in { opacity: 0; transform: translateY(20px); transition: opacity 0.8s, transform 0.8s;}
     .fade-in.visible { opacity: 1; transform: translateY(0);}
@@ -38,8 +50,11 @@
       .label-panel { min-width: 90vw; max-width: none; padding: 22px 18px; border-radius: 0 0 24px 24px; left: 0; right: 0; top: 0; bottom: unset;}
     }
 </style>
+
 </head>
 <body>
+
+<div class="page-gradient"></div>
 
 <!-- Hero Section (Particle Background) -->
 <section class="hero">
@@ -52,8 +67,7 @@
 </section>
 
 <!-- Gallery Section -->
-<section id="gallery" class="py-20 px-6 fade-in" 
-  style="background: linear-gradient(to top, #000 0%, rgba(0,0,0,0) 100%);">
+<section id="gallery" class="py-20 px-6 fade-in">
   <div class="max-w-6xl mx-auto">
     <h2 class="text-3xl font-bold mb-10 text-center">Gallery</h2>
     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
@@ -78,6 +92,9 @@
     </div>
   </div>
 </section>
+
+</body>
+</html>
 
   <!-- Manifesto & Bio Section -->
   <section class="py-20 px-6 fade-in">
