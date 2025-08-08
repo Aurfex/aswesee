@@ -13,18 +13,6 @@
       color: #fff; 
       overflow-x: hidden;
     }
-
-    .page-gradient {
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: linear-gradient(to top, #000 0%, rgba(0,0,0,0) 80%);
-      pointer-events: none;
-      z-index: 2;
-    }
-
     h1, h2, h3 { font-family: 'Playfair Display', serif; }
     .fade-in { opacity: 0; transform: translateY(20px); transition: opacity 0.8s, transform 0.8s;}
     .fade-in.visible { opacity: 1; transform: translateY(0);}
@@ -49,12 +37,15 @@
     @media (max-width: 900px) {
       .label-panel { min-width: 90vw; max-width: none; padding: 22px 18px; border-radius: 0 0 24px 24px; left: 0; right: 0; top: 0; bottom: unset;}
     }
+
+    /* گرادیان فقط در پس‌زمینه گالری */
+    #gallery {
+      background: linear-gradient(to top, #000 0%, rgba(0,0,0,0) 80%);
+    }
 </style>
 
 </head>
 <body>
-
-<div class="page-gradient"></div>
 
 <!-- Hero Section (Particle Background) -->
 <section class="hero">
@@ -67,35 +58,33 @@
 </section>
 
 <!-- Gallery Section -->
-<section id="gallery" class="py-20 px-6 fade-in">
-  <div class="max-w-6xl mx-auto">
-    <h2 class="text-3xl font-bold mb-10 text-center">Gallery</h2>
-    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-      <div class="bg-gray-900 hover-zoom cursor-pointer aspect-[3/4] overflow-hidden" onclick="openFullscreenImage(0)">
-        <img src="https://i.ibb.co/PZn5wGKJ/I-Built-Myself-Out-of-Wires.webp" alt="I Built Myself Out of Wires" class="w-full h-full object-cover" loading="lazy">
-      </div>
-      <div class="bg-gray-900 hover-zoom cursor-pointer aspect-[3/4] overflow-hidden" onclick="openFullscreenImage(1)">
-        <img src="https://i.ibb.co/xZrGddw/I-Wore-the-Scar-Like-Jewelry.webp" alt="I Wore the Scar Like Jewelry" class="w-full h-full object-cover" loading="lazy">
-      </div>
-      <div class="bg-gray-900 hover-zoom cursor-pointer aspect-[3/4] overflow-hidden" onclick="openFullscreenImage(2)">
-        <img src="https://i.ibb.co/wrQrrHfC/the-Face-I-Invented.webp" alt="The Face I Invented" class="w-full h-full object-cover" loading="lazy">
-      </div>
-      <div class="bg-gray-900 hover-zoom cursor-pointer aspect-[3/4] overflow-hidden" onclick="openFullscreenImage(3)">
-        <img src="https://i.ibb.co/60WMBLL0/What-Surrender-Looked-Like.webp" alt="What Surrender Looked Like" class="w-full h-full object-cover" loading="lazy">
-      </div>
-      <div class="bg-gray-900 hover-zoom cursor-pointer aspect-[3/4] overflow-hidden" onclick="openFullscreenImage(4)">
-        <img src="https://i.ibb.co/84zvjMfj/When-Silence-Looked-Back.webp" alt="When Silence Looked Back" class="w-full h-full object-cover" loading="lazy">
-      </div>
-      <div class="bg-gray-900 hover-zoom cursor-pointer aspect-[3/4] overflow-hidden" onclick="openFullscreenImage(5)">
-        <img src="https://i.ibb.co/cKNVrQFH/While-the-Tears-Were-Still-Warm.webp" alt="While the Tears Were Still Warm" class="w-full h-full object-cover" loading="lazy">
+  <section id="gallery" class="py-20 px-6 fade-in">
+    <div class="max-w-6xl mx-auto">
+      <h2 class="text-3xl font-bold mb-10 text-center">Gallery</h2>
+      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+        <div class="bg-gray-900 hover-zoom cursor-pointer aspect-[3/4] overflow-hidden" onclick="openFullscreenImage(0)">
+          <img src="https://i.ibb.co/PZn5wGKJ/I-Built-Myself-Out-of-Wires.webp" alt="I Built Myself Out of Wires" class="w-full h-full object-cover" loading="lazy">
+        </div>
+        <div class="bg-gray-900 hover-zoom cursor-pointer aspect-[3/4] overflow-hidden" onclick="openFullscreenImage(1)">
+          <img src="https://i.ibb.co/xZrGddw/I-Wore-the-Scar-Like-Jewelry.webp" alt="I Wore the Scar Like Jewelry" class="w-full h-full object-cover" loading="lazy">
+        </div>
+        <div class="bg-gray-900 hover-zoom cursor-pointer aspect-[3/4] overflow-hidden" onclick="openFullscreenImage(2)">
+          <img src="https://i.ibb.co/wrQrrHfC/the-Face-I-Invented.webp" alt="The Face I Invented" class="w-full h-full object-cover" loading="lazy">
+        </div>
+        <div class="bg-gray-900 hover-zoom cursor-pointer aspect-[3/4] overflow-hidden" onclick="openFullscreenImage(3)">
+          <img src="https://i.ibb.co/60WMBLL0/What-Surrender-Looked-Like.webp" alt="What Surrender Looked Like" class="w-full h-full object-cover" loading="lazy">
+        </div>
+        <div class="bg-gray-900 hover-zoom cursor-pointer aspect-[3/4] overflow-hidden" onclick="openFullscreenImage(4)">
+          <img src="https://i.ibb.co/84zvjMfj/When-Silence-Looked-Back.webp" alt="When Silence Looked Back" class="w-full h-full object-cover" loading="lazy">
+        </div>
+        <div class="bg-gray-900 hover-zoom cursor-pointer aspect-[3/4] overflow-hidden" onclick="openFullscreenImage(5)">
+          <img src="https://i.ibb.co/cKNVrQFH/While-the-Tears-Were-Still-Warm.webp" alt="While the Tears Were Still Warm" class="w-full h-full object-cover" loading="lazy">
+        </div>
       </div>
     </div>
-  </div>
-</section>
-
+  </section>
 </body>
 </html>
-
   <!-- Manifesto & Bio Section -->
   <section class="py-20 px-6 fade-in">
     <div class="max-w-6xl mx-auto">
