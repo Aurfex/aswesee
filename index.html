@@ -24,7 +24,14 @@
     .minimal-hover { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);}
     .minimal-hover:hover { background: #fff; color: #000; transform: translateY(-2px); box-shadow: 0 4px 12px rgba(255,255,255,0.1);}
     .hero { position: relative; width: 100%; height: 100vh; overflow: hidden;}
-    #bg-three { position: fixed; inset: 0; width: 100vw; height: 100vh; z-index: 0; pointer-events: none;}
+    #bg-three { 
+      position: fixed; 
+      inset: 0; 
+      width: 100vw; 
+      height: 100vh; 
+      z-index: -1; /* فرستاده شده پشت همه */
+      pointer-events: none;
+    }
     #bg-three canvas { display: none; }
     .hero-content { position: absolute; top: 40px; left: 50%; transform: translateX(-50%); text-align: center; z-index: 10;}
     .hero-content h1 { font-size: 4rem; margin: 0; letter-spacing: 4px; font-weight: 500;}
@@ -38,18 +45,26 @@
       .label-panel { min-width: 90vw; max-width: none; padding: 22px 18px; border-radius: 0 0 24px 24px; left: 0; right: 0; top: 0; bottom: unset;}
     }
 
-    /* گرادیانت پس‌زمینه گالری */
+    /* گرادیان فقط در پس‌زمینه گالری */
     #gallery {
       position: relative;
       background: linear-gradient(to top, #000 0%, rgba(0,0,0,0) 80%);
-      z-index: 1;
     }
 
-    /* سکشن‌های بعد از گالری بک‌گراند مشکی داشته باشند */
+    /* بعد از گالری همه سکشن‌ها مشکی باشه */
     #gallery ~ section {
       background-color: #000;
-      position: relative;
-      z-index: 1;
+    }
+
+    /* لایه مشکی ثابت برای پوشاندن فضای خالی پایین */
+    body::after {
+      content: "";
+      position: fixed;
+      left: 0; right: 0; bottom: 0;
+      height: 30vh; /* میتونی اینو زیاد/کم کنی */
+      background: #000;
+      pointer-events: none;
+      z-index: 0;
     }
 </style>
 
@@ -67,31 +82,31 @@
 </section>
 
 <!-- Gallery Section -->
-  <section id="gallery" class="py-20 px-6 fade-in">
-    <div class="max-w-6xl mx-auto">
-      <h2 class="text-3xl font-bold mb-10 text-center">Gallery</h2>
-      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-        <div class="bg-gray-900 hover-zoom cursor-pointer aspect-[3/4] overflow-hidden" onclick="openFullscreenImage(0)">
-          <img src="https://i.ibb.co/PZn5wGKJ/I-Built-Myself-Out-of-Wires.webp" alt="I Built Myself Out of Wires" class="w-full h-full object-cover" loading="lazy">
-        </div>
-        <div class="bg-gray-900 hover-zoom cursor-pointer aspect-[3/4] overflow-hidden" onclick="openFullscreenImage(1)">
-          <img src="https://i.ibb.co/xZrGddw/I-Wore-the-Scar-Like-Jewelry.webp" alt="I Wore the Scar Like Jewelry" class="w-full h-full object-cover" loading="lazy">
-        </div>
-        <div class="bg-gray-900 hover-zoom cursor-pointer aspect-[3/4] overflow-hidden" onclick="openFullscreenImage(2)">
-          <img src="https://i.ibb.co/wrQrrHfC/the-Face-I-Invented.webp" alt="The Face I Invented" class="w-full h-full object-cover" loading="lazy">
-        </div>
-        <div class="bg-gray-900 hover-zoom cursor-pointer aspect-[3/4] overflow-hidden" onclick="openFullscreenImage(3)">
-          <img src="https://i.ibb.co/60WMBLL0/What-Surrender-Looked-Like.webp" alt="What Surrender Looked Like" class="w-full h-full object-cover" loading="lazy">
-        </div>
-        <div class="bg-gray-900 hover-zoom cursor-pointer aspect-[3/4] overflow-hidden" onclick="openFullscreenImage(4)">
-          <img src="https://i.ibb.co/84zvjMfj/When-Silence-Looked-Back.webp" alt="When Silence Looked Back" class="w-full h-full object-cover" loading="lazy">
-        </div>
-        <div class="bg-gray-900 hover-zoom cursor-pointer aspect-[3/4] overflow-hidden" onclick="openFullscreenImage(5)">
-          <img src="https://i.ibb.co/cKNVrQFH/While-the-Tears-Were-Still-Warm.webp" alt="While the Tears Were Still Warm" class="w-full h-full object-cover" loading="lazy">
-        </div>
+<section id="gallery" class="py-20 px-6 fade-in">
+  <div class="max-w-6xl mx-auto">
+    <h2 class="text-3xl font-bold mb-10 text-center">Gallery</h2>
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+      <div class="bg-gray-900 hover-zoom cursor-pointer aspect-[3/4] overflow-hidden" onclick="openFullscreenImage(0)">
+        <img src="https://i.ibb.co/PZn5wGKJ/I-Built-Myself-Out-of-Wires.webp" alt="I Built Myself Out of Wires" class="w-full h-full object-cover" loading="lazy">
+      </div>
+      <div class="bg-gray-900 hover-zoom cursor-pointer aspect-[3/4] overflow-hidden" onclick="openFullscreenImage(1)">
+        <img src="https://i.ibb.co/xZrGddw/I-Wore-the-Scar-Like-Jewelry.webp" alt="I Wore the Scar Like Jewelry" class="w-full h-full object-cover" loading="lazy">
+      </div>
+      <div class="bg-gray-900 hover-zoom cursor-pointer aspect-[3/4] overflow-hidden" onclick="openFullscreenImage(2)">
+        <img src="https://i.ibb.co/wrQrrHfC/the-Face-I-Invented.webp" alt="The Face I Invented" class="w-full h-full object-cover" loading="lazy">
+      </div>
+      <div class="bg-gray-900 hover-zoom cursor-pointer aspect-[3/4] overflow-hidden" onclick="openFullscreenImage(3)">
+        <img src="https://i.ibb.co/60WMBLL0/What-Surrender-Looked-Like.webp" alt="What Surrender Looked Like" class="w-full h-full object-cover" loading="lazy">
+      </div>
+      <div class="bg-gray-900 hover-zoom cursor-pointer aspect-[3/4] overflow-hidden" onclick="openFullscreenImage(4)">
+        <img src="https://i.ibb.co/84zvjMfj/When-Silence-Looked-Back.webp" alt="When Silence Looked Back" class="w-full h-full object-cover" loading="lazy">
+      </div>
+      <div class="bg-gray-900 hover-zoom cursor-pointer aspect-[3/4] overflow-hidden" onclick="openFullscreenImage(5)">
+        <img src="https://i.ibb.co/cKNVrQFH/While-the-Tears-Were-Still-Warm.webp" alt="While the Tears Were Still Warm" class="w-full h-full object-cover" loading="lazy">
       </div>
     </div>
-  </section>
+  </div>
+</section>
 
 </body>
 </html>
