@@ -38,24 +38,23 @@
       .label-panel { min-width: 90vw; max-width: none; padding: 22px 18px; border-radius: 0 0 24px 24px; left: 0; right: 0; top: 0; bottom: unset;}
     }
 
-    /* لایهٔ گرادیان بک‌گراند فقط از زیر هیرو تا پایین صفحه */
-    .bg-under-hero{
-      position: fixed;
-      left: 0;
-      right: 0;
-      top: 100vh;           /* از پایینِ Hero شروع می‌شود */
-      bottom: 0;            /* تا انتهای صفحه ادامه دارد */
-      background: linear-gradient(to top, #000 0%, rgba(0,0,0,0) 65%);
-      z-index: 1;           /* بالای canvas (z=0) و زیر محتوا */
-      pointer-events: none;
+    /* گرادیانت پس‌زمینه گالری */
+    #gallery {
+      position: relative;
+      background: linear-gradient(to top, #000 0%, rgba(0,0,0,0) 80%);
+      z-index: 1;
+    }
+
+    /* سکشن‌های بعد از گالری بک‌گراند مشکی داشته باشند */
+    #gallery ~ section {
+      background-color: #000;
+      position: relative;
+      z-index: 1;
     }
 </style>
 
 </head>
 <body>
-
-<!-- لایهٔ گرادیان پس‌زمینه -->
-<div class="bg-under-hero"></div>
 
 <!-- Hero Section (Particle Background) -->
 <section class="hero">
@@ -85,7 +84,7 @@
           <img src="https://i.ibb.co/60WMBLL0/What-Surrender-Looked-Like.webp" alt="What Surrender Looked Like" class="w-full h-full object-cover" loading="lazy">
         </div>
         <div class="bg-gray-900 hover-zoom cursor-pointer aspect-[3/4] overflow-hidden" onclick="openFullscreenImage(4)">
-          <img src="https://i.ibb.co/84zvjMfj/When-Silence Looked Back.webp" alt="When Silence Looked Back" class="w-full h-full object-cover" loading="lazy">
+          <img src="https://i.ibb.co/84zvjMfj/When-Silence-Looked-Back.webp" alt="When Silence Looked Back" class="w-full h-full object-cover" loading="lazy">
         </div>
         <div class="bg-gray-900 hover-zoom cursor-pointer aspect-[3/4] overflow-hidden" onclick="openFullscreenImage(5)">
           <img src="https://i.ibb.co/cKNVrQFH/While-the-Tears-Were-Still-Warm.webp" alt="While the Tears Were Still Warm" class="w-full h-full object-cover" loading="lazy">
@@ -93,6 +92,7 @@
       </div>
     </div>
   </section>
+
 </body>
 </html>
   <!-- Manifesto & Bio Section -->
