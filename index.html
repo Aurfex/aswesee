@@ -42,7 +42,7 @@
   <div class="hero-content">
     <h1>AS WE SEE</h1>
     <p>A Manifesto for the Post-Photography Era</p>
-    <a href="#gallery">Enter Experience</a>
+    <a href="#gallery">Gallery</a>
   </div>
 </section>
 
@@ -454,16 +454,38 @@ function animate(now){
     }
   </script>  
   <!-- Audio (served from /public/audio/...) -->
-  <audio id="bg-audio" preload="auto">
+ <audio id="bg-audio" preload="auto" playsinline>
   <source src="/audio/manifesto_with_bg.mp3" type="audio/mpeg">
   <source src="/audio/manifesto_with_bg.ogg" type="audio/ogg">
   <source src="/audio/manifesto_with_bg.wav" type="audio/wav">
 </audio>
 <script>
-  document.addEventListener("click", function playOnce() {
-    document.getElementById("bg-audio").play().catch(()=>{});
-    document.removeEventListener("click", playOnce);
+  const audioEl = document.getElementById('bg-audio');
+
+  function tryPlay() {
+    audioEl.play().then(() => {
+      // موفق شد؛ لیسنر کلیک لازم نیست
+      window.removeEventListener('click', playOnUserAction);
+      window.removeEventListener('touchstart', playOnUserAction);
+    }).catch(() => {
+      // مرورگر بلاک کرد: منتظر تعامل کاربر می‌مانیم
+    });
+  }
+
+  function playOnUserAction() {
+    audioEl.play().catch(() => {});
+    window.removeEventListener('click', playOnUserAction);
+    window.removeEventListener('touchstart', playOnUserAction);
+  }
+
+  // 2.5 ثانیه بعد از لود، تلاش برای پخش
+  window.addEventListener('DOMContentLoaded', () => {
+    setTimeout(tryPlay, 2500);
   });
+
+  // فallback در صورت بلاک‌شدن
+  window.addEventListener('click', playOnUserAction);
+  window.addEventListener('touchstart', playOnUserAction);
 </script>
 </body>
 </html>
