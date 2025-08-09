@@ -65,103 +65,137 @@
 </head>
 <body>
 
-  <!-- Hero (Particles live behind everything) -->
-  <section class="hero">
-    <div id="bg-three"></div>
-    <div class="hero-content">
-      <h1>AS WE SEE</h1>
-      <p>A Manifesto for the Post-Photography Era</p>
-      <a href="#gallery">Gallery</a>
-    </div>
-  </section>
+<!-- Hero (Particles live behind everything) -->
+<section class="hero">
+  <div id="bg-three"></div>
+  <div class="hero-content">
+    <h1>AS WE SEE</h1>
+    <p>A Manifesto for the Post-Photography Era</p>
+    <a id="toGallery" href="#gallery">Gallery</a>
+  </div>
+</section>
 
   <!-- Gallery (top transparent -> bottom black). Everything below stays black. -->
   <!-- Gallery (2 rows x 5 cols on large screens, full viewport) -->
-<section id="gallery" class="min-h-screen px-6 py-12 fade-in" style="scroll-margin-top:80px;">
-  <div class="max-w-7xl mx-auto">
-    <h2 class="text-3xl font-bold mb-10 text-center">Gallery</h2>
+<section id="gallery" class="px-6 fade-in">
+  <div class="max-w-[1600px] mx-auto">
+    <h2 class="text-3xl font-bold mb-8 text-center">Gallery</h2>
 
-    <!-- 1 row on mobile, 2 on sm, 3 on md, 5 on lg -->
-    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
-      <!-- 0 -->
-      <figure class="hover-zoom cursor-pointer" onclick="openFullscreenImage(0)">
-        <div class="aspect-[3/4] overflow-hidden bg-gray-900">
-          <img src="https://i.ibb.co/PZn5wGKJ/I-Built-Myself-Out-of-Wires.webp" alt="I Built Myself Out of Wires" class="w-full h-full object-cover" loading="lazy">
-        </div>
-        <figcaption class="mt-2 text-sm text-center opacity-90">I Built Myself Out of Wires</figcaption>
-      </figure>
+    <!-- خود گرید -->
+    <div id="gallery-grid"
+         class="grid justify-items-center gap-6
+                sm:grid-cols-2 md:grid-cols-4 xl:grid-cols-5">
 
       <!-- 1 -->
-      <figure class="hover-zoom cursor-pointer" onclick="openFullscreenImage(1)">
-        <div class="aspect-[3/4] overflow-hidden bg-gray-900">
-          <img src="https://i.ibb.co/xZrGddw/I-Wore-the-Scar-Like-Jewelry.webp" alt="I Wore the Scar Like Jewelry" class="w-full h-full object-cover" loading="lazy">
-        </div>
-        <figcaption class="mt-2 text-sm text-center opacity-90">I Wore the Scar Like Jewelry</figcaption>
+      <figure class="gallery-card w-full aspect-[3/4] overflow-hidden cursor-pointer"
+              onclick="openFullscreenImage(0)">
+        <img class="w-full h-full object-cover" loading="lazy"
+             src="https://i.ibb.co/PZn5wGKJ/I-Built-Myself-Out-of-Wires.webp"
+             alt="I Built Myself Out of Wires">
+        <figcaption class="mt-2 text-sm text-center opacity-80">
+          I Built Myself Out of Wires
+        </figcaption>
       </figure>
 
       <!-- 2 -->
-      <figure class="hover-zoom cursor-pointer" onclick="openFullscreenImage(2)">
-        <div class="aspect-[3/4] overflow-hidden bg-gray-900">
-          <img src="https://i.ibb.co/wrQrrHfC/the-Face-I-Invented.webp" alt="The Face I Invented" class="w-full h-full object-cover" loading="lazy">
-        </div>
-        <figcaption class="mt-2 text-sm text-center opacity-90">The Face I Invented</figcaption>
+      <figure class="gallery-card w-full aspect-[3/4] overflow-hidden cursor-pointer"
+              onclick="openFullscreenImage(1)">
+        <img class="w-full h-full object-cover" loading="lazy"
+             src="https://i.ibb.co/xZrGddw/I-Wore-the-Scar-Like-Jewelry.webp"
+             alt="I Wore the Scar Like Jewelry">
+        <figcaption class="mt-2 text-sm text-center opacity-80">
+          I Wore the Scar Like Jewelry
+        </figcaption>
       </figure>
 
       <!-- 3 -->
-      <figure class="hover-zoom cursor-pointer" onclick="openFullscreenImage(3)">
-        <div class="aspect-[3/4] overflow-hidden bg-gray-900">
-          <img src="https://i.ibb.co/60WMBLL0/What-Surrender-Looked-Like.webp" alt="What Surrender Looked Like" class="w-full h-full object-cover" loading="lazy">
-        </div>
-        <figcaption class="mt-2 text-sm text-center opacity-90">What Surrender Looked Like</figcaption>
+      <figure class="gallery-card w-full aspect-[3/4] overflow-hidden cursor-pointer"
+              onclick="openFullscreenImage(2)">
+        <img class="w-full h-full object-cover" loading="lazy"
+             src="https://i.ibb.co/wrQrrHfC/the-Face-I-Invented.webp"
+             alt="The Face I Invented">
+        <figcaption class="mt-2 text-sm text-center opacity-80">
+          The Face I Invented
+        </figcaption>
       </figure>
 
       <!-- 4 -->
-      <figure class="hover-zoom cursor-pointer" onclick="openFullscreenImage(4)">
-        <div class="aspect-[3/4] overflow-hidden bg-gray-900">
-          <img src="https://i.ibb.co/84zvjMfj/When-Silence-Looked-Back.webp" alt="When Silence Looked Back" class="w-full h-full object-cover" loading="lazy">
-        </div>
-        <figcaption class="mt-2 text-sm text-center opacity-90">When Silence Looked Back</figcaption>
+      <figure class="gallery-card w-full aspect-[3/4] overflow-hidden cursor-pointer"
+              onclick="openFullscreenImage(3)">
+        <img class="w-full h-full object-cover" loading="lazy"
+             src="https://i.ibb.co/60WMBLL0/What-Surrender-Looked-Like.webp"
+             alt="What Surrender Looked Like">
+        <figcaption class="mt-2 text-sm text-center opacity-80">
+          What Surrender Looked Like
+        </figcaption>
       </figure>
 
       <!-- 5 -->
-      <figure class="hover-zoom cursor-pointer" onclick="openFullscreenImage(5)">
-        <div class="aspect-[3/4] overflow-hidden bg-gray-900">
-          <img src="https://i.ibb.co/cKNVrQFH/While-the-Tears-Were-Still-Warm.webp" alt="While the Tears Were Still Warm" class="w-full h-full object-cover" loading="lazy">
-        </div>
-        <figcaption class="mt-2 text-sm text-center opacity-90">While the Tears Were Still Warm</figcaption>
+      <figure class="gallery-card w-full aspect-[3/4] overflow-hidden cursor-pointer"
+              onclick="openFullscreenImage(4)">
+        <img class="w-full h-full object-cover" loading="lazy"
+             src="https://i.ibb.co/84zvjMfj/When-Silence-Looked-Back.webp"
+             alt="When Silence Looked Back">
+        <figcaption class="mt-2 text-sm text-center opacity-80">
+          When Silence Looked Back
+        </figcaption>
       </figure>
 
-      <!-- 6 NEW -->
-      <figure class="hover-zoom cursor-pointer" onclick="openFullscreenImage(6)">
-        <div class="aspect-[3/4] overflow-hidden bg-gray-900">
-          <img src="https://i.ibb.co/b5N73mBh/Coloring-Sorrow.png" alt="Coloring Sorrow" class="w-full h-full object-cover" loading="lazy">
-        </div>
-        <figcaption class="mt-2 text-sm text-center opacity-90">Coloring Sorrow</figcaption>
+      <!-- 6 -->
+      <figure class="gallery-card w-full aspect-[3/4] overflow-hidden cursor-pointer"
+              onclick="openFullscreenImage(5)">
+        <img class="w-full h-full object-cover" loading="lazy"
+             src="https://i.ibb.co/cKNVrQFH/While-the-Tears-Were-Still-Warm.webp"
+             alt="While the Tears Were Still Warm">
+        <figcaption class="mt-2 text-sm text-center opacity-80">
+          While the Tears Were Still Warm
+        </figcaption>
       </figure>
 
-      <!-- 7 NEW -->
-      <figure class="hover-zoom cursor-pointer" onclick="openFullscreenImage(7)">
-        <div class="aspect-[3/4] overflow-hidden bg-gray-900">
-          <img src="https://i.ibb.co/twtgSbHV/A-Life-Unbegun.png" alt="A Life Unbegun" class="w-full h-full object-cover" loading="lazy">
-        </div>
-        <figcaption class="mt-2 text-sm text-center opacity-90">A Life Unbegun</figcaption>
+      <!-- 7 -->
+      <figure class="gallery-card w-full aspect-[3/4] overflow-hidden cursor-pointer"
+              onclick="openFullscreenImage(6)">
+        <img class="w-full h-full object-cover" loading="lazy"
+             src="https://i.ibb.co/b5N73mBh/Coloring-Sorrow.png"
+             alt="Coloring Sorrow">
+        <figcaption class="mt-2 text-sm text-center opacity-80">
+          Coloring Sorrow
+        </figcaption>
       </figure>
 
-      <!-- 8 NEW -->
-      <figure class="hover-zoom cursor-pointer" onclick="openFullscreenImage(8)">
-        <div class="aspect-[3/4] overflow-hidden bg-gray-900">
-          <img src="https://i.ibb.co/Y7NWbDs4/Inheritance-of-Silence.png" alt="Inheritance of Silence" class="w-full h-full object-cover" loading="lazy">
-        </div>
-        <figcaption class="mt-2 text-sm text-center opacity-90">Inheritance of Silence</figcaption>
+      <!-- 8 -->
+      <figure class="gallery-card w-full aspect-[3/4] overflow-hidden cursor-pointer"
+              onclick="openFullscreenImage(7)">
+        <img class="w-full h-full object-cover" loading="lazy"
+             src="https://i.ibb.co/twtgSbHV/A-Life-Unbegun.png"
+             alt="A Life Unbegun">
+        <figcaption class="mt-2 text-sm text-center opacity-80">
+          A Life Unbegun
+        </figcaption>
       </figure>
 
-      <!-- 9 NEW -->
-      <figure class="hover-zoom cursor-pointer" onclick="openFullscreenImage(9)">
-        <div class="aspect-[3/4] overflow-hidden bg-gray-900">
-          <img src="https://i.ibb.co/fVmrnn09/Cutting-Silence.png" alt="Cutting Silence" class="w-full h-full object-cover" loading="lazy">
-        </div>
-        <figcaption class="mt-2 text-sm text-center opacity-90">Cutting Silence</figcaption>
+      <!-- 9 -->
+      <figure class="gallery-card w-full aspect-[3/4] overflow-hidden cursor-pointer"
+              onclick="openFullscreenImage(8)">
+        <img class="w-full h-full object-cover" loading="lazy"
+             src="https://i.ibb.co/Y7NWbDs4/Inheritance-of-Silence.png"
+             alt="Inheritance of Silence">
+        <figcaption class="mt-2 text-sm text-center opacity-80">
+          Inheritance of Silence
+        </figcaption>
       </figure>
+
+      <!-- 10 -->
+      <figure class="w-full aspect-[3/4] overflow-hidden cursor-pointer"
+              onclick="openFullscreenImage(9)">
+        <img class="w-full h-full object-cover" loading="lazy"
+             src="https://i.ibb.co/fVmrnn09/Cutting-Silence.png"
+             alt="Cutting Silence">
+        <figcaption class="mt-2 text-sm text-center opacity-80">
+          Cutting Silence
+        </figcaption>
+      </figure>
+
     </div>
   </div>
 </section>
@@ -700,6 +734,61 @@ function animate(now){
   // فallback در صورت بلاک‌شدن
   window.addEventListener('click', playOnUserAction);
   window.addEventListener('touchstart', playOnUserAction);
+<script>
+  // با کلیک روی دکمه Gallery، ۱۰ مورد اول دقیقاً وسط ویوپورت قرار می‌گیرند
+  document.getElementById('toGallery')?.addEventListener('click', function (e) {
+    e.preventDefault();
+    centerFirstNInView(10);
+  });
+
+  function centerFirstNInView(n) {
+    const grid = document.getElementById('gallery-grid');
+    if (!grid) return;
+
+    const items = Array.from(grid.querySelectorAll('.gallery-card'));
+    if (!items.length) return;
+
+    const slice = items.slice(0, Math.min(n, items.length));
+
+    waitForImages(slice).then(() => {
+      const rects = slice.map(el => el.getBoundingClientRect());
+      const { top, bottom, height } = coverRect(rects);
+
+      // تبدیل به مختصات صفحه
+      const topOnPage = top + window.pageYOffset;
+      const viewportH = window.innerHeight;
+
+      // طوری اسکرول کن که کل بلوک ۱۰تایی وسط بیفته
+      const targetTop = topOnPage - (viewportH - height) / 2;
+
+      window.scrollTo({ top: Math.max(0, targetTop), behavior: 'smooth' });
+    });
+  }
+
+  function waitForImages(els) {
+    const imgs = els.flatMap(el => Array.from(el.querySelectorAll('img')));
+    if (imgs.length === 0) return Promise.resolve();
+    return new Promise(resolve => {
+      let left = imgs.length;
+      const done = () => { if (--left <= 0) resolve(); };
+      imgs.forEach(img => {
+        if (img.complete && img.naturalWidth) done();
+        else {
+          img.addEventListener('load', done, { once: true });
+          img.addEventListener('error', done, { once: true });
+        }
+      });
+    });
+  }
+
+  function coverRect(rects) {
+    const top = Math.min(...rects.map(r => r.top));
+    const bottom = Math.max(...rects.map(r => r.bottom));
+    const left = Math.min(...rects.map(r => r.left));
+    const right = Math.max(...rects.map(r => r.right));
+    return { top, bottom, left, right, width: right - left, height: bottom - top };
+  }
 </script>
+
 </body>
 </html>
