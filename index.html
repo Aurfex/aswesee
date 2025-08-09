@@ -65,15 +65,15 @@
 </head>
 <body>
 
-  <!-- Hero (Particles live behind everything) -->
-  <section class="hero">
-    <div id="bg-three"></div>
-    <div class="hero-content">
-      <h1>AS WE SEE</h1>
-      <p>A Manifesto for the Post-Photography Era</p>
-      <a href="#gallery">Gallery</a>
-    </div>
-  </section>
+<!-- Hero (Particles live behind everything) -->
+<section class="hero">
+  <div id="bg-three"></div>
+  <div class="hero-content">
+    <h1>AS WE SEE</h1>
+    <p>A Manifesto for the Post-Photography Era</p>
+    <a id="toGallery" href="#gallery">Gallery</a>
+  </div>
+</section>
 
   <!-- Gallery (top transparent -> bottom black). Everything below stays black. -->
   <!-- Gallery (2 rows x 5 cols on large screens, full viewport) -->
@@ -87,7 +87,7 @@
                 sm:grid-cols-2 md:grid-cols-4 xl:grid-cols-5">
 
       <!-- 1 -->
-      <figure class="w-full aspect-[3/4] overflow-hidden cursor-pointer"
+      <figure class="gallery-card w-full aspect-[3/4] overflow-hidden cursor-pointer"
               onclick="openFullscreenImage(0)">
         <img class="w-full h-full object-cover" loading="lazy"
              src="https://i.ibb.co/PZn5wGKJ/I-Built-Myself-Out-of-Wires.webp"
@@ -98,7 +98,7 @@
       </figure>
 
       <!-- 2 -->
-      <figure class="w-full aspect-[3/4] overflow-hidden cursor-pointer"
+      <figure class="gallery-card w-full aspect-[3/4] overflow-hidden cursor-pointer"
               onclick="openFullscreenImage(1)">
         <img class="w-full h-full object-cover" loading="lazy"
              src="https://i.ibb.co/xZrGddw/I-Wore-the-Scar-Like-Jewelry.webp"
@@ -109,7 +109,7 @@
       </figure>
 
       <!-- 3 -->
-      <figure class="w-full aspect-[3/4] overflow-hidden cursor-pointer"
+      <figure class="gallery-card w-full aspect-[3/4] overflow-hidden cursor-pointer"
               onclick="openFullscreenImage(2)">
         <img class="w-full h-full object-cover" loading="lazy"
              src="https://i.ibb.co/wrQrrHfC/the-Face-I-Invented.webp"
@@ -120,7 +120,7 @@
       </figure>
 
       <!-- 4 -->
-      <figure class="w-full aspect-[3/4] overflow-hidden cursor-pointer"
+      <figure class="gallery-card w-full aspect-[3/4] overflow-hidden cursor-pointer"
               onclick="openFullscreenImage(3)">
         <img class="w-full h-full object-cover" loading="lazy"
              src="https://i.ibb.co/60WMBLL0/What-Surrender-Looked-Like.webp"
@@ -131,7 +131,7 @@
       </figure>
 
       <!-- 5 -->
-      <figure class="w-full aspect-[3/4] overflow-hidden cursor-pointer"
+      <figure class="gallery-card w-full aspect-[3/4] overflow-hidden cursor-pointer"
               onclick="openFullscreenImage(4)">
         <img class="w-full h-full object-cover" loading="lazy"
              src="https://i.ibb.co/84zvjMfj/When-Silence-Looked-Back.webp"
@@ -142,7 +142,7 @@
       </figure>
 
       <!-- 6 -->
-      <figure class="w-full aspect-[3/4] overflow-hidden cursor-pointer"
+      <figure class="gallery-card w-full aspect-[3/4] overflow-hidden cursor-pointer"
               onclick="openFullscreenImage(5)">
         <img class="w-full h-full object-cover" loading="lazy"
              src="https://i.ibb.co/cKNVrQFH/While-the-Tears-Were-Still-Warm.webp"
@@ -153,7 +153,7 @@
       </figure>
 
       <!-- 7 -->
-      <figure class="w-full aspect-[3/4] overflow-hidden cursor-pointer"
+      <figure class="gallery-card w-full aspect-[3/4] overflow-hidden cursor-pointer"
               onclick="openFullscreenImage(6)">
         <img class="w-full h-full object-cover" loading="lazy"
              src="https://i.ibb.co/b5N73mBh/Coloring-Sorrow.png"
@@ -164,7 +164,7 @@
       </figure>
 
       <!-- 8 -->
-      <figure class="w-full aspect-[3/4] overflow-hidden cursor-pointer"
+      <figure class="gallery-card w-full aspect-[3/4] overflow-hidden cursor-pointer"
               onclick="openFullscreenImage(7)">
         <img class="w-full h-full object-cover" loading="lazy"
              src="https://i.ibb.co/twtgSbHV/A-Life-Unbegun.png"
@@ -175,7 +175,7 @@
       </figure>
 
       <!-- 9 -->
-      <figure class="w-full aspect-[3/4] overflow-hidden cursor-pointer"
+      <figure class="gallery-card w-full aspect-[3/4] overflow-hidden cursor-pointer"
               onclick="openFullscreenImage(8)">
         <img class="w-full h-full object-cover" loading="lazy"
              src="https://i.ibb.co/Y7NWbDs4/Inheritance-of-Silence.png"
@@ -369,7 +369,7 @@
     geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
     geometry.setAttribute('aSize', new THREE.BufferAttribute(sizes, 1));
     const material = new THREE.ShaderMaterial({
-      vertexShader: 
+      vertexShader: `
         attribute float aSize;
         attribute vec3 color;
         varying vec3 vColor;
@@ -379,8 +379,8 @@
           gl_PointSize = aSize * 1300.0 / (-mvPosition.z);
           gl_Position = projectionMatrix * mvPosition;
         }
-      ,
-      fragmentShader: 
+      `,
+      fragmentShader: `
         varying vec3 vColor;
         void main() {
           float border = 0.07;
@@ -388,7 +388,7 @@
              gl_PointCoord.y < border || gl_PointCoord.y > 1.0-border) discard;
           gl_FragColor = vec4(vColor, 0.99);
         }
-      ,
+      `,
       transparent: true,
       depthTest: true
     });
@@ -674,7 +674,7 @@ function animate(now){
     const label = document.getElementById('labelPanel');
     const d = galleryData[idx];
     img.src = d.img;
-    label.innerHTML = 
+    label.innerHTML = `
       <h3>${d.title}</h3>
       <p><b>Series:</b> ${d.series}</p>
       <p><b>Tagline:</b> <i>${d.tagline}</i></p>
@@ -683,7 +683,7 @@ function animate(now){
       <p><b>Dimensions:</b> ${d.dimensions}</p>
       <p><b>Edition:</b> ${d.edition || ""}</p>
       <p style="margin-top:1.2em;font-size:.95em;color:#eee;opacity:.65">Click/tap anywhere to close</p>
-    ;
+    `;
     modal.classList.remove('hidden');
     document.body.style.overflow = 'hidden';
   }
@@ -734,6 +734,61 @@ function animate(now){
   // فallback در صورت بلاک‌شدن
   window.addEventListener('click', playOnUserAction);
   window.addEventListener('touchstart', playOnUserAction);
+<script>
+  // با کلیک روی دکمه Gallery، ۱۰ مورد اول دقیقاً وسط ویوپورت قرار می‌گیرند
+  document.getElementById('toGallery')?.addEventListener('click', function (e) {
+    e.preventDefault();
+    centerFirstNInView(10);
+  });
+
+  function centerFirstNInView(n) {
+    const grid = document.getElementById('gallery-grid');
+    if (!grid) return;
+
+    const items = Array.from(grid.querySelectorAll('.gallery-card'));
+    if (!items.length) return;
+
+    const slice = items.slice(0, Math.min(n, items.length));
+
+    waitForImages(slice).then(() => {
+      const rects = slice.map(el => el.getBoundingClientRect());
+      const { top, bottom, height } = coverRect(rects);
+
+      // تبدیل به مختصات صفحه
+      const topOnPage = top + window.pageYOffset;
+      const viewportH = window.innerHeight;
+
+      // طوری اسکرول کن که کل بلوک ۱۰تایی وسط بیفته
+      const targetTop = topOnPage - (viewportH - height) / 2;
+
+      window.scrollTo({ top: Math.max(0, targetTop), behavior: 'smooth' });
+    });
+  }
+
+  function waitForImages(els) {
+    const imgs = els.flatMap(el => Array.from(el.querySelectorAll('img')));
+    if (imgs.length === 0) return Promise.resolve();
+    return new Promise(resolve => {
+      let left = imgs.length;
+      const done = () => { if (--left <= 0) resolve(); };
+      imgs.forEach(img => {
+        if (img.complete && img.naturalWidth) done();
+        else {
+          img.addEventListener('load', done, { once: true });
+          img.addEventListener('error', done, { once: true });
+        }
+      });
+    });
+  }
+
+  function coverRect(rects) {
+    const top = Math.min(...rects.map(r => r.top));
+    const bottom = Math.max(...rects.map(r => r.bottom));
+    const left = Math.min(...rects.map(r => r.left));
+    const right = Math.max(...rects.map(r => r.right));
+    return { top, bottom, left, right, width: right - left, height: bottom - top };
+  }
 </script>
+
 </body>
 </html>
