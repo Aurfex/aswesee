@@ -76,31 +76,67 @@
   </section>
 
   <!-- Gallery (top transparent -> bottom black). Everything below stays black. -->
-  <section id="gallery" class="px-6 fade-in">
-    <div class="max-w-6xl mx-auto">
-      <h2 class="text-3xl font-bold mb-10 text-center">Gallery</h2>
-      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-        <div class="bg-gray-900 hover-zoom cursor-pointer aspect-[3/4] overflow-hidden" onclick="openFullscreenImage(0)">
-          <img src="https://i.ibb.co/PZn5wGKJ/I-Built-Myself-Out-of-Wires.webp" alt="I Built Myself Out of Wires" class="w-full h-full object-cover" loading="lazy">
-        </div>
-        <div class="bg-gray-900 hover-zoom cursor-pointer aspect-[3/4] overflow-hidden" onclick="openFullscreenImage(1)">
-          <img src="https://i.ibb.co/xZrGddw/I-Wore-the-Scar-Like-Jewelry.webp" alt="I Wore the Scar Like Jewelry" class="w-full h-full object-cover" loading="lazy">
-        </div>
-        <div class="bg-gray-900 hover-zoom cursor-pointer aspect-[3/4] overflow-hidden" onclick="openFullscreenImage(2)">
-          <img src="https://i.ibb.co/wrQrrHfC/the-Face-I-Invented.webp" alt="The Face I Invented" class="w-full h-full object-cover" loading="lazy">
-        </div>
-        <div class="bg-gray-900 hover-zoom cursor-pointer aspect-[3/4] overflow-hidden" onclick="openFullscreenImage(3)">
-          <img src="https://i.ibb.co/60WMBLL0/What-Surrender-Looked-Like.webp" alt="What Surrender Looked Like" class="w-full h-full object-cover" loading="lazy">
-        </div>
-        <div class="bg-gray-900 hover-zoom cursor-pointer aspect-[3/4] overflow-hidden" onclick="openFullscreenImage(4)">
-          <img src="https://i.ibb.co/84zvjMfj/When-Silence-Looked-Back.webp" alt="When Silence Looked Back" class="w-full h-full object-cover" loading="lazy">
-        </div>
-        <div class="bg-gray-900 hover-zoom cursor-pointer aspect-[3/4] overflow-hidden" onclick="openFullscreenImage(5)">
-          <img src="https://i.ibb.co/cKNVrQFH/While-the-Tears-Were-Still-Warm.webp" alt="While the Tears Were Still Warm" class="w-full h-full object-cover" loading="lazy">
-        </div>
-      </div>
+  <section id="gallery" class="px-6 fade-in" style="background: linear-gradient(to bottom, rgba(0,0,0,0) 0%, #000 100%);">
+  <div class="max-w-6xl mx-auto">
+    <h2 class="text-3xl font-bold mb-10 text-center">Gallery</h2>
+
+    <!-- 2 rows × 5 columns -->
+    <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-6">
+
+      <figure class="bg-gray-900 hover-zoom cursor-pointer aspect-[3/4] overflow-hidden" onclick="openFullscreenImage(0)">
+        <img src="https://i.ibb.co/PZn5wGKJ/I-Built-Myself-Out-of-Wires.webp" alt="I Built Myself Out of Wires" class="w-full h-full object-cover" loading="lazy">
+        <figcaption class="mt-2 text-center text-sm opacity-80">I Built Myself Out of Wires</figcaption>
+      </figure>
+
+      <figure class="bg-gray-900 hover-zoom cursor-pointer aspect-[3/4] overflow-hidden" onclick="openFullscreenImage(1)">
+        <img src="https://i.ibb.co/xZrGddw/I-Wore-the-Scar-Like-Jewelry.webp" alt="I Wore the Scar Like Jewelry" class="w-full h-full object-cover" loading="lazy">
+        <figcaption class="mt-2 text-center text-sm opacity-80">I Wore the Scar Like Jewelry</figcaption>
+      </figure>
+
+      <figure class="bg-gray-900 hover-zoom cursor-pointer aspect-[3/4] overflow-hidden" onclick="openFullscreenImage(2)">
+        <img src="https://i.ibb.co/wrQrrHfC/the-Face-I-Invented.webp" alt="The Face I Invented" class="w-full h-full object-cover" loading="lazy">
+        <figcaption class="mt-2 text-center text-sm opacity-80">The Face I Invented</figcaption>
+      </figure>
+
+      <figure class="bg-gray-900 hover-zoom cursor-pointer aspect-[3/4] overflow-hidden" onclick="openFullscreenImage(3)">
+        <img src="https://i.ibb.co/60WMBLL0/What-Surrender-Looked-Like.webp" alt="What Surrender Looked Like" class="w-full h-full object-cover" loading="lazy">
+        <figcaption class="mt-2 text-center text-sm opacity-80">What Surrender Looked Like</figcaption>
+      </figure>
+
+      <figure class="bg-gray-900 hover-zoom cursor-pointer aspect-[3/4] overflow-hidden" onclick="openFullscreenImage(4)">
+        <img src="https://i.ibb.co/84zvjMfj/When-Silence-Looked-Back.webp" alt="When Silence Looked Back" class="w-full h-full object-cover" loading="lazy">
+        <figcaption class="mt-2 text-center text-sm opacity-80">When Silence Looked Back</figcaption>
+      </figure>
+
+      <figure class="bg-gray-900 hover-zoom cursor-pointer aspect-[3/4] overflow-hidden" onclick="openFullscreenImage(5)">
+        <img src="https://i.ibb.co/cKNVrQFH/While-the-Tears-Were-Still-Warm.webp" alt="While the Tears Were Still Warm" class="w-full h-full object-cover" loading="lazy">
+        <figcaption class="mt-2 text-center text-sm opacity-80">While the Tears Were Still Warm</figcaption>
+      </figure>
+
+      <!-- Duplicate or replace with new images for a full 10 -->
+      <figure class="bg-gray-900 hover-zoom cursor-pointer aspect-[3/4] overflow-hidden" onclick="openFullscreenImage(6)">
+        <img src="https://i.ibb.co/PZn5wGKJ/I-Built-Myself-Out-of-Wires.webp" alt="Sample Title 7" class="w-full h-full object-cover" loading="lazy">
+        <figcaption class="mt-2 text-center text-sm opacity-80">Sample Title 7</figcaption>
+      </figure>
+
+      <figure class="bg-gray-900 hover-zoom cursor-pointer aspect-[3/4] overflow-hidden" onclick="openFullscreenImage(7)">
+        <img src="https://i.ibb.co/xZrGddw/I-Wore-the-Scar-Like-Jewelry.webp" alt="Sample Title 8" class="w-full h-full object-cover" loading="lazy">
+        <figcaption class="mt-2 text-center text-sm opacity-80">Sample Title 8</figcaption>
+      </figure>
+
+      <figure class="bg-gray-900 hover-zoom cursor-pointer aspect-[3/4] overflow-hidden" onclick="openFullscreenImage(8)">
+        <img src="https://i.ibb.co/wrQrrHfC/the-Face-I-Invented.webp" alt="Sample Title 9" class="w-full h-full object-cover" loading="lazy">
+        <figcaption class="mt-2 text-center text-sm opacity-80">Sample Title 9</figcaption>
+      </figure>
+
+      <figure class="bg-gray-900 hover-zoom cursor-pointer aspect-[3/4] overflow-hidden" onclick="openFullscreenImage(9)">
+        <img src="https://i.ibb.co/60WMBLL0/What-Surrender-Looked-Like.webp" alt="Sample Title 10" class="w-full h-full object-cover" loading="lazy">
+        <figcaption class="mt-2 text-center text-sm opacity-80">Sample Title 10</figcaption>
+      </figure>
+
     </div>
-  </section>
+  </div>
+</section>
 <!-- Bio & Manifesto (FULL TEXT) -->
 <section class="section-dark py-20 px-6 fade-in">
   <div class="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12">
