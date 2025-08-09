@@ -518,19 +518,19 @@ function animate(now){
     startMorph();
   </script>
   <script>
-    // Fade-in animations
-    const faders = document.querySelectorAll('.fade-in');
-    const appearOnScroll = new IntersectionObserver((entries, observer) => {
-      entries.forEach(entry => {
-        if (!entry.isIntersecting) return;
-        entry.target.classList.add('visible');
-        observer.unobserve(entry.target);
-      });
-    }, { threshold: 0.1 });
-    faders.forEach(fader => appearOnScroll.observe(fader));
-    // GALLERY LABEL DATA
-  <script>
-   const galleryData = [
+  // Fade-in animations
+  const faders = document.querySelectorAll('.fade-in');
+  const appearOnScroll = new IntersectionObserver((entries, observer) => {
+    entries.forEach(entry => {
+      if (!entry.isIntersecting) return;
+      entry.target.classList.add('visible');
+      observer.unobserve(entry.target);
+    });
+  }, { threshold: 0.1 });
+  faders.forEach(fader => appearOnScroll.observe(fader));
+
+  // ===== GALLERY LABEL DATA (یک <script> جدید باز نکن!) =====
+  const galleryData = [
     {
       img: "https://i.ibb.co/PZn5wGKJ/I-Built-Myself-Out-of-Wires.webp",
       title: "I Built Myself Out of Wires",
@@ -632,34 +632,41 @@ function animate(now){
       edition: "1/10 + 2 AP"
     }
   ];
+
+  // Fullscreen modal handlers
+  function openFullscreenImage(idx) {
+    const modal = document.getElementById('fullscreenImage');
+    const img = document.getElementById('fullscreen-img');
+    const label = document.getElementById('labelPanel');
+    const d = galleryData[idx];
+    img.src = d.img;
+    label.innerHTML = `
+      <h3>${d.title}</h3>
+      <p><b>Series:</b> ${d.series}</p>
+      <p><b>Tagline:</b> <i>${d.tagline}</i></p>
+      <p><b>Year:</b> ${d.year}</p>
+      <p><b>Medium:</b> ${d.medium}</p>
+      <p><b>Dimensions:</b> ${d.dimensions}</p>
+      <p><b>Edition:</b> ${d.edition || ""}</p>
+      <p style="margin-top:1.2em;font-size:.95em;color:#eee;opacity:.65">Click/tap anywhere to close</p>
+    `;
+    modal.classList.remove('hidden');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeFullscreenImage() {
+    const modal = document.getElementById('fullscreenImage');
+    const img = document.getElementById('fullscreen-img');
+    modal.classList.add('hidden');
+    img.src = '';
+    document.body.style.overflow = '';
+  }
+
+  // برای onclickهای inline لازم است global باشند
+  window.openFullscreenImage = openFullscreenImage;
+  window.closeFullscreenImage = closeFullscreenImage;
 </script>
 
-    function openFullscreenImage(idx) {
-      const modal = document.getElementById('fullscreenImage');
-      const img = document.getElementById('fullscreen-img');
-      const label = document.getElementById('labelPanel');
-      const d = galleryData[idx];
-      img.src = d.img;
-      label.innerHTML = `
-        <h3>${d.title}</h3>
-        <p><b>Series:</b> ${d.series}</p>
-        <p><b>Tagline:</b> <span style="font-style:italic">${d.tagline}</span></p>
-        <p><b>Year:</b> ${d.year}</p>
-        <p><b>Medium:</b> ${d.medium}</p>
-        <p><b>Dimensions:</b> ${d.dimensions}</p>
-        <p><b>Edition:</b> ${d.edition}</p>
-        <p style="margin-top:1.2em;font-size:.95em;color:#eee;opacity:.65">Click/tap anywhere to close</p>
-      `;
-      modal.classList.remove('hidden');
-      document.body.style.overflow = 'hidden';
-    }
-    function closeFullscreenImage() {
-      const modal = document.getElementById('fullscreenImage');
-      modal.classList.add('hidden');
-      document.getElementById('fullscreen-img').src = '';
-      document.body.style.overflow = '';
-    }
-  </script>  
   <!-- Audio (served from /public/audio/...) -->
  <audio id="bg-audio" preload="auto" playsinline>
   <source src="/audio/manifesto_with_bg.mp3" type="audio/mpeg">
