@@ -76,69 +76,92 @@
   </section>
 
   <!-- Gallery (top transparent -> bottom black). Everything below stays black. -->
-  <section id="gallery" class="px-6 fade-in" style="background: linear-gradient(to bottom, rgba(0,0,0,0) 0%, #000 100%);">
-  <div class="max-w-6xl mx-auto">
+  <!-- Gallery (2 rows x 5 cols on large screens, full viewport) -->
+<section id="gallery" class="min-h-screen px-6 py-12 fade-in" style="scroll-margin-top:80px;">
+  <div class="max-w-7xl mx-auto">
     <h2 class="text-3xl font-bold mb-10 text-center">Gallery</h2>
 
-    <!-- 2 rows × 5 columns -->
-    <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-6">
-
-      <figure class="bg-gray-900 hover-zoom cursor-pointer aspect-[3/4] overflow-hidden" onclick="openFullscreenImage(0)">
-        <img src="https://i.ibb.co/PZn5wGKJ/I-Built-Myself-Out-of-Wires.webp" alt="I Built Myself Out of Wires" class="w-full h-full object-cover" loading="lazy">
-        <figcaption class="mt-2 text-center text-sm opacity-80">I Built Myself Out of Wires</figcaption>
+    <!-- 1 row on mobile, 2 on sm, 3 on md, 5 on lg -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
+      <!-- 0 -->
+      <figure class="hover-zoom cursor-pointer" onclick="openFullscreenImage(0)">
+        <div class="aspect-[3/4] overflow-hidden bg-gray-900">
+          <img src="https://i.ibb.co/PZn5wGKJ/I-Built-Myself-Out-of-Wires.webp" alt="I Built Myself Out of Wires" class="w-full h-full object-cover" loading="lazy">
+        </div>
+        <figcaption class="mt-2 text-sm text-center opacity-90">I Built Myself Out of Wires</figcaption>
       </figure>
 
-      <figure class="bg-gray-900 hover-zoom cursor-pointer aspect-[3/4] overflow-hidden" onclick="openFullscreenImage(1)">
-        <img src="https://i.ibb.co/xZrGddw/I-Wore-the-Scar-Like-Jewelry.webp" alt="I Wore the Scar Like Jewelry" class="w-full h-full object-cover" loading="lazy">
-        <figcaption class="mt-2 text-center text-sm opacity-80">I Wore the Scar Like Jewelry</figcaption>
+      <!-- 1 -->
+      <figure class="hover-zoom cursor-pointer" onclick="openFullscreenImage(1)">
+        <div class="aspect-[3/4] overflow-hidden bg-gray-900">
+          <img src="https://i.ibb.co/xZrGddw/I-Wore-the-Scar-Like-Jewelry.webp" alt="I Wore the Scar Like Jewelry" class="w-full h-full object-cover" loading="lazy">
+        </div>
+        <figcaption class="mt-2 text-sm text-center opacity-90">I Wore the Scar Like Jewelry</figcaption>
       </figure>
 
-      <figure class="bg-gray-900 hover-zoom cursor-pointer aspect-[3/4] overflow-hidden" onclick="openFullscreenImage(2)">
-        <img src="https://i.ibb.co/wrQrrHfC/the-Face-I-Invented.webp" alt="The Face I Invented" class="w-full h-full object-cover" loading="lazy">
-        <figcaption class="mt-2 text-center text-sm opacity-80">The Face I Invented</figcaption>
+      <!-- 2 -->
+      <figure class="hover-zoom cursor-pointer" onclick="openFullscreenImage(2)">
+        <div class="aspect-[3/4] overflow-hidden bg-gray-900">
+          <img src="https://i.ibb.co/wrQrrHfC/the-Face-I-Invented.webp" alt="The Face I Invented" class="w-full h-full object-cover" loading="lazy">
+        </div>
+        <figcaption class="mt-2 text-sm text-center opacity-90">The Face I Invented</figcaption>
       </figure>
 
-      <figure class="bg-gray-900 hover-zoom cursor-pointer aspect-[3/4] overflow-hidden" onclick="openFullscreenImage(3)">
-        <img src="https://i.ibb.co/60WMBLL0/What-Surrender-Looked-Like.webp" alt="What Surrender Looked Like" class="w-full h-full object-cover" loading="lazy">
-        <figcaption class="mt-2 text-center text-sm opacity-80">What Surrender Looked Like</figcaption>
+      <!-- 3 -->
+      <figure class="hover-zoom cursor-pointer" onclick="openFullscreenImage(3)">
+        <div class="aspect-[3/4] overflow-hidden bg-gray-900">
+          <img src="https://i.ibb.co/60WMBLL0/What-Surrender-Looked-Like.webp" alt="What Surrender Looked Like" class="w-full h-full object-cover" loading="lazy">
+        </div>
+        <figcaption class="mt-2 text-sm text-center opacity-90">What Surrender Looked Like</figcaption>
       </figure>
 
-      <figure class="bg-gray-900 hover-zoom cursor-pointer aspect-[3/4] overflow-hidden" onclick="openFullscreenImage(4)">
-        <img src="https://i.ibb.co/84zvjMfj/When-Silence-Looked-Back.webp" alt="When Silence Looked Back" class="w-full h-full object-cover" loading="lazy">
-        <figcaption class="mt-2 text-center text-sm opacity-80">When Silence Looked Back</figcaption>
+      <!-- 4 -->
+      <figure class="hover-zoom cursor-pointer" onclick="openFullscreenImage(4)">
+        <div class="aspect-[3/4] overflow-hidden bg-gray-900">
+          <img src="https://i.ibb.co/84zvjMfj/When-Silence-Looked-Back.webp" alt="When Silence Looked Back" class="w-full h-full object-cover" loading="lazy">
+        </div>
+        <figcaption class="mt-2 text-sm text-center opacity-90">When Silence Looked Back</figcaption>
       </figure>
 
-      <figure class="bg-gray-900 hover-zoom cursor-pointer aspect-[3/4] overflow-hidden" onclick="openFullscreenImage(5)">
-        <img src="https://i.ibb.co/cKNVrQFH/While-the-Tears-Were-Still-Warm.webp" alt="While the Tears Were Still Warm" class="w-full h-full object-cover" loading="lazy">
-        <figcaption class="mt-2 text-center text-sm opacity-80">While the Tears Were Still Warm</figcaption>
+      <!-- 5 -->
+      <figure class="hover-zoom cursor-pointer" onclick="openFullscreenImage(5)">
+        <div class="aspect-[3/4] overflow-hidden bg-gray-900">
+          <img src="https://i.ibb.co/cKNVrQFH/While-the-Tears-Were-Still-Warm.webp" alt="While the Tears Were Still Warm" class="w-full h-full object-cover" loading="lazy">
+        </div>
+        <figcaption class="mt-2 text-sm text-center opacity-90">While the Tears Were Still Warm</figcaption>
       </figure>
 
-      <!-- Duplicate or replace with new images for a full 10 -->
-
-      <figure class="bg-gray-900 hover-zoom cursor-pointer aspect-[3/4] overflow-hidden"
-        onclick="openFullscreenImage(7)">
-        <img src="https://i.ibb.co/twtgSbHV/A-Life-Unbegun.png"
-        alt="A Life Unbegun" class="w-full h-full object-cover" loading="lazy">
-        </figcaption class="mt-2 text-sm text-center opacity-80">A Life Unbegun</figcaption>
-     </figure>
-
-      <figure class="bg-gray-900 hover-zoom cursor-pointer aspect-[3/4] overflow-hidden"
-        onclick="openFullscreenImage(6)">
-        <img src="https://i.ibb.co/b5N73mBh/Coloring-Sorrow.png"
-        alt="Coloring Sorrow" class="w-full h-full object-cover" loading="lazy">
-        <figcaption class="mt-2 text-sm text-center opacity-80">Coloring Sorrow</figcaption>
+      <!-- 6 NEW -->
+      <figure class="hover-zoom cursor-pointer" onclick="openFullscreenImage(6)">
+        <div class="aspect-[3/4] overflow-hidden bg-gray-900">
+          <img src="https://i.ibb.co/b5N73mBh/Coloring-Sorrow.png" alt="Coloring Sorrow" class="w-full h-full object-cover" loading="lazy">
+        </div>
+        <figcaption class="mt-2 text-sm text-center opacity-90">Coloring Sorrow</figcaption>
       </figure>
 
-      <figure class="bg-gray-900 hover-zoom cursor-pointer aspect-[3/4] overflow-hidden" onclick="openFullscreenImage(8)">
-        <img src="https://i.ibb.co/wrQrrHfC/the-Face-I-Invented.webp" alt="Sample Title 9" class="w-full h-full object-cover" loading="lazy">
-        <figcaption class="mt-2 text-center text-sm opacity-80">Sample Title 9</figcaption>
+      <!-- 7 NEW -->
+      <figure class="hover-zoom cursor-pointer" onclick="openFullscreenImage(7)">
+        <div class="aspect-[3/4] overflow-hidden bg-gray-900">
+          <img src="https://i.ibb.co/twtgSbHV/A-Life-Unbegun.png" alt="A Life Unbegun" class="w-full h-full object-cover" loading="lazy">
+        </div>
+        <figcaption class="mt-2 text-sm text-center opacity-90">A Life Unbegun</figcaption>
       </figure>
 
-      <figure class="bg-gray-900 hover-zoom cursor-pointer aspect-[3/4] overflow-hidden" onclick="openFullscreenImage(9)">
-        <img src="https://i.ibb.co/60WMBLL0/What-Surrender-Looked-Like.webp" alt="Sample Title 10" class="w-full h-full object-cover" loading="lazy">
-        <figcaption class="mt-2 text-center text-sm opacity-80">Sample Title 10</figcaption>
+      <!-- 8 NEW -->
+      <figure class="hover-zoom cursor-pointer" onclick="openFullscreenImage(8)">
+        <div class="aspect-[3/4] overflow-hidden bg-gray-900">
+          <img src="https://i.ibb.co/Y7NWbDs4/Inheritance-of-Silence.png" alt="Inheritance of Silence" class="w-full h-full object-cover" loading="lazy">
+        </div>
+        <figcaption class="mt-2 text-sm text-center opacity-90">Inheritance of Silence</figcaption>
       </figure>
 
+      <!-- 9 NEW -->
+      <figure class="hover-zoom cursor-pointer" onclick="openFullscreenImage(9)">
+        <div class="aspect-[3/4] overflow-hidden bg-gray-900">
+          <img src="https://i.ibb.co/fVmrnn09/Cutting-Silence.png" alt="Cutting Silence" class="w-full h-full object-cover" loading="lazy">
+        </div>
+        <figcaption class="mt-2 text-sm text-center opacity-90">Cutting Silence</figcaption>
+      </figure>
     </div>
   </div>
 </section>
@@ -505,68 +528,111 @@ function animate(now){
     }, { threshold: 0.1 });
     faders.forEach(fader => appearOnScroll.observe(fader));
     // GALLERY LABEL DATA
-    const galleryData = [
-      {
-        img: "https://i.ibb.co/PZn5wGKJ/I-Built-Myself-Out-of-Wires.webp",
-        title: "I Built Myself Out of Wires",
-        series: "AS WE SEE",
-        tagline: "A Manifesto for the Post-Photography Era",
-        year: "2025",
-        medium: "Archival Pigment Print on Cotton Rag",
-        dimensions: "100 × 70 cm (39.3 × 27.5 in)",
-        edition: "1/10 + 2 AP"
-      },
-      {
-        img: "https://i.ibb.co/xZrGddw/I-Wore-the-Scar-Like-Jewelry.webp",
-        title: "I Wore the Scar Like Jewelry",
-        series: "AS WE SEE",
-        tagline: "A Manifesto for the Post-Photography Era",
-        year: "2025",
-        medium: "Archival Pigment Print on Cotton Rag",
-        dimensions: "100 × 70 cm (39.3 × 27.5 in)",
-        edition: "1/10 + 2 AP"
-      },
-      {
-        img: "https://i.ibb.co/wrQrrHfC/the-Face-I-Invented.webp",
-        title: "The Face I Invented",
-        series: "AS WE SEE",
-        tagline: "A Manifesto for the Post-Photography Era",
-        year: "2025",
-        medium: "Archival Pigment Print on Cotton Rag",
-        dimensions: "100 × 70 cm (39.3 × 27.5 in)",
-        edition: "1/10 + 2 AP"
-      },
-      {
-        img: "https://i.ibb.co/60WMBLL0/What-Surrender-Looked-Like.webp",
-        title: "What Surrender Looked Like",
-        series: "AS WE SEE",
-        tagline: "A Manifesto for the Post-Photography Era",
-        year: "2025",
-        medium: "Archival Pigment Print on Cotton Rag",
-        dimensions: "100 × 70 cm (39.3 × 27.5 in)",
-        edition: "1/10 + 2 AP"
-      },
-      {
-        img: "https://i.ibb.co/84zvjMfj/When-Silence Looked Back.webp",
-        title: "When Silence Looked Back",
-        series: "AS WE SEE",
-        tagline: "A Manifesto for the Post-Photography Era",
-        year: "2025",
-        medium: "Archival Pigment Print on Cotton Rag",
-        dimensions: "100 × 70 cm (39.3 × 27.5 in)",
-        edition: "1/10 + 2 AP"
-      },
-      {
-        img: "https://i.ibb.co/cKNVrQFH/While-the-Tears-Were-Still-Warm.webp",
-        title: "While the Tears Were Still Warm",
-        series: "AS WE SEE",
-        tagline: "A Manifesto for the Post-Photography Era",
-        year: "2025",
-        medium: "Archival Pigment Print on Cotton Rag",
-        dimensions: "100 × 70 cm (39.3 × 27.5 in)",
-        edition: "1/10 + 2 AP"
-      }
-    ];
+    <script>
+  const galleryData = [
+    {
+      img: "https://i.ibb.co/PZn5wGKJ/I-Built-Myself-Out-of-Wires.webp",
+      title: "I Built Myself Out of Wires",
+      series: "AS WE SEE",
+      tagline: "A Manifesto for the Post-Photography Era",
+      year: "2025",
+      medium: "Archival Pigment Print on Cotton Rag",
+      dimensions: "100 × 70 cm (39.3 × 27.5 in)",
+      edition: "1/10 + 2 AP"
+    },
+    {
+      img: "https://i.ibb.co/xZrGddw/I-Wore-the-Scar-Like-Jewelry.webp",
+      title: "I Wore the Scar Like Jewelry",
+      series: "AS WE SEE",
+      tagline: "A Manifesto for the Post-Photography Era",
+      year: "2025",
+      medium: "Archival Pigment Print on Cotton Rag",
+      dimensions: "100 × 70 cm (39.3 × 27.5 in)",
+      edition: "1/10 + 2 AP"
+    },
+    {
+      img: "https://i.ibb.co/wrQrrHfC/the-Face-I-Invented.webp",
+      title: "The Face I Invented",
+      series: "AS WE SEE",
+      tagline: "A Manifesto for the Post-Photography Era",
+      year: "2025",
+      medium: "Archival Pigment Print on Cotton Rag",
+      dimensions: "100 × 70 cm (39.3 × 27.5 in)",
+      edition: "1/10 + 2 AP"
+    },
+    {
+      img: "https://i.ibb.co/60WMBLL0/What-Surrender-Looked-Like.webp",
+      title: "What Surrender Looked Like",
+      series: "AS WE SEE",
+      tagline: "A Manifesto for the Post-Photography Era",
+      year: "2025",
+      medium: "Archival Pigment Print on Cotton Rag",
+      dimensions: "100 × 70 cm (39.3 × 27.5 in)",
+      edition: "1/10 + 2 AP"
+    },
+    {
+      img: "https://i.ibb.co/84zvjMfj/When-Silence-Looked-Back.webp",
+      title: "When Silence Looked Back",
+      series: "AS WE SEE",
+      tagline: "A Manifesto for the Post-Photography Era",
+      year: "2025",
+      medium: "Archival Pigment Print on Cotton Rag",
+      dimensions: "100 × 70 cm (39.3 × 27.5 in)",
+      edition: "1/10 + 2 AP"
+    },
+    {
+      img: "https://i.ibb.co/cKNVrQFH/While-the-Tears-Were-Still-Warm.webp",
+      title: "While the Tears Were Still Warm",
+      series: "AS WE SEE",
+      tagline: "A Manifesto for the Post-Photography Era",
+      year: "2025",
+      medium: "Archival Pigment Print on Cotton Rag",
+      dimensions: "100 × 70 cm (39.3 × 27.5 in)",
+      edition: "1/10 + 2 AP"
+    },
+    {
+      img: "https://i.ibb.co/b5N73mBh/Coloring-Sorrow.png",
+      title: "Coloring Sorrow",
+      series: "AS WE SEE",
+      tagline: "A Manifesto for the Post-Photography Era",
+      year: "2025",
+      medium: "Archival Pigment Print on Cotton Rag",
+      dimensions: "100 × 70 cm (39.3 × 27.5 in)",
+      edition: "1/10 + 2 AP"
+    },
+    {
+      img: "https://i.ibb.co/twtgSbHV/A-Life-Unbegun.png",
+      title: "A Life Unbegun",
+      series: "AS WE SEE",
+      tagline: "A Manifesto for the Post-Photography Era",
+      year: "2025",
+      medium: "Archival Pigment Print on Cotton Rag",
+      dimensions: "100 × 70 cm (39.3 × 27.5 in)",
+      edition: "1/10 + 2 AP"
+    },
+    {
+      img: "https://i.ibb.co/Y7NWbDs4/Inheritance-of-Silence.png",
+      title: "Inheritance of Silence",
+      series: "AS WE SEE",
+      tagline: "A Manifesto for the Post-Photography Era",
+      year: "2025",
+      medium: "Archival Pigment Print on Cotton Rag",
+      dimensions: "100 × 70 cm (39.3 × 27.5 in)",
+      edition: "1/10 + 2 AP"
+    },
+    {
+      img: "https://i.ibb.co/fVmrnn09/Cutting-Silence.png",
+      title: "Cutting Silence",
+      series: "AS WE SEE",
+      tagline: "A Manifesto for the Post-Photography Era",
+      year: "2025",
+      medium: "Archival Pigment Print on Cotton Rag",
+      dimensions: "100 × 70 cm (39.3 × 27.5 in)",
+      edition: "1/10 + 2 AP"
+    }
+  ];
+</script>
+
     function openFullscreenImage(idx) {
       const modal = document.getElementById('fullscreenImage');
       const img = document.getElementById('fullscreen-img');
