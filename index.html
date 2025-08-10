@@ -257,50 +257,39 @@
 <!-- THREE.js -->
 <script src="https://cdn.jsdelivr.net/npm/three@0.155.0/build/three.min.js"></script>
 <script>
-/* ========================== CONFIG (visible & stable) ========================== */
+/* ========================== CONFIG ========================== */
 const PARTICLES = 60000, PORTRAIT = 30000;
 const MIN_GRAY = 0.18, PARTICLE_SIZE = 0.47, CONTRAST = 1.08;
-
-/* Camera/pose */
 const GLOBAL_ROTATE_SPEED = 0.16;
 const PORTRAIT_SCALE = 1.20, PORTRAIT_Y_SHIFT = -40;
-const MORPH_TIME = 30000;
+const MORPH_TIME = 3000; // 3s morph per درخواست
+const PORTRAIT_SCALE_FACTOR = 1.15;
 
-/* Portrait point tuning */
-const PORTRAIT_POINT_SCALE = 0.78;
-const PORTRAIT_SIZE_GROW_MIN = 0.35;
-const PORTRAIT_SIZE_GROW_MAX = 0.45;
-const PORTRAIT_FINAL_ORBIT = 0.60;
-const PORTRAIT_FINAL_ORBIT_Y = 0.36;
-const PORTRAIT_FINAL_FREQ = 0.28;
-
-/* Motion & fading */
-const STAGGER_MS = 6500;
-const ORB_MAG_PORTRAIT = 1.2;
+/* New: fine controls */
+const PORTRAIT_SIZE_MULT = 0.72;          // کوچیک‌تر کردن ذراتِ چهره
+const PORTRAIT_IDLE_X = 0.35, PORTRAIT_IDLE_Y = 0.22; // اُربیته‌ی ظریف بعد از تشکیل
+const ORB_MAG_PORTRAIT = 0.85;            // آرام‌تر برای چهره
 const ORB_MAG_AMBIENT  = 13.5;
 
-/* Ambient gaussian vignette (boosted a bit for visibility) */
-const AMBIENT_SIGMA = 560;
-const AMBIENT_MIN_ALPHA = 0.16;  // ↑
-const AMBIENT_MAX_ALPHA = 0.72;  // ↑
+/* Ambient fade (no halo around head) */
+const AMBIENT_INNER = 180;   // خیلی نزدیک به مرکز: تقریبا نامرئی
+const AMBIENT_OUTER = 900;   // دورتر: به حداکثر آلفا می‌رسه
+const AMBIENT_MIN_ALPHA = 0.035;
+const AMBIENT_MAX_ALPHA = 0.55;
 
-/* Hotspot & edge control (forehead guard) */
-const CENTER_DAMP_STRENGTH = 0.62;
-const EDGE_FADE_START = 0.84;
-const EDGE_FADE_END   = 1.04;
-const EDGE_FADE_STRENGTH = 0.50;
+/* Hotspot & edge control for portrait */
+const CENTER_DAMP_STRENGTH = 0.55;     // کاهش نور مرکز
+const CENTER_SUPPRESS_RADIUS = 0.13;   // شعاع بسیار کوچک مرکز (نرمال 0..1)
+const CENTER_SUPPRESS_ALPHA  = 0.60;   // خفه‌کردن آلفا در مرکز
+const CENTER_SUPPRESS_SIZE   = 0.65;   // خفه‌کردن سایز در مرکز
+const EDGE_FADE_START = 0.88, EDGE_FADE_END = 1.02, EDGE_FADE_STRENGTH = 0.45;
 
-const HOT_LUM_START = 0.82, HOT_LUM_END = 0.94;
-const HOT_EDGE_START = 0.08, HOT_EDGE_END = 0.28;
-const HOT_EARLY_MIN = 0.22, HOT_EARLY_MAX = 0.55;
-
-/* Portrait source */
 const PORTRAIT_SRC = "https://i.ibb.co/W4N6XfsN/portrait.png";
 
 /* ========================== SETUP ========================== */
-const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false });
-renderer.setPixelRatio(window.devicePixelRatio || 1);
-renderer.setClearColor(0x000000, 1);
+const renderer = new THREE.WebGLRenderer({ antialias: true });
+renderer.setClearColor(0x10151A, 1);
+renderer.setPixelRatio(Math.min(2, window.devicePixelRatio || 1));
 renderer.setSize(window.innerWidth, window.innerHeight);
 document.getElementById("bg-three").appendChild(renderer.domElement);
 
@@ -325,8 +314,8 @@ const flickPhase = new Float32Array(PARTICLES);
 
 function clamp(v,a,b){return Math.max(a,Math.min(v,b));}
 function applyContrast(l, c) { return clamp(0.5 + (l-0.5)*c, 0, 1); }
-function easeInOut(t){ return t < 0.5 ? 4*t*t*t : 1 - Math.pow(-2*t + 2, 3)/2; }
-function smoothstep(e0,e1,x){ const t = clamp((x-e0)/(e1-e0),0,1); return t*t*(3-2*t); }
+function easeInOut(t) { return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2; }
+function smoothstep(e0,e1,x){ const t = clamp((x-e0)/(e1-e1==0?1e-6:e1-e0),0,1); return t*t*(3-2*t); }
 
 const RADIUS = 700;
 for(let i=0;i<PARTICLES;++i){
@@ -339,78 +328,57 @@ for(let i=0;i<PARTICLES;++i){
   positions[i*3] = basePositions[i*3] = x;
   positions[i*3+1] = basePositions[i*3+1] = y;
   positions[i*3+2] = basePositions[i*3+2] = z;
-
   colors[i*3] = 1.0; colors[i*3+1] = 1.0; colors[i*3+2] = 1.0;
-  sizes[i] = PARTICLE_SIZE;
-  sharpness[i] = 1.0;
-  isPortrait[i] = (i < PORTRAIT) ? 1 : 0;
+  sizes[i] = PARTICLE_SIZE; sharpness[i] = 1.0; isPortrait[i] = (i < PORTRAIT) ? 1 : 0;
   alphas[i] = AMBIENT_MAX_ALPHA;
 
   randFreq[i]   = 0.35 + Math.random()*0.9;
   randAmp[i]    = 0.7  + Math.random()*0.6;
-  morphDelay[i] = isPortrait[i] ? Math.random()*STAGGER_MS : 0.0;
+  morphDelay[i] = isPortrait[i] ? Math.random()*350 : 0.0; // خیلی کوتاه، کلش 3s
   flickFreq[i]  = 0.5  + Math.random()*2.5;
   flickPhase[i] = Math.random()*Math.PI*2;
 }
 
 const geometry = new THREE.BufferGeometry();
 geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-geometry.setAttribute('aColor',   new THREE.BufferAttribute(colors, 3));   // rename to avoid conflicts
+geometry.setAttribute('color',    new THREE.BufferAttribute(colors, 3));
 geometry.setAttribute('aSize',    new THREE.BufferAttribute(sizes, 1));
 geometry.setAttribute('aAlpha',   new THREE.BufferAttribute(alphas, 1));
-geometry.setAttribute('aSharp',   new THREE.BufferAttribute(sharpness, 1));
-geometry.computeBoundingSphere();
-geometry.boundingSphere = new THREE.Sphere(new THREE.Vector3(0,0,0), 1500); // ensure visible
 
-/* ===================== Soft-disc shader (fixed + clamped size) ===================== */
 const material = new THREE.ShaderMaterial({
   vertexShader: `
     attribute float aSize;
-    attribute vec3 aColor;
+    attribute vec3 color;
     attribute float aAlpha;
-    attribute float aSharp;
     varying vec3 vColor;
     varying float vAlpha;
-    varying float vSharp;
     void main() {
-      vColor = aColor;
+      vColor = color;
       vAlpha = aAlpha;
-      vSharp = aSharp;
       vec4 mvPosition = modelViewMatrix * vec4(position, 1.0);
-      float depth = max(1.0, -mvPosition.z);
-      float ps = aSize * 4800.0 / depth;     // ↑ stronger scale so points don't go sub-pixel
-      gl_PointSize = clamp(ps, 1.25, 28.0);  // min clamp to guarantee visibility
+      float ps = aSize * 1300.0 / max(1.0, -mvPosition.z);
+      gl_PointSize = max(1.6, ps); // حداقل سایز برای دیده‌شدن روی همه‌ی GPUها
       gl_Position = projectionMatrix * mvPosition;
     }
   `,
   fragmentShader: `
     varying vec3 vColor;
     varying float vAlpha;
-    varying float vSharp;
     void main() {
-      vec2 uv = gl_PointCoord * 2.0 - 1.0;
-      float r2 = dot(uv, uv);
-      if (r2 > 1.0) discard;
-
-      float fallBase = 1.0 - smoothstep(0.0, 1.0, r2);
-      float fall = pow(fallBase, mix(1.2, 2.6, clamp(vSharp, 0.0, 1.0)));
-      float glow = 1.0 - smoothstep(0.0, 0.55, r2);
-
-      float a  = clamp(vAlpha * fall, 0.0, 1.0);
-      vec3 col = vColor * (0.86 + 0.14 * glow);
-
-      gl_FragColor = vec4(col * a, a); // premultiplied
+      // دیسک نرم (نه مربع) + لبه‌ی نرم
+      vec2 p = gl_PointCoord - vec2(0.5);
+      float r = length(p);
+      if (r > 0.5) discard;
+      float edge = smoothstep(0.5, 0.42, r);
+      gl_FragColor = vec4(vColor, vAlpha * edge);
     }
   `,
   transparent: true,
   depthTest: true,
-  depthWrite: false,              // ← important for layered alpha
-  blending: THREE.NormalBlending,
-  premultipliedAlpha: true
+  depthWrite: false
 });
 
 const points = new THREE.Points(geometry, material);
-points.frustumCulled = false;      // ← avoid over-culling
 scene.add(points);
 
 /* =================== SAMPLER (grid + sobel + jitter) =================== */
@@ -459,8 +427,8 @@ function sampleImageGrid(url, pointCount, callback) {
     for (let y=0; y<h; y++){
       for (let x=0; x<w; x++){
         const i=y*w+x, a=data[i*4+3]/255; if (a < ALPHA_MIN) continue;
-        const lum  = Math.max(MIN_GRAY, L[i]); const edge = E[i]);
-        const score = 0.22 + 1.35*edge + 0.12*(1.0 - Math.abs(lum-0.5));
+        const lum  = Math.max(MIN_GRAY, L[i]); const edge = E[i];
+        const score = 0.20 + 1.2*edge + 0.15*(1.0 - Math.abs(lum-0.5));
         cand.push({x,y,lum,edge,score});
       }
     }
@@ -482,7 +450,7 @@ function sampleImageGrid(url, pointCount, callback) {
 
     const out=[], lums=[], edges=[];
     const centerX = w/2, centerY = h/2;
-    const jitter = 0.42;
+    const jitter = 0.35;
 
     for (let cy=0; cy<gridH; cy++){
       for (let cx=0; cx<gridW; cx++){
@@ -563,9 +531,23 @@ function startMorph(){
     for(let i=0;i<PARTICLES;++i){
       if(isPortrait[i]){
         const s = samples[i] || {x:0,y:0,sharp:1};
+
+        // --- Center hotspot killer: push-out + micro-jitter ---
+        const nx0 = s.x, ny0 = s.y;
+        const rNormS = Math.hypot(nx0/RX, ny0/RY); // 0..~1
+        let nx = nx0, ny = ny0;
+        if (rNormS < CENTER_SUPPRESS_RADIUS){
+          const k = (CENTER_SUPPRESS_RADIUS - rNormS) / Math.max(1e-6, CENTER_SUPPRESS_RADIUS); // 0..1
+          const scale = 1.25 + 0.9 * k;           // کمی از مرکز دورتر
+          nx *= scale; ny *= scale;
+          nx += (Math.random()-0.5) * 6.0 * k;    // jitter خیلی کوچک
+          ny += (Math.random()-0.5) * 6.0 * k;
+        }
+
         const pos = portraitCenterW.clone()
-          .add(right.clone().multiplyScalar(s.x))
-          .add(up.clone().multiplyScalar(s.y));
+          .add(right.clone().multiplyScalar(nx))
+          .add(up.clone().multiplyScalar(ny));
+
         morphTargets[i*3]   = pos.x;
         morphTargets[i*3+1] = pos.y;
         morphTargets[i*3+2] = pos.z;
@@ -589,11 +571,9 @@ function animate(now){
 
   for(let i=0; i<PARTICLES; ++i){
     let bx = basePositions[i*3], by = basePositions[i*3+1], bz = basePositions[i*3+2], gx = bx, gy = by, gz = bz;
-
     if (!isPortrait[i]) {
       [gx, gy, gz] = rotateAroundPoint(bx, by, bz, 0, 0, 0, globalPhase, globalPhase * 0.7);
     }
-
     const baseMag = isPortrait[i] ? ORB_MAG_PORTRAIT : ORB_MAG_AMBIENT;
     const orbMag  = baseMag * randAmp[i];
     const orbFreq = (0.42 + (i%17)*0.012) * randFreq[i];
@@ -609,71 +589,69 @@ function animate(now){
 
       const tx = morphTargets[i*3], ty = morphTargets[i*3+1], tz = morphTargets[i*3+2];
 
-      const jitterFade = 1.0 - smoothstep(0.25, 0.85, lp);
-      const jx = (Math.sin(i*12.9898)*43758.5453 % 1 - 0.5) * 0.8 * jitterFade;
-      const jy = (Math.sin(i*78.233 )*19341.1211 % 1 - 0.5) * 0.8 * jitterFade;
+      // پس از تکمیل، در صفحه‌ی راست/بالا کمی اُربیته‌ی زنده داشته باشه
+      let idleX = 0.0, idleY = 0.0;
+      if (lp > 0.999){
+        idleX = Math.sin(t*0.42 + i*1.731) * PORTRAIT_IDLE_X;
+        idleY = Math.cos(t*0.37 + i*1.113) * PORTRAIT_IDLE_Y;
+      }
 
-      nx = (1-lp)*bx + lp*tx + wob + jx;
-      ny = (1-lp)*by + lp*ty + wob2 + jy;
+      nx = (1-lp)*bx + lp*tx + wob + idleX;
+      ny = (1-lp)*by + lp*ty + wob2 + idleY;
       nz = (1-lp)*bz + lp*tz;
 
+      // فاصله‌ی نرمال‌شده در صفحه‌ی پرتره
       let rNorm = 0.0;
       if (portraitCenterW){
         const vx = nx - portraitCenterW.x;
         const vy = ny - portraitCenterW.y;
         const vz = nz - portraitCenterW.z;
-        const dx = (vx*portraitRightW.x + vy*portraitRightW.y + vz*portraitRightW.z) / (280*PORTRAIT_SCALE);
-        const dy = (vx*portraitUpW.x    + vy*portraitUpW.y    + vz*portraitUpW.z) / (340*PORTRAIT_SCALE);
+        const dx = (vx*portraitRightW.x + vy*portraitRightW.y + vz*portraitRightW.z) / RX;
+        const dy = (vx*portraitUpW.x    + vy*portraitUpW.y    + vz*portraitUpW.z) / RY;
         rNorm = Math.min(1.4, Math.hypot(dx, dy));
       }
 
+      // لومننس + کاهش مرکز
       let lum = applyContrast(morphLums[i] ?? 0.8, CONTRAST);
       lum = clamp(lum, MIN_GRAY, 1.0);
+      const centerFactorSoft = 1.0 - CENTER_DAMP_STRENGTH * (1.0 - smoothstep(0.0, 0.35, rNorm));
+      lum *= centerFactorSoft;
 
-      const centerFactor = 1.0 - CENTER_DAMP_STRENGTH * (1.0 - smoothstep(0.05, 0.38, rNorm));
+      // فید لبه
       const edgeMix = clamp((rNorm - EDGE_FADE_START) / (EDGE_FADE_END - EDGE_FADE_START), 0, 1);
       const edgeFactor = 1.0 - EDGE_FADE_STRENGTH * edgeMix;
 
       const edge = edgeStrengths[i] ?? 0.0;
       const edgeShrink = 1.0 - 0.25 * edge;
 
-      const grow = PORTRAIT_SIZE_GROW_MIN + (PORTRAIT_SIZE_GROW_MAX - PORTRAIT_SIZE_GROW_MIN)*lp;
-      sizes[i]  = PARTICLE_SIZE * PORTRAIT_POINT_SCALE * sharpness[i] * edgeShrink * grow * edgeFactor;
+      // خفه‌کردن شدید مرکز (سایز)
+      const centerHardSize = 1.0 - (1.0 - smoothstep(0.0, CENTER_SUPPRESS_RADIUS, rNorm)) * (1.0 - CENTER_SUPPRESS_SIZE);
+
+      const grow = 0.45 + 0.65*lp;
+      sizes[i]  = PARTICLE_SIZE * PORTRAIT_SIZE_MULT * sharpness[i] * edgeShrink * grow * edgeFactor * centerHardSize * (lp>0.999 ? PORTRAIT_SCALE_FACTOR : 1.0);
 
       colors[i*3] = colors[i*3+1] = colors[i*3+2] = 1.0 + (lum-1.0)*lp;
 
-      const isHot   = smoothstep(HOT_LUM_START, HOT_LUM_END, morphLums[i] ?? 0.8);
-      const isPlain = 1.0 - smoothstep(HOT_EDGE_START, HOT_EDGE_END, edge);
-      const isEarly = 1.0 - smoothstep(HOT_EARLY_MIN, HOT_EARLY_MAX, lp);
-      const hotspotDamp = 1.0 - 0.85 * (isHot * isPlain * isEarly);
-
-      let a = (0.14 + 0.88*lp) * edgeFactor * centerFactor; // slightly boosted base
-      a *= hotspotDamp;
+      // آلفا: رشد تدریجی + فید لبه + خفه‌کردن مرکز شدید
+      let a = (0.12 + 0.86*lp) * edgeFactor * centerFactorSoft;
+      const centerHardAlpha = 1.0 - (1.0 - smoothstep(0.0, CENTER_SUPPRESS_RADIUS*0.95, rNorm)) * CENTER_SUPPRESS_ALPHA;
+      a *= centerHardAlpha;
       alphas[i] = clamp(a, 0.0, 1.0);
-
-      const post = smoothstep(0.92, 1.0, lp);
-      if (post > 0.0 && portraitRightW && portraitUpW){
-        const ph = i * 0.37;
-        const ox = Math.cos(t*PORTRAIT_FINAL_FREQ + ph) * PORTRAIT_FINAL_ORBIT * post;
-        const oy = Math.sin(t*PORTRAIT_FINAL_FREQ*1.33 + ph) * PORTRAIT_FINAL_ORBIT * PORTRAIT_FINAL_ORBIT_Y * post;
-        nx += portraitRightW.x*ox + portraitUpW.x*oy;
-        ny += portraitRightW.y*ox + portraitUpW.y*oy;
-        nz += portraitRightW.z*ox + portraitUpW.z*oy;
-      }
 
     } else {
       nx = gx + wob; ny = gy + wob2; nz = gz;
 
+      // Ambient: fade out near portrait center (no halo)
+      let alpha = AMBIENT_MAX_ALPHA;
       if (portraitCenterW){
         const dx = nx - portraitCenterW.x, dy = ny - portraitCenterW.y, dz = nz - portraitCenterW.z;
-        const dist2 = dx*dx+dy*dy+dz*dz;
-        const gauss = 1.0 - Math.exp(-dist2 / (2.0 * AMBIENT_SIGMA * AMBIENT_SIGMA));
-        let alpha = AMBIENT_MIN_ALPHA + (AMBIENT_MAX_ALPHA - AMBIENT_MIN_ALPHA) * gauss;
-        alpha *= (0.92 + 0.08*Math.sin(t*flickFreq[i] + flickPhase[i]));
-        alphas[i] = alpha;
-      } else {
-        alphas[i] = AMBIENT_MIN_ALPHA;
+        const dist = Math.sqrt(dx*dx+dy*dy+dz*dz);
+        let a = smoothstep(AMBIENT_INNER, AMBIENT_OUTER, dist);
+        a = Math.pow(a, 1.6); // منحنی نرم‌تر
+        alpha = AMBIENT_MIN_ALPHA + (AMBIENT_MAX_ALPHA - AMBIENT_MIN_ALPHA) * a;
       }
+      alpha *= (0.92 + 0.08*Math.sin(t*flickFreq[i] + flickPhase[i]));
+      alphas[i] = alpha;
 
       colors[i*3]=colors[i*3+1]=colors[i*3+2]=1.0;
       sizes[i]=PARTICLE_SIZE;
@@ -684,10 +662,9 @@ function animate(now){
   }
 
   geometry.attributes.position.needsUpdate = true;
-  geometry.attributes.aColor.needsUpdate = true;
+  geometry.attributes.color.needsUpdate = true;
   geometry.attributes.aSize.needsUpdate = true;
   geometry.attributes.aAlpha.needsUpdate = true;
-  geometry.attributes.aSharp.needsUpdate = true;
 
   renderer.render(scene, camera);
   requestAnimationFrame(animate);
@@ -695,6 +672,7 @@ function animate(now){
 
 window.addEventListener('resize', ()=>{
   renderer.setSize(window.innerWidth, window.innerHeight);
+  renderer.setPixelRatio(Math.min(2, window.devicePixelRatio || 1));
   camera.aspect = window.innerWidth / window.innerHeight;
   camera.updateProjectionMatrix();
 });
