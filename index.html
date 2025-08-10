@@ -254,397 +254,464 @@
     </div>
   </div>
 
-  <!-- THREE.js -->
-  <script src="https://cdn.jsdelivr.net/npm/three@0.155.0/build/three.min.js"></script>
-  <script>
-  /* ========================== CONFIG ========================== */
-  const PARTICLES = 60000, PORTRAIT = 30000;
-  const MIN_GRAY = 0.18, PARTICLE_SIZE = 0.47, CONTRAST = 1.08;
-  const GLOBAL_ROTATE_SPEED = 0.16;
-  const PORTRAIT_SCALE = 1.20, PORTRAIT_Y_SHIFT = -40;
-  const MORPH_TIME = 30000, PORTRAIT_SCALE_FACTOR = 1.15;
+<!-- THREE.js -->
+<script src="https://cdn.jsdelivr.net/npm/three@0.155.0/build/three.min.js"></script>
+<script>
+/* ========================== CONFIG (tuned) ========================== */
+const PARTICLES = 60000, PORTRAIT = 30000;
+const MIN_GRAY = 0.18, PARTICLE_SIZE = 0.47, CONTRAST = 1.08;
 
-  /* Motion & fading */
-  const STAGGER_MS = 6500;
-  const ORB_MAG_PORTRAIT = 2.2;
-  const ORB_MAG_AMBIENT  = 13.5;
+/* Camera/pose */
+const GLOBAL_ROTATE_SPEED = 0.16;
+const PORTRAIT_SCALE = 1.20, PORTRAIT_Y_SHIFT = -40;
+const MORPH_TIME = 30000;
 
-  /* Ambient smooth fade ring (no hard line) */
-  const AMBIENT_INNER = 240;   // فاصله (واحد صحنه) که از اینجا شروع به محو شدن می‌کند
-  const AMBIENT_OUTER = 720;   // تا این فاصله به حداکثر آلفا می‌رسد
-  const AMBIENT_MIN_ALPHA = 0.14;
-  const AMBIENT_MAX_ALPHA = 0.55;
+/* Portrait point tuning */
+const PORTRAIT_POINT_SCALE = 0.78;          // کوچک‌تر شدن ذرات چهره
+const PORTRAIT_SIZE_GROW_MIN = 0.35;        // حداقل رشد سایز در طول مورف
+const PORTRAIT_SIZE_GROW_MAX = 0.45;        // حداکثر رشد سایز در طول مورف
+const PORTRAIT_FINAL_ORBIT = 0.60;          // دامنه اوربیت نهایی (px صحنه)
+const PORTRAIT_FINAL_ORBIT_Y = 0.36;        // نسبت بیضوی محور دوم
+const PORTRAIT_FINAL_FREQ = 0.28;           // فرکانس اوربیت نهایی
 
-  /* Hotspot & edge control for portrait */
-  const CENTER_DAMP_STRENGTH = 0.45;    // کاهش در مرکز
-  const EDGE_FADE_START = 0.88;          // شروع فید لبه
-  const EDGE_FADE_END   = 1.02;          // پایان فید لبه
-  const EDGE_FADE_STRENGTH = 0.45;
+/* Motion & fading */
+const STAGGER_MS = 6500;
+const ORB_MAG_PORTRAIT = 1.2;               // کمتر برای چهره در حین مورف
+const ORB_MAG_AMBIENT  = 13.5;
 
-  /* Portrait source */
-  const PORTRAIT_SRC = "https://i.ibb.co/W4N6XfsN/portrait.png";
+/* Ambient gaussian vignette (بدون حلقه) */
+const AMBIENT_SIGMA = 560;                  // هرچه بزرگ‌تر، شیب آرام‌تر
+const AMBIENT_MIN_ALPHA = 0.10;
+const AMBIENT_MAX_ALPHA = 0.55;
 
-  /* ========================== SETUP ========================== */
-  const renderer = new THREE.WebGLRenderer({ antialias: true });
-  renderer.setClearColor(0x10151A, 1);
-  renderer.setSize(window.innerWidth, window.innerHeight);
-  document.getElementById("bg-three").appendChild(renderer.domElement);
+/* Hotspot & edge control for portrait */
+const CENTER_DAMP_STRENGTH = 0.62;          // کاهش مرکز قوی‌تر
+const EDGE_FADE_START = 0.84;
+const EDGE_FADE_END   = 1.04;
+const EDGE_FADE_STRENGTH = 0.50;
 
-  const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 3000);
-  camera.position.set(400, 80, 220); camera.lookAt(0,0,0);
-  const scene = new THREE.Scene();
+/* Hotspot guard (پیشانی‌های خیلی روشن در فاز اولیه) */
+const HOT_LUM_START = 0.82, HOT_LUM_END = 0.94;       // محدوده روشنایی
+const HOT_EDGE_START = 0.08, HOT_EDGE_END = 0.28;     // کم‌لبه بودن
+const HOT_EARLY_MIN = 0.22, HOT_EARLY_MAX = 0.55;     // فقط اوایل مورف
 
-  const positions     = new Float32Array(PARTICLES * 3);
-  const basePositions = new Float32Array(PARTICLES * 3);
-  const morphTargets  = new Float32Array(PARTICLES * 3);
-  const colors        = new Float32Array(PARTICLES * 3);
-  const sizes         = new Float32Array(PARTICLES);
-  const sharpness     = new Float32Array(PARTICLES);
-  const isPortrait    = new Uint8Array(PARTICLES);
-  const alphas        = new Float32Array(PARTICLES);
+/* Portrait source */
+const PORTRAIT_SRC = "https://i.ibb.co/W4N6XfsN/portrait.png";
 
-  const randFreq   = new Float32Array(PARTICLES);
-  const randAmp    = new Float32Array(PARTICLES);
-  const morphDelay = new Float32Array(PARTICLES);
-  const flickFreq  = new Float32Array(PARTICLES);
-  const flickPhase = new Float32Array(PARTICLES);
+/* ========================== SETUP ========================== */
+const renderer = new THREE.WebGLRenderer({ antialias: true });
+renderer.setClearColor(0x000000, 1);
+renderer.setSize(window.innerWidth, window.innerHeight);
+document.getElementById("bg-three").appendChild(renderer.domElement);
 
-  function clamp(v,a,b){return Math.max(a,Math.min(v,b));}
-  function applyContrast(l, c) { return clamp(0.5 + (l-0.5)*c, 0, 1); }
-  function easeInOut(t) { return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2; }
-  function smoothstep(e0,e1,x){ const t = clamp((x-e0)/(e1-e0),0,1); return t*t*(3-2*t); }
+const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 3000);
+camera.position.set(400, 80, 220); camera.lookAt(0,0,0);
+const scene = new THREE.Scene();
 
-  const RADIUS = 700;
-  for(let i=0;i<PARTICLES;++i){
-    let r = RADIUS * (0.7 + Math.random()*0.2) * (Math.random()**0.6),
-        theta = Math.random()*2*Math.PI,
-        phi = Math.acos(1 - 2*Math.random());
-    const x = r*Math.sin(phi)*Math.cos(theta)+150,
-          y = r*Math.sin(phi)*Math.sin(theta)+80,
-          z = r*Math.cos(phi)-150;
-    positions[i*3] = basePositions[i*3] = x;
-    positions[i*3+1] = basePositions[i*3+1] = y;
-    positions[i*3+2] = basePositions[i*3+2] = z;
-    colors[i*3] = 1.0; colors[i*3+1] = 1.0; colors[i*3+2] = 1.0;
-    sizes[i] = PARTICLE_SIZE; sharpness[i] = 1.0; isPortrait[i] = (i < PORTRAIT) ? 1 : 0;
-    alphas[i] = AMBIENT_MAX_ALPHA;
+const positions     = new Float32Array(PARTICLES * 3);
+const basePositions = new Float32Array(PARTICLES * 3);
+const morphTargets  = new Float32Array(PARTICLES * 3);
+const colors        = new Float32Array(PARTICLES * 3);
+const sizes         = new Float32Array(PARTICLES);
+const sharpness     = new Float32Array(PARTICLES);
+const isPortrait    = new Uint8Array(PARTICLES);
+const alphas        = new Float32Array(PARTICLES);
 
-    randFreq[i]   = 0.35 + Math.random()*0.9;
-    randAmp[i]    = 0.7  + Math.random()*0.6;
-    morphDelay[i] = isPortrait[i] ? Math.random()*STAGGER_MS : 0.0;
-    flickFreq[i]  = 0.5  + Math.random()*2.5;
-    flickPhase[i] = Math.random()*Math.PI*2;
-  }
+const randFreq   = new Float32Array(PARTICLES);
+const randAmp    = new Float32Array(PARTICLES);
+const morphDelay = new Float32Array(PARTICLES);
+const flickFreq  = new Float32Array(PARTICLES);
+const flickPhase = new Float32Array(PARTICLES);
 
-  const geometry = new THREE.BufferGeometry();
-  geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-  geometry.setAttribute('color',    new THREE.BufferAttribute(colors, 3));
-  geometry.setAttribute('aSize',    new THREE.BufferAttribute(sizes, 1));
-  geometry.setAttribute('aAlpha',   new THREE.BufferAttribute(alphas, 1));
+function clamp(v,a,b){return Math.max(a,Math.min(v,b));}
+function applyContrast(l, c) { return clamp(0.5 + (l-0.5)*c, 0, 1); }
+function easeInOut(t){ return t < 0.5 ? 4*t*t*t : 1 - Math.pow(-2*t + 2, 3)/2; }
+function smoothstep(e0,e1,x){ const t = clamp((x-e0)/(e1-e0),0,1); return t*t*(3-2*t); }
 
-  const material = new THREE.ShaderMaterial({
-    vertexShader: `
-      attribute float aSize;
-      attribute vec3 color;
-      attribute float aAlpha;
-      varying vec3 vColor;
-      varying float vAlpha;
-      void main() {
-        vColor = color;
-        vAlpha = aAlpha;
-        vec4 mvPosition = modelViewMatrix * vec4(position, 1.0);
-        gl_PointSize = aSize * 1300.0 / (-mvPosition.z);
-        gl_Position = projectionMatrix * mvPosition;
-      }
-    `,
-    fragmentShader: `
-      varying vec3 vColor;
-      varying float vAlpha;
-      void main() {
-        float border = 0.07;
-        if(gl_PointCoord.x < border || gl_PointCoord.x > 1.0-border ||
-           gl_PointCoord.y < border || gl_PointCoord.y > 1.0-border) discard;
-        gl_FragColor = vec4(vColor, vAlpha);
-      }
-    `,
-    transparent: true,
-    depthTest: true
-  });
+const RADIUS = 700;
+for(let i=0;i<PARTICLES;++i){
+  let r = RADIUS * (0.7 + Math.random()*0.2) * (Math.random()**0.6),
+      theta = Math.random()*2*Math.PI,
+      phi = Math.acos(1 - 2*Math.random());
+  const x = r*Math.sin(phi)*Math.cos(theta)+150,
+        y = r*Math.sin(phi)*Math.sin(theta)+80,
+        z = r*Math.cos(phi)-150;
+  positions[i*3] = basePositions[i*3] = x;
+  positions[i*3+1] = basePositions[i*3+1] = y;
+  positions[i*3+2] = basePositions[i*3+2] = z;
 
-  const points = new THREE.Points(geometry, material);
-  scene.add(points);
+  colors[i*3] = 1.0; colors[i*3+1] = 1.0; colors[i*3+2] = 1.0;
+  sizes[i] = PARTICLE_SIZE;
+  sharpness[i] = 1.0;
+  isPortrait[i] = (i < PORTRAIT) ? 1 : 0;
+  alphas[i] = AMBIENT_MAX_ALPHA;
 
-  /* =================== SAMPLER (grid + sobel + jitter) =================== */
-  function sampleImageGrid(url, pointCount, callback) {
-    const img = new Image();
-    img.crossOrigin = "anonymous";
-    img.referrerPolicy = "no-referrer";
+  randFreq[i]   = 0.35 + Math.random()*0.9;
+  randAmp[i]    = 0.7  + Math.random()*0.6;
+  morphDelay[i] = isPortrait[i] ? Math.random()*STAGGER_MS : 0.0;
+  flickFreq[i]  = 0.5  + Math.random()*2.5;
+  flickPhase[i] = Math.random()*Math.PI*2;
+}
 
-    function hardFallback() {
-      const out=[], lums=[], edges=[];
-      for (let i=0;i<pointCount;i++){
-        const th = Math.random()*Math.PI*2;
-        const r  = Math.sqrt(Math.random())*150;
-        const x  = (Math.cos(th)*r)*0.85*PORTRAIT_SCALE;
-        const y  = (Math.sin(th)*r)*1.10*PORTRAIT_SCALE + PORTRAIT_Y_SHIFT;
-        out.push({x,y,z:0,sharp:0.8}); lums.push(0.8); edges.push(0.0);
-      }
-      callback(out,lums,edges);
+const geometry = new THREE.BufferGeometry();
+geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+geometry.setAttribute('color',    new THREE.BufferAttribute(colors, 3));
+geometry.setAttribute('aSize',    new THREE.BufferAttribute(sizes, 1));
+geometry.setAttribute('aAlpha',   new THREE.BufferAttribute(alphas, 1));
+geometry.setAttribute('aSharp',   new THREE.BufferAttribute(sharpness, 1)); // NEW
+
+/* ===================== Soft-disc shader (no harsh halos) ===================== */
+const material = new THREE.ShaderMaterial({
+  vertexShader: `
+    attribute float aSize;
+    attribute vec3 color;
+    attribute float aAlpha;
+    attribute float aSharp;
+    varying vec3 vColor;
+    varying float vAlpha;
+    varying float vSharp;
+    void main() {
+      vColor = color;
+      vAlpha = aAlpha;
+      vSharp = aSharp;
+      vec4 mvPosition = modelViewMatrix * vec4(position, 1.0);
+      float ps = aSize * 1300.0 / max(20.0, -mvPosition.z);  // جلوگیری از انفجار سایز
+      gl_PointSize = clamp(ps, 0.0, 11.0);                   // سقف سایز
+      gl_Position = projectionMatrix * mvPosition;
     }
-    img.onerror = hardFallback;
+  `,
+  fragmentShader: `
+    varying vec3 vColor;
+    varying float vAlpha;
+    varying float vSharp;
+    void main() {
+      // soft disc with inner glow
+      vec2 uv = gl_PointCoord * 2.0 - 1.0;
+      float r2 = dot(uv, uv);             // 0 = مرکز ... ~1 = لبه
+      if (r2 > 1.0) discard;
 
-    img.onload = function(){
-      const w = 360, h = 450;
-      const cv = document.createElement('canvas'); cv.width = w; cv.height = h;
-      const ctx = cv.getContext('2d'); ctx.drawImage(img, 0, 0, w, h);
+      // falloff قابل کنترل با sharpness
+      float fall = pow(smoothstep(1.0, 0.0, r2), mix(1.2, 2.6, clamp(vSharp,0.0,1.0)));
+      // هاله‌ی داخلی خیلی خفیف
+      float glow = smoothstep(0.55, 0.0, r2);
 
-      let data; try { data = ctx.getImageData(0,0,w,h).data; } catch(e){ return hardFallback(); }
+      vec3 col = vColor * (0.86 + 0.14 * glow);
+      float a  = vAlpha * fall;
+      gl_FragColor = vec4(col, a);
+    }
+  `,
+  transparent: true,
+  depthTest: true,
+  blending: THREE.NormalBlending
+});
 
-      const L = new Float32Array(w*h);
-      for (let i=0, y=0; y<h; y++){
-        for (let x=0; x<w; x++, i++){
-          const k=i*4; L[i] = (data[k]*0.299 + data[k+1]*0.587 + data[k+2]*0.114)/255;
-        }
+const points = new THREE.Points(geometry, material);
+scene.add(points);
+
+/* =================== SAMPLER (grid + sobel + jitter) =================== */
+function sampleImageGrid(url, pointCount, callback) {
+  const img = new Image();
+  img.crossOrigin = "anonymous";
+  img.referrerPolicy = "no-referrer";
+
+  function hardFallback() {
+    const out=[], lums=[], edges=[];
+    for (let i=0;i<pointCount;i++){
+      const th = Math.random()*Math.PI*2;
+      const r  = Math.sqrt(Math.random())*150;
+      const x  = (Math.cos(th)*r)*0.85*PORTRAIT_SCALE;
+      const y  = (Math.sin(th)*r)*1.10*PORTRAIT_SCALE + PORTRAIT_Y_SHIFT;
+      out.push({x,y,z:0,sharp:0.8}); lums.push(0.8); edges.push(0.0);
+    }
+    callback(out,lums,edges);
+  }
+  img.onerror = hardFallback;
+
+  img.onload = function(){
+    const w = 360, h = 450;
+    const cv = document.createElement('canvas'); cv.width = w; cv.height = h;
+    const ctx = cv.getContext('2d'); ctx.drawImage(img, 0, 0, w, h);
+
+    let data; try { data = ctx.getImageData(0,0,w,h).data; } catch(e){ return hardFallback(); }
+
+    const L = new Float32Array(w*h);
+    for (let i=0, y=0; y<h; y++){
+      for (let x=0; x<w; x++, i++){
+        const k=i*4; L[i] = (data[k]*0.299 + data[k+1]*0.587 + data[k+2]*0.114)/255;
       }
-      const E = new Float32Array(w*h);
-      const sobel=(x,y)=>{
-        const g=(xx,yy)=> L[Math.max(0,Math.min(h-1,yy))*w + Math.max(0,Math.min(w-1,xx))];
-        const gx = -g(x-1,y-1)-2*g(x-1,y)-g(x-1,y+1) + g(x+1,y-1)+2*g(x+1,y)+g(x+1,y+1);
-        const gy = -g(x-1,y-1)-2*g(x,y-1)-g(x+1,y-1) + g(x-1,y+1)+2*g(x,y+1)+g(x+1,y+1);
-        return Math.min(1, Math.hypot(gx,gy)*0.8);
-      };
-      for (let y=0; y<h; y++) for (let x=0; x<w; x++) E[y*w+x]=sobel(x,y);
-
-      const ALPHA_MIN = 0.05;
-      const cand = [];
-      for (let y=0; y<h; y++){
-        for (let x=0; x<w; x++){
-          const i=y*w+x, a=data[i*4+3]/255; if (a < ALPHA_MIN) continue;
-          const lum  = Math.max(MIN_GRAY, L[i]); const edge = E[i];
-          const score = 0.20 + 1.2*edge + 0.15*(1.0 - Math.abs(lum-0.5));
-          cand.push({x,y,lum,edge,score});
-        }
-      }
-      if (!cand.length) return hardFallback();
-
-      const ar = w/h;
-      let gridW = Math.max(6, Math.round(Math.sqrt(pointCount*ar)));
-      let gridH = Math.max(6, Math.round(pointCount / gridW));
-      const cellW = w/gridW, cellH = h/gridH;
-
-      const buckets = Array.from({length:gridW*gridH}, ()=>null);
-      for (const c of cand){
-        const cx = Math.min(gridW-1, Math.floor(c.x / cellW));
-        const cy = Math.min(gridH-1, Math.floor(c.y / cellH));
-        const idx = cy*gridW + cx;
-        const b = buckets[idx];
-        if (!b || c.score > b.score) buckets[idx] = c;
-      }
-
-      const out=[], lums=[], edges=[];
-      const centerX = w/2, centerY = h/2;
-      const jitter = 0.35;
-
-      for (let cy=0; cy<gridH; cy++){
-        for (let cx=0; cx<gridW; cx++){
-          const c = buckets[cy*gridW + cx];
-          if (!c) continue;
-
-          const jx = (Math.random()-0.5)*cellW*jitter;
-          const jy = (Math.random()-0.5)*cellH*jitter;
-          const px = Math.max(0, Math.min(w-1, c.x + jx));
-          const py = Math.max(0, Math.min(h-1, c.y + jy));
-
-          const nx = (px - centerX)/w * 280 * PORTRAIT_SCALE;
-          const ny = (centerY - py)/h * 340 * PORTRAIT_SCALE + PORTRAIT_Y_SHIFT;
-
-          const dx = (px-centerX)/(w/2), dy = (py-centerY)/(h/2);
-          const radial = Math.sqrt(dx*dx + dy*dy);
-          const sharp = Math.max(0.4, 1.0 - radial);
-
-          out.push({x:nx, y:ny, z:0, sharp});
-          lums.push(Math.max(MIN_GRAY, c.lum));
-          edges.push(c.edge);
-        }
-      }
-
-      if (out.length < pointCount){
-        cand.sort((a,b)=>b.score-a.score);
-        for (let k=0; k<cand.length && out.length<pointCount; k+=Math.ceil(cand.length/(pointCount-out.length))){
-          const c=cand[k];
-          const nx = (c.x - centerX)/w * 280 * PORTRAIT_SCALE;
-          const ny = (centerY - c.y)/h * 340 * PORTRAIT_SCALE + PORTRAIT_Y_SHIFT;
-          const dx=(c.x-centerX)/(w/2), dy=(c.y-centerY)/(h/2);
-          const sharp = Math.max(0.4, 1.0 - Math.hypot(dx,dy));
-          out.push({x:nx,y:ny,z:0,sharp});
-          lums.push(Math.max(MIN_GRAY, c.lum));
-          edges.push(c.edge);
-        }
-      }
-      if (out.length > pointCount){ out.length = pointCount; lums.length = pointCount; edges.length = pointCount; }
-
-      callback(out, lums, edges);
+    }
+    const E = new Float32Array(w*h);
+    const sobel=(x,y)=>{
+      const g=(xx,yy)=> L[Math.max(0,Math.min(h-1,yy))*w + Math.max(0,Math.min(w-1,xx))];
+      const gx = -g(x-1,y-1)-2*g(x-1,y)-g(x-1,y+1) + g(x+1,y-1)+2*g(x+1,y)+g(x+1,y+1);
+      const gy = -g(x-1,y-1)-2*g(x,y-1)-g(x+1,y-1) + g(x-1,y+1)+2*g(x,y+1)+g(x+1,y+1);
+      return Math.min(1, Math.hypot(gx,gy)*0.8);
     };
+    for (let y=0; y<h; y++) for (let x=0; x<w; x++) E[y*w+x]=sobel(x,y);
 
-    img.src = url;
-  }
-
-  /* ========================== MORPH ========================== */
-  let morphLums = [], edgeStrengths = [];
-  let morphStartTime = 0, morphing = false, morphReady = false, fullyReady = false;
-  let portraitCenterW = null, portraitRightW = null, portraitUpW = null;
-  const RX = 280*PORTRAIT_SCALE, RY = 340*PORTRAIT_SCALE; // scale radii for plane distance
-
-  function rotateY(x, y, z, theta) {
-    return [Math.cos(theta)*x - Math.sin(theta)*z, y, Math.sin(theta)*x + Math.cos(theta)*z];
-  }
-  function rotateX(x, y, z, phi) {
-    return [x, Math.cos(phi)*y - Math.sin(phi)*z, Math.sin(phi)*y + Math.cos(phi)*z];
-  }
-  function rotateAroundPoint(x, y, z, cx, cy, cz, theta, phi) {
-    let dx = x - cx, dy = y - cy, dz = z - cz;
-    let [rx, ry, rz] = rotateY(dx, dy, dz, theta); [rx, ry, rz] = rotateX(rx, ry, rz, phi);
-    return [rx + cx, ry + cy, rz + cz];
-  }
-
-  function startMorph(){
-    for(let i=0; i<PARTICLES; i++) isPortrait[i] = (i < PORTRAIT) ? 1 : 0;
-
-    sampleImageGrid(PORTRAIT_SRC, PORTRAIT, function(samples, lums, edges){
-      morphLums = lums; edgeStrengths = edges;
-
-      const forward = new THREE.Vector3(); camera.getWorldDirection(forward).normalize();
-      const portraitDepth = 320;
-      portraitCenterW = camera.position.clone().add(forward.clone().multiplyScalar(portraitDepth));
-      const up    = camera.up.clone().normalize();
-      let right = new THREE.Vector3().crossVectors(forward, up).normalize();
-      if (right.lengthSq() < 1e-6) right = new THREE.Vector3(1,0,0);
-      portraitRightW = right; portraitUpW = up;
-
-      for(let i=0;i<PARTICLES;++i){
-        if(isPortrait[i]){
-          const s = samples[i] || {x:0,y:0,sharp:1};
-          const pos = portraitCenterW.clone()
-            .add(right.clone().multiplyScalar(s.x))
-            .add(up.clone().multiplyScalar(s.y));
-          morphTargets[i*3]   = pos.x;
-          morphTargets[i*3+1] = pos.y;
-          morphTargets[i*3+2] = pos.z;
-          sharpness[i] = Number.isFinite(s.sharp) ? s.sharp : 1.0;
-        } else {
-          morphTargets[i*3]=basePositions[i*3];
-          morphTargets[i*3+1]=basePositions[i*3+1];
-          morphTargets[i*3+2]=basePositions[i*3+2];
-          sharpness[i]=1.0;
-        }
+    const ALPHA_MIN = 0.05;
+    const cand = [];
+    for (let y=0; y<h; y++){
+      for (let x=0; x<w; x++){
+        const i=y*w+x, a=data[i*4+3]/255; if (a < ALPHA_MIN) continue;
+        const lum  = Math.max(MIN_GRAY, L[i]); const edge = E[i];
+        // کمی ترجیح به لبه‌ها تا تجمع وسط کمتر شود
+        const score = 0.22 + 1.35*edge + 0.12*(1.0 - Math.abs(lum-0.5));
+        cand.push({x,y,lum,edge,score});
       }
+    }
+    if (!cand.length) return hardFallback();
 
-      morphStartTime = performance.now();
-      morphReady = true; morphing = true; fullyReady = true;
-      requestAnimationFrame(animate);
-    });
-  }
+    const ar = w/h;
+    let gridW = Math.max(6, Math.round(Math.sqrt(pointCount*ar)));
+    let gridH = Math.max(6, Math.round(pointCount / gridW));
+    const cellW = w/gridW, cellH = h/gridH;
 
-  function animate(now){
-    const t = now*0.001, globalPhase = t*GLOBAL_ROTATE_SPEED;
+    const buckets = Array.from({length:gridW*gridH}, ()=>null);
+    for (const c of cand){
+      const cx = Math.min(gridW-1, Math.floor(c.x / cellW));
+      const cy = Math.min(gridH-1, Math.floor(c.y / cellH));
+      const idx = cy*gridW + cx;
+      const b = buckets[idx];
+      if (!b || c.score > b.score) buckets[idx] = c;
+    }
 
-    for(let i=0; i<PARTICLES; ++i){
-      let bx = basePositions[i*3], by = basePositions[i*3+1], bz = basePositions[i*3+2], gx = bx, gy = by, gz = bz;
-      if (!isPortrait[i]) {
-        [gx, gy, gz] = rotateAroundPoint(bx, by, bz, 0, 0, 0, globalPhase, globalPhase * 0.7);
+    const out=[], lums=[], edges=[];
+    const centerX = w/2, centerY = h/2;
+    const jitter = 0.42;
+
+    for (let cy=0; cy<gridH; cy++){
+      for (let cx=0; cx<gridW; cx++){
+        const c = buckets[cy*gridW + cx];
+        if (!c) continue;
+
+        const jx = (Math.random()-0.5)*cellW*jitter;
+        const jy = (Math.random()-0.5)*cellH*jitter;
+        const px = Math.max(0, Math.min(w-1, c.x + jx));
+        const py = Math.max(0, Math.min(h-1, c.y + jy));
+
+        const nx = (px - centerX)/w * 280 * PORTRAIT_SCALE;
+        const ny = (centerY - py)/h * 340 * PORTRAIT_SCALE + PORTRAIT_Y_SHIFT;
+
+        const dx = (px-centerX)/(w/2), dy = (py-centerY)/(h/2);
+        const radial = Math.sqrt(dx*dx + dy*dy);
+        const sharp = Math.max(0.4, 1.0 - radial);
+
+        out.push({x:nx, y:ny, z:0, sharp});
+        lums.push(Math.max(MIN_GRAY, c.lum));
+        edges.push(c.edge);
       }
-      const baseMag = isPortrait[i] ? ORB_MAG_PORTRAIT : ORB_MAG_AMBIENT;
-      const orbMag  = baseMag * randAmp[i];
-      const orbFreq = (0.42 + (i%17)*0.012) * randFreq[i];
-      const wob  = Math.sin(t*orbFreq + i) * orbMag;
-      const wob2 = Math.cos(t*orbFreq*0.63 + i*0.74) * (orbMag*0.5);
+    }
 
-      let nx, ny, nz;
+    if (out.length < pointCount){
+      cand.sort((a,b)=>b.score-a.score);
+      for (let k=0; k<cand.length && out.length<pointCount; k+=Math.ceil(cand.length/(pointCount-out.length))){
+        const c=cand[k];
+        const nx = (c.x - centerX)/w * 280 * PORTRAIT_SCALE;
+        const ny = (centerY - c.y)/h * 340 * PORTRAIT_SCALE + PORTRAIT_Y_SHIFT;
+        const dx=(c.x-centerX)/(w/2), dy=(c.y-centerY)/(h/2);
+        const sharp = Math.max(0.4, 1.0 - Math.hypot(dx,dy));
+        out.push({x:nx,y:ny,z:0,sharp});
+        lums.push(Math.max(MIN_GRAY, c.lum));
+        edges.push(c.edge);
+      }
+    }
+    if (out.length > pointCount){ out.length = pointCount; lums.length = pointCount; edges.length = pointCount; }
 
-      if(fullyReady && morphReady && morphing && isPortrait[i]){
-        const startI = morphStartTime + morphDelay[i];
-        const raw = clamp((now - startI) / MORPH_TIME, 0, 1);
-        const lp = easeInOut(raw);
+    callback(out, lums, edges);
+  };
 
-        const tx = morphTargets[i*3], ty = morphTargets[i*3+1], tz = morphTargets[i*3+2];
-        nx = (1-lp)*bx + lp*tx + wob;
-        ny = (1-lp)*by + lp*ty + wob2;
-        nz = (1-lp)*bz + lp*tz;
+  img.src = url;
+}
 
-        // distance in portrait plane (normalized 0..1)
-        let rNorm = 0.0;
-        if (portraitCenterW){
-          const vx = nx - portraitCenterW.x;
-          const vy = ny - portraitCenterW.y;
-          const vz = nz - portraitCenterW.z;
-          const dx = (vx*portraitRightW.x + vy*portraitRightW.y + vz*portraitRightW.z) / RX;
-          const dy = (vx*portraitUpW.x    + vy*portraitUpW.y    + vz*portraitUpW.z) / RY;
-          rNorm = Math.min(1.4, Math.hypot(dx, dy)); // allow slight >1 for fade end
-        }
+/* ========================== MORPH ========================== */
+let morphLums = [], edgeStrengths = [];
+let morphStartTime = 0, morphing = false, morphReady = false, fullyReady = false;
+let portraitCenterW = null, portraitRightW = null, portraitUpW = null;
+const RX = 280*PORTRAIT_SCALE, RY = 340*PORTRAIT_SCALE;
 
-        // luminance & hotspot damp
-        let lum = applyContrast(morphLums[i] ?? 0.8, CONTRAST);
-        lum = clamp(lum, MIN_GRAY, 1.0);
+function rotateY(x, y, z, theta) {
+  return [Math.cos(theta)*x - Math.sin(theta)*z, y, Math.sin(theta)*x + Math.cos(theta)*z];
+}
+function rotateX(x, y, z, phi) {
+  return [x, Math.cos(phi)*y - Math.sin(phi)*z, Math.sin(phi)*y + Math.cos(phi)*z];
+}
+function rotateAroundPoint(x, y, z, cx, cy, cz, theta, phi) {
+  let dx = x - cx, dy = y - cy, dz = z - cz;
+  let [rx, ry, rz] = rotateY(dx, dy, dz, theta); [rx, ry, rz] = rotateX(rx, ry, rz, phi);
+  return [rx + cx, ry + cy, rz + cz];
+}
 
-        // کاهش مرکز
-        const centerFactor = 1.0 - CENTER_DAMP_STRENGTH * (1.0 - smoothstep(0.0, 0.35, rNorm));
-        lum *= centerFactor;
+function startMorph(){
+  for(let i=0; i<PARTICLES; i++) isPortrait[i] = (i < PORTRAIT) ? 1 : 0;
 
-        // فید لبه
-        const edgeMix = clamp((rNorm - EDGE_FADE_START) / (EDGE_FADE_END - EDGE_FADE_START), 0, 1);
-        const edgeFactor = 1.0 - EDGE_FADE_STRENGTH * edgeMix;
+  sampleImageGrid(PORTRAIT_SRC, PORTRAIT, function(samples, lums, edges){
+    morphLums = lums; edgeStrengths = edges;
 
-        const edge = edgeStrengths[i] ?? 0.0;
-        const edgeShrink = 1.0 - 0.25 * edge;
+    const forward = new THREE.Vector3(); camera.getWorldDirection(forward).normalize();
+    const portraitDepth = 320;
+    portraitCenterW = camera.position.clone().add(forward.clone().multiplyScalar(portraitDepth));
+    const up    = camera.up.clone().normalize();
+    let right = new THREE.Vector3().crossVectors(forward, up).normalize();
+    if (right.lengthSq() < 1e-6) right = new THREE.Vector3(1,0,0);
+    portraitRightW = right; portraitUpW = up;
 
-        const grow = 0.45 + 0.65*lp;
-        sizes[i]  = PARTICLE_SIZE * sharpness[i] * edgeShrink * grow * edgeFactor * (lp>0.999 ? PORTRAIT_SCALE_FACTOR : 1.0);
-
-        colors[i*3] = colors[i*3+1] = colors[i*3+2] = 1.0 + (lum-1.0)*lp;
-
-        // آلفا: رشد تدریجی + فید لبه + کاهش مرکز
-        let a = (0.12 + 0.86*lp) * edgeFactor * centerFactor;
-        alphas[i] = clamp(a, 0.0, 1.0);
-
+    for(let i=0;i<PARTICLES;++i){
+      if(isPortrait[i]){
+        const s = samples[i] || {x:0,y:0,sharp:1};
+        // هدف نهایی روی صفحهٔ پرتره
+        const pos = portraitCenterW.clone()
+          .add(right.clone().multiplyScalar(s.x))
+          .add(up.clone().multiplyScalar(s.y));
+        morphTargets[i*3]   = pos.x;
+        morphTargets[i*3+1] = pos.y;
+        morphTargets[i*3+2] = pos.z;
+        sharpness[i] = Number.isFinite(s.sharp) ? s.sharp : 1.0;
       } else {
-        nx = gx + wob; ny = gy + wob2; nz = gz;
+        morphTargets[i*3]=basePositions[i*3];
+        morphTargets[i*3+1]=basePositions[i*3+1];
+        morphTargets[i*3+2]=basePositions[i*3+2];
+        sharpness[i]=1.0;
+      }
+    }
 
-        // Ambient soft ring fade (no hard line)
-        let alpha = AMBIENT_MAX_ALPHA;
-        if (portraitCenterW){
-          const dx = nx - portraitCenterW.x, dy = ny - portraitCenterW.y, dz = nz - portraitCenterW.z;
-          const dist = Math.sqrt(dx*dx+dy*dy+dz*dz);
-          const a = smoothstep(AMBIENT_INNER, AMBIENT_OUTER, dist);
-          alpha = AMBIENT_MIN_ALPHA + (AMBIENT_MAX_ALPHA - AMBIENT_MIN_ALPHA) * a;
-        }
+    morphStartTime = performance.now();
+    morphReady = true; morphing = true; fullyReady = true;
+    requestAnimationFrame(animate);
+  });
+}
+
+function animate(now){
+  const t = now*0.001, globalPhase = t*GLOBAL_ROTATE_SPEED;
+
+  for(let i=0; i<PARTICLES; ++i){
+    let bx = basePositions[i*3], by = basePositions[i*3+1], bz = basePositions[i*3+2], gx = bx, gy = by, gz = bz;
+
+    // چرخش محیطی برای ذرات غیرچهره
+    if (!isPortrait[i]) {
+      [gx, gy, gz] = rotateAroundPoint(bx, by, bz, 0, 0, 0, globalPhase, globalPhase * 0.7);
+    }
+
+    const baseMag = isPortrait[i] ? ORB_MAG_PORTRAIT : ORB_MAG_AMBIENT;
+    const orbMag  = baseMag * randAmp[i];
+    const orbFreq = (0.42 + (i%17)*0.012) * randFreq[i];
+    const wob  = Math.sin(t*orbFreq + i) * orbMag;
+    const wob2 = Math.cos(t*orbFreq*0.63 + i*0.74) * (orbMag*0.5);
+
+    let nx, ny, nz;
+
+    if(fullyReady && morphReady && morphing && isPortrait[i]){
+      const startI = morphStartTime + morphDelay[i];
+      const raw = clamp((now - startI) / MORPH_TIME, 0, 1);
+      const lp = easeInOut(raw);
+
+      // lerp به هدف + لرزش خیلی ملایم
+      const tx = morphTargets[i*3], ty = morphTargets[i*3+1], tz = morphTargets[i*3+2];
+
+      // jitter محو شونده به سمت هدف (برای جلوگیری از تجمع نقطه‌ای)
+      const jitterFade = 1.0 - smoothstep(0.25, 0.85, lp);
+      const jx = (Math.sin(i*12.9898)*43758.5453 % 1 - 0.5) * 0.8 * jitterFade;
+      const jy = (Math.sin(i*78.233 )*19341.1211 % 1 - 0.5) * 0.8 * jitterFade;
+
+      nx = (1-lp)*bx + lp*tx + wob + jx;
+      ny = (1-lp)*by + lp*ty + wob2 + jy;
+      nz = (1-lp)*bz + lp*tz;
+
+      // مختصات نرمالیزه شعاعی نسبت به مرکز پرتره
+      let rNorm = 0.0;
+      if (portraitCenterW){
+        const vx = nx - portraitCenterW.x;
+        const vy = ny - portraitCenterW.y;
+        const vz = nz - portraitCenterW.z;
+        const dx = (vx*portraitRightW.x + vy*portraitRightW.y + vz*portraitRightW.z) / RX;
+        const dy = (vx*portraitUpW.x    + vy*portraitUpW.y    + vz*portraitUpW.z) / RY;
+        rNorm = Math.min(1.4, Math.hypot(dx, dy));
+      }
+
+      // روشنایی و کنترل مرکز/لبه
+      let lum = applyContrast(morphLums[i] ?? 0.8, CONTRAST);
+      lum = clamp(lum, MIN_GRAY, 1.0);
+
+      // کاهش مرکز قوی‌تر
+      const centerFactor = 1.0 - CENTER_DAMP_STRENGTH * (1.0 - smoothstep(0.05, 0.38, rNorm));
+      // فید لبه
+      const edgeMix = clamp((rNorm - EDGE_FADE_START) / (EDGE_FADE_END - EDGE_FADE_START), 0, 1);
+      const edgeFactor = 1.0 - EDGE_FADE_STRENGTH * edgeMix;
+
+      const edge = edgeStrengths[i] ?? 0.0;
+      const edgeShrink = 1.0 - 0.25 * edge;
+
+      // رشد سایز ملایم‌تر + کوچک‌تر برای چهره
+      const grow = PORTRAIT_SIZE_GROW_MIN + (PORTRAIT_SIZE_GROW_MAX - PORTRAIT_SIZE_GROW_MIN)*lp;
+      sizes[i]  = PARTICLE_SIZE * PORTRAIT_POINT_SCALE * sharpness[i] * edgeShrink * grow * edgeFactor;
+
+      colors[i*3] = colors[i*3+1] = colors[i*3+2] = 1.0 + (lum-1.0)*lp;
+
+      // Hotspot Guard: روشنِ کم‌لبه + فاز اولیه ⇒ سرکوب
+      const isHot   = smoothstep(HOT_LUM_START, HOT_LUM_END, morphLums[i] ?? 0.8);
+      const isPlain = 1.0 - smoothstep(HOT_EDGE_START, HOT_EDGE_END, edge);
+      const isEarly = 1.0 - smoothstep(HOT_EARLY_MIN, HOT_EARLY_MAX, lp);
+      const hotspotDamp = 1.0 - 0.85 * (isHot * isPlain * isEarly);
+
+      // آلفا: رشد تدریجی + فید لبه + کاهش مرکز + گارد
+      let a = (0.12 + 0.86*lp) * edgeFactor * centerFactor;
+      a *= hotspotDamp;
+      alphas[i] = clamp(a, 0.0, 1.0);
+
+      // اوربیت خیلی خفیف بعد از تشکیل کامل
+      const post = smoothstep(0.92, 1.0, lp);
+      if (post > 0.0 && portraitRightW && portraitUpW){
+        const ph = i * 0.37;
+        const ox = Math.cos(t*PORTRAIT_FINAL_FREQ + ph) * PORTRAIT_FINAL_ORBIT * post;
+        const oy = Math.sin(t*PORTRAIT_FINAL_FREQ*1.33 + ph) * PORTRAIT_FINAL_ORBIT * PORTRAIT_FINAL_ORBIT_Y * post;
+        nx += portraitRightW.x*ox + portraitUpW.x*oy;
+        ny += portraitRightW.y*ox + portraitUpW.y*oy;
+        nz += portraitRightW.z*ox + portraitUpW.z*oy;
+      }
+
+    } else {
+      // Ambient
+      nx = gx + wob; ny = gy + wob2; nz = gz;
+
+      if (portraitCenterW){
+        const dx = nx - portraitCenterW.x, dy = ny - portraitCenterW.y, dz = nz - portraitCenterW.z;
+        const dist2 = dx*dx+dy*dy+dz*dz;
+        // Gaussian vignette: بدون مرز حلقه‌ای
+        const gauss = 1.0 - Math.exp(-dist2 / (2.0 * AMBIENT_SIGMA * AMBIENT_SIGMA));
+        let alpha = AMBIENT_MIN_ALPHA + (AMBIENT_MAX_ALPHA - AMBIENT_MIN_ALPHA) * gauss;
         alpha *= (0.92 + 0.08*Math.sin(t*flickFreq[i] + flickPhase[i]));
         alphas[i] = alpha;
-
-        colors[i*3]=colors[i*3+1]=colors[i*3+2]=1.0;
-        sizes[i]=PARTICLE_SIZE;
+      } else {
+        alphas[i] = AMBIENT_MIN_ALPHA;
       }
 
-      if (!Number.isFinite(nx) || !Number.isFinite(ny) || !Number.isFinite(nz)) { nx = bx; ny = by; nz = bz; }
-      positions[i*3]   = nx; positions[i*3+1] = ny; positions[i*3+2] = nz;
+      colors[i*3]=colors[i*3+1]=colors[i*3+2]=1.0;
+      sizes[i]=PARTICLE_SIZE;
     }
 
-    geometry.attributes.position.needsUpdate = true;
-    geometry.attributes.color.needsUpdate = true;
-    geometry.attributes.aSize.needsUpdate = true;
-    geometry.attributes.aAlpha.needsUpdate = true;
-
-    renderer.render(scene, camera);
-    requestAnimationFrame(animate);
+    if (!Number.isFinite(nx) || !Number.isFinite(ny) || !Number.isFinite(nz)) { nx = bx; ny = by; nz = bz; }
+    positions[i*3]   = nx; positions[i*3+1] = ny; positions[i*3+2] = nz;
   }
 
-  window.addEventListener('resize', ()=>{
-    renderer.setSize(window.innerWidth, window.innerHeight);
-    camera.aspect = window.innerWidth / window.innerHeight;
-    camera.updateProjectionMatrix();
-  });
+  geometry.attributes.position.needsUpdate = true;
+  geometry.attributes.color.needsUpdate = true;
+  geometry.attributes.aSize.needsUpdate = true;
+  geometry.attributes.aAlpha.needsUpdate = true;
+  geometry.attributes.aSharp.needsUpdate = true;
 
-  startMorph();
-  </script>
+  renderer.render(scene, camera);
+  requestAnimationFrame(animate);
+}
+
+window.addEventListener('resize', ()=>{
+  renderer.setSize(window.innerWidth, window.innerHeight);
+  camera.aspect = window.innerWidth / window.innerHeight;
+  camera.updateProjectionMatrix();
+});
+
+startMorph();
+</script>
+
 
   <!-- Fade-ins -->
   <script>
