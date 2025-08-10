@@ -606,80 +606,140 @@
 
     const points = new THREE.Points(geometry, material);
     scene.add(points);
+/* === Edge-aware sampling (robust + guaranteed fill) === */
+function sampleImageGrid(url, pointCount, callback) {
+  const img = new Image();
+  img.crossOrigin = "anonymous";
 
-    /* === Edge-aware sampling (REPLACED) === */
-    function sampleImageGrid(url, pointCount, callback) {
-      const img = new Image();
-      img.crossOrigin = "Anonymous";
-      img.onload = function(){
-        const w = 360, h = 450; // a bit higher res
-        const cv = document.createElement('canvas'); cv.width = w; cv.height = h;
-        const ctx = cv.getContext('2d'); ctx.drawImage(img, 0, 0, w, h);
-        const d = ctx.getImageData(0,0,w,h).data;
-
-        // Luminance
-        const L = new Float32Array(w*h);
-        for (let y=0, i=0; y<h; y++){
-          for (let x=0; x<w; x++, i++){
-            const k = i*4;
-            L[i] = (d[k]*0.299 + d[k+1]*0.587 + d[k+2]*0.114)/255;
-          }
-        }
-        // Sobel edges
-        const E = new Float32Array(w*h);
-        const sobel = (x,y)=> {
-          const g = (xx,yy)=> L[Math.max(0, Math.min(h-1,yy))*w + Math.max(0, Math.min(w-1,xx))];
-          const gx = -g(x-1,y-1)-2*g(x-1,y)+-g(x-1,y+1) + g(x+1,y-1)+2*g(x+1,y)+g(x+1,y+1);
-          const gy = -g(x-1,y-1)-2*g(x,y-1)-g(x+1,y-1) + g(x-1,y+1)+2*g(x,y+1)+g(x+1,y+1);
-          return Math.min(1, Math.sqrt(gx*gx+gy*gy)*0.8);
-        };
-        for (let y=0; y<h; y++) for (let x=0; x<w; x++) E[y*w+x] = sobel(x,y);
-
-        const cand = [];
-        for (let y=0; y<h; y++){
-          for (let x=0; x<w; x++){
-            const i = y*w+x, a = d[i*4+3]/255;
-            if (a < 0.63) continue;
-            let lum = Math.max(MIN_GRAY, L[i]);
-            const edge = E[i];
-            const score = 0.1 + EDGE_WEIGHT*edge + 0.3*(1.0 - Math.abs(lum-0.5));
-            cand.push({x,y,lum,edge,score});
-          }
-        }
-        cand.sort((a,b)=> b.score - a.score);
-
-        const needDetail = Math.floor(pointCount * DETAIL_BIAS);
-        const out = [], lums=[], edges=[];
-        const centerX = w/2, centerY = h/2;
-
-        // detail-first
-        for (let i=0; i<needDetail && i<cand.length; i++){
-          const c = cand[i];
-          const nx = (c.x - centerX)/w * 280 * PORTRAIT_SCALE;
-          const ny = (centerY - c.y)/h * 340 * PORTRAIT_SCALE + PORTRAIT_Y_SHIFT;
-          let dx = (c.x-centerX)/(w/2), dy = (c.y-centerY)/(h/2);
-          const radial = Math.sqrt(dx*dx+dy*dy);
-          const sharp = Math.max(0.4, 1.0 - radial);
-          out.push({x:nx, y:ny, z:0, sharp});
-          lums.push(c.lum); edges.push(c.edge);
-        }
-        // uniform fill for rest
-        const remain = Math.max(0, pointCount - out.length);
-        for (let i=0; i<remain; i++){
-          const c = cand[(i * Math.floor(cand.length/remain)) % cand.length];
-          const nx = (c.x - centerX)/w * 280 * PORTRAIT_SCALE;
-          const ny = (centerY - c.y)/h * 340 * PORTRAIT_SCALE + PORTRAIT_Y_SHIFT;
-          let dx = (c.x-centerX)/(w/2), dy = (c.y-centerY)/(h/2);
-          const radial = Math.sqrt(dx*dx+dy*dy);
-          const sharp = Math.max(0.4, 1.0 - radial);
-          out.push({x:nx, y:ny, z:0, sharp});
-          lums.push(c.lum); edges.push(c.edge);
-        }
-
-        callback(out, lums, edges);
-      };
-      img.src = url;
+  // Always return exactly pointCount samples
+  function ensureCount(out, lums, edges) {
+    if (out.length === pointCount) return { out, lums, edges };
+    if (out.length === 0) {
+      // solid fallback: elliptical face-like blob
+      const outF = [], lF = [], eF = [];
+      for (let i = 0; i < pointCount; i++) {
+        const th = Math.random() * Math.PI * 2;
+        const r  = Math.sqrt(Math.random()) * 150;
+        const x  = (Math.cos(th) * r) * 0.85 * PORTRAIT_SCALE;
+        const y  = (Math.sin(th) * r) * 1.10 * PORTRAIT_SCALE + PORTRAIT_Y_SHIFT;
+        outF.push({ x, y, z:0, sharp: 0.8 });
+        lF.push(0.8); eF.push(0.0);
+      }
+      return { out: outF, lums: lF, edges: eF };
     }
+    // duplicate from existing to reach exact count
+    const add = pointCount - out.length;
+    for (let i = 0; i < add; i++) {
+      const j = i % out.length;
+      out.push({ ...out[j] });
+      lums.push(lums[j]);
+      edges.push(edges[j]);
+    }
+    return { out, lums, edges };
+  }
+
+  function safeCallback(out, lums, edges) {
+    const pack = ensureCount(out, lums, edges);
+    callback(pack.out, pack.lums, pack.edges);
+  }
+
+  function hardFallback() {
+    console.warn('[portrait] using hard fallback (no image data).');
+    safeCallback([], [], []);
+  }
+
+  img.onerror = hardFallback;
+
+  img.onload = function () {
+    const w = 360, h = 450;
+    const cv = document.createElement('canvas'); cv.width = w; cv.height = h;
+    const ctx = cv.getContext('2d');
+    ctx.drawImage(img, 0, 0, w, h);
+
+    let data;
+    try {
+      data = ctx.getImageData(0, 0, w, h).data;
+    } catch (e) {
+      console.warn('[portrait] getImageData failed (likely CORS).', e);
+      return hardFallback();
+    }
+
+    // luminance
+    const L = new Float32Array(w*h);
+    for (let y=0, i=0; y<h; y++) {
+      for (let x=0; x<w; x++, i++) {
+        const k = i*4;
+        L[i] = (data[k]*0.299 + data[k+1]*0.587 + data[k+2]*0.114)/255;
+      }
+    }
+
+    // Sobel edges
+    const E = new Float32Array(w*h);
+    const sobel = (x,y)=> {
+      const g = (xx,yy)=> L[Math.max(0, Math.min(h-1,yy))*w + Math.max(0, Math.min(w-1,xx))];
+      const gx = -g(x-1,y-1)-2*g(x-1,y)-g(x-1,y+1) + g(x+1,y-1)+2*g(x+1,y)+g(x+1,y+1);
+      const gy = -g(x-1,y-1)-2*g(x,y-1)-g(x+1,y-1) + g(x-1,y+1)+2*g(x,y+1)+g(x+1,y+1);
+      return Math.min(1, Math.sqrt(gx*gx+gy*gy)*0.8);
+    };
+    for (let y=0; y<h; y++) for (let x=0; x<w; x++) E[y*w+x] = sobel(x,y);
+
+    // candidates (softer alpha threshold to avoid empty masks)
+    const cand = [];
+    const ALPHA_MIN = 0.35; // was ~0.63
+    for (let y=0; y<h; y++) {
+      for (let x=0; x<w; x++) {
+        const i = y*w + x;
+        const a = data[i*4 + 3] / 255;
+        if (a < ALPHA_MIN) continue;
+        const lum = Math.max(MIN_GRAY, L[i]);
+        const edge = E[i];
+        const score = 0.1 + EDGE_WEIGHT*edge + 0.3*(1.0 - Math.abs(lum-0.5));
+        cand.push({ x, y, lum, edge, score });
+      }
+    }
+
+    // If still empty (fully transparent PNG, etc.) -> fallback
+    if (cand.length === 0) {
+      console.warn('[portrait] no candidate pixels found; falling back.');
+      return hardFallback();
+    }
+
+    cand.sort((a,b)=> b.score - a.score);
+
+    const out = [], lums = [], edges = [];
+    const centerX = w/2, centerY = h/2;
+    const needDetail = Math.floor(pointCount * DETAIL_BIAS);
+
+    function pushSample(c) {
+      const nx = (c.x - centerX)/w * 280 * PORTRAIT_SCALE;
+      const ny = (centerY - c.y)/h * 340 * PORTRAIT_SCALE + PORTRAIT_Y_SHIFT;
+      const dx = (c.x-centerX)/(w/2), dy = (c.y-centerY)/(h/2);
+      const radial = Math.sqrt(dx*dx + dy*dy);
+      const sharp = Math.max(0.4, 1.0 - radial);
+      out.push({ x:nx, y:ny, z:0, sharp });
+      lums.push(c.lum);
+      edges.push(c.edge);
+    }
+
+    // 1) high-detail first
+    for (let i=0; i<needDetail && i<cand.length; i++) pushSample(cand[i]);
+
+    // 2) fill the rest quasi-uniformly from the remaining pool
+    const remain = Math.max(0, pointCount - out.length);
+    if (remain > 0) {
+      const step = Math.max(1, Math.floor(cand.length / remain));
+      for (let i=0, taken=0; taken<remain && i<cand.length; i+=step, taken++) {
+        pushSample(cand[i]);
+      }
+    }
+
+    // 3) guarantee exact count
+    safeCallback(out, lums, edges);
+  };
+
+  img.src = url;
+}
+
 
     // Globals (UPDATED)
     let morphLums = [], edgeStrengths = [], sharpArr = [];
