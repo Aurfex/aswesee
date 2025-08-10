@@ -42,7 +42,7 @@
 .hero-content h1{
   font-family: 'Josefin Sans', Inter, system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
   font-weight: 400;
-  font-size: clamp(2rem, 7.6vw, 5.9rem);
+  font-size: clamp(2rem, 7.6vw, 6.3rem);
   line-height: 1.05;
   letter-spacing: 0.04em;
   margin: 0;
@@ -522,13 +522,6 @@
     const PARTICLES = 60000, PORTRAIT = 30000, MIN_GRAY = 0.18, PARTICLE_SIZE = 0.47, CONTRAST = 1.08,
       GLOBAL_ROTATE_SPEED = 0.1, PORTRAIT_SCALE = 1.20, PORTRAIT_Y_SHIFT = -40, MORPH_TIME = 30000, PORTRAIT_SCALE_FACTOR = 1.15;
 
-    /* === Detail & Ambient Fade (ADDED) === */
-    const EDGE_WEIGHT = 1.4;          // edge importance
-    const DETAIL_BIAS = 0.85;         // portion of points taken from high-detail areas
-    const AMBIENT_FADE_RADIUS = 520;  // world-space radius for ambient fade
-    const AMBIENT_MIN_ALPHA = 0.15;   // near portrait alpha
-    const AMBIENT_MAX_ALPHA = 0.55;   // far alpha
-
     const renderer = new THREE.WebGLRenderer({ antialias: true });
     renderer.setClearColor(0x10151A, 1);
     renderer.setSize(window.innerWidth, window.innerHeight);
@@ -545,9 +538,6 @@
           sizes = new Float32Array(PARTICLES),
           sharpness = new Float32Array(PARTICLES),
           isPortrait = new Uint8Array(PARTICLES);
-
-    // NEW: per-point alpha attribute
-    const alphas = new Float32Array(PARTICLES);
 
     function clamp(v,a,b){return Math.max(a,Math.min(v,b));}
     function applyContrast(l, c) { return clamp(0.5 + (l-0.5)*c, 0, 1); }
@@ -566,25 +556,20 @@
       positions[i*3+2] = basePositions[i*3+2] = z;
       colors[i*3] = 1.0; colors[i*3+1] = 1.0; colors[i*3+2] = 1.0;
       sizes[i] = PARTICLE_SIZE; sharpness[i] = 1.0; isPortrait[i] = 0;
-      alphas[i] = AMBIENT_MAX_ALPHA; // default ambient visibility
     }
 
     const geometry = new THREE.BufferGeometry();
     geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
     geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
     geometry.setAttribute('aSize', new THREE.BufferAttribute(sizes, 1));
-    geometry.setAttribute('aAlpha', new THREE.BufferAttribute(alphas, 1)); // NEW
 
     const material = new THREE.ShaderMaterial({
       vertexShader: `
         attribute float aSize;
         attribute vec3 color;
-        attribute float aAlpha;     // NEW
         varying vec3 vColor;
-        varying float vAlpha;       // NEW
         void main() {
           vColor = color;
-          vAlpha = aAlpha;          // NEW
           vec4 mvPosition = modelViewMatrix * vec4(position, 1.0);
           gl_PointSize = aSize * 1300.0 / (-mvPosition.z);
           gl_Position = projectionMatrix * mvPosition;
@@ -592,12 +577,11 @@
       `,
       fragmentShader: `
         varying vec3 vColor;
-        varying float vAlpha;       // NEW
         void main() {
           float border = 0.07;
           if(gl_PointCoord.x < border || gl_PointCoord.x > 1.0-border ||
              gl_PointCoord.y < border || gl_PointCoord.y > 1.0-border) discard;
-          gl_FragColor = vec4(vColor, vAlpha); // per-point alpha
+          gl_FragColor = vec4(vColor, 0.99);
         }
       `,
       transparent: true,
@@ -607,85 +591,59 @@
     const points = new THREE.Points(geometry, material);
     scene.add(points);
 
-    /* === Edge-aware sampling (REPLACED) === */
     function sampleImageGrid(url, pointCount, callback) {
       const img = new Image();
       img.crossOrigin = "Anonymous";
       img.onload = function(){
-        const w = 360, h = 450; // a bit higher res
-        const cv = document.createElement('canvas'); cv.width = w; cv.height = h;
+        const w = 320, h = 400, cv = document.createElement('canvas'); cv.width = w; cv.height = h;
         const ctx = cv.getContext('2d'); ctx.drawImage(img, 0, 0, w, h);
-        const d = ctx.getImageData(0,0,w,h).data;
-
-        // Luminance
-        const L = new Float32Array(w*h);
-        for (let y=0, i=0; y<h; y++){
-          for (let x=0; x<w; x++, i++){
-            const k = i*4;
-            L[i] = (d[k]*0.299 + d[k+1]*0.587 + d[k+2]*0.114)/255;
+        const imgData = ctx.getImageData(0,0,w,h).data,
+              gridW = Math.round(Math.sqrt(pointCount * w / h)),
+              gridH = Math.round(pointCount / gridW);
+        let centerX = w/2, centerY = h/2, out = [], lums = [], sharpArr = [];
+        for(let i=0; i<pointCount; i++) {
+          let gx = i % gridW, gy = Math.floor(i / gridW),
+              x = Math.round(gx * w / gridW), y = Math.round(gy * h / gridH),
+              idx = (y*w + x)*4;
+          if(imgData[idx+3]>160){
+            let lum = (imgData[idx]*0.299 + imgData[idx+1]*0.587 + imgData[idx+2]*0.114)/255;
+            if(lum < MIN_GRAY) lum = MIN_GRAY;
+            const nx = (x - centerX)/w * 280 * PORTRAIT_SCALE,
+                  ny = (centerY - y)/h * 340 * PORTRAIT_SCALE + PORTRAIT_Y_SHIFT;
+            let dx = (x-centerX)/(w/2), dy = (y-centerY)/(h/2),
+                radialPos = Math.sqrt(dx*dx+dy*dy),
+                sharp = clamp(1.0-radialPos, 0.4, 1.0);
+            out.push({x:nx, y:ny, z:0, sharp}); lums.push(lum); sharpArr.push(sharp);
           }
         }
-        // Sobel edges
-        const E = new Float32Array(w*h);
-        const sobel = (x,y)=> {
-          const g = (xx,yy)=> L[Math.max(0, Math.min(h-1,yy))*w + Math.max(0, Math.min(w-1,xx))];
-          const gx = -g(x-1,y-1)-2*g(x-1,y)+-g(x-1,y+1) + g(x+1,y-1)+2*g(x+1,y)+g(x+1,y+1);
-          const gy = -g(x-1,y-1)-2*g(x,y-1)-g(x+1,y-1) + g(x-1,y+1)+2*g(x,y+1)+g(x+1,y+1);
-          return Math.min(1, Math.sqrt(gx*gx+gy*gy)*0.8);
-        };
-        for (let y=0; y<h; y++) for (let x=0; x<w; x++) E[y*w+x] = sobel(x,y);
-
-        const cand = [];
-        for (let y=0; y<h; y++){
-          for (let x=0; x<w; x++){
-            const i = y*w+x, a = d[i*4+3]/255;
-            if (a < 0.63) continue;
-            let lum = Math.max(MIN_GRAY, L[i]);
-            const edge = E[i];
-            const score = 0.1 + EDGE_WEIGHT*edge + 0.3*(1.0 - Math.abs(lum-0.5));
-            cand.push({x,y,lum,edge,score});
+        if(out.length < pointCount){
+          const valid = [];
+          for(let y=0;y<h;y++){
+            for(let x=0;x<w;x++){
+              const idx = (y*w + x)*4;
+              if(imgData[idx+3]>160){
+                let lum = (imgData[idx]*0.299 + imgData[idx+1]*0.587 + imgData[idx+2]*0.114)/255;
+                if(lum < MIN_GRAY) lum = MIN_GRAY;
+                const nx = (x - centerX)/w * 280 * PORTRAIT_SCALE,
+                      ny = (centerY - y)/h * 340 * PORTRAIT_SCALE + PORTRAIT_Y_SHIFT;
+                let dx = (x-centerX)/(w/2), dy = (y-centerY)/(h/2),
+                    radialPos = Math.sqrt(dx*dx+dy*dy),
+                    sharp = clamp(1.0-radialPos, 0.4, 1.0);
+                valid.push({x:nx, y:ny, z:0, sharp, lum});
+              }
+            }
+          }
+          while(out.length < pointCount && valid.length){
+            const rnd = valid[Math.floor(Math.random()*valid.length)];
+            out.push({x:rnd.x, y:rnd.y, z:0, sharp:rnd.sharp}); lums.push(rnd.lum); sharpArr.push(rnd.sharp);
           }
         }
-        cand.sort((a,b)=> b.score - a.score);
-
-        const needDetail = Math.floor(pointCount * DETAIL_BIAS);
-        const out = [], lums=[], edges=[];
-        const centerX = w/2, centerY = h/2;
-
-        // detail-first
-        for (let i=0; i<needDetail && i<cand.length; i++){
-          const c = cand[i];
-          const nx = (c.x - centerX)/w * 280 * PORTRAIT_SCALE;
-          const ny = (centerY - c.y)/h * 340 * PORTRAIT_SCALE + PORTRAIT_Y_SHIFT;
-          let dx = (c.x-centerX)/(w/2), dy = (c.y-centerY)/(h/2);
-          const radial = Math.sqrt(dx*dx+dy*dy);
-          const sharp = Math.max(0.4, 1.0 - radial);
-          out.push({x:nx, y:ny, z:0, sharp});
-          lums.push(c.lum); edges.push(c.edge);
-        }
-        // uniform fill for rest
-        const remain = Math.max(0, pointCount - out.length);
-        for (let i=0; i<remain; i++){
-          const c = cand[(i * Math.floor(cand.length/remain)) % cand.length];
-          const nx = (c.x - centerX)/w * 280 * PORTRAIT_SCALE;
-          const ny = (centerY - c.y)/h * 340 * PORTRAIT_SCALE + PORTRAIT_Y_SHIFT;
-          let dx = (c.x-centerX)/(w/2), dy = (c.y-centerY)/(h/2);
-          const radial = Math.sqrt(dx*dx+dy*dy);
-          const sharp = Math.max(0.4, 1.0 - radial);
-          out.push({x:nx, y:ny, z:0, sharp});
-          lums.push(c.lum); edges.push(c.edge);
-        }
-
-        callback(out, lums, edges);
+        callback(out, lums, sharpArr);
       };
       img.src = url;
     }
 
-    // Globals (UPDATED)
-    let morphLums = [], edgeStrengths = [], sharpArr = [];
-    let portraitIndices = [], morphStartTime = 0, morphing = false, morphReady = false, fullyReady = false;
-    let portraitCenterW = null;
-    const portraitMap = new Int32Array(PARTICLES); // index -> portrait pixel index or -1
+    let morphLums = [], sharpArr = [], portraitIndices = [], morphStartTime = 0, morphing = false, morphReady = false, fullyReady = false;
 
     function rotateY(x, y, z, theta) {
       return [Math.cos(theta)*x - Math.sin(theta)*z, y, Math.sin(theta)*x + Math.cos(theta)*z];
@@ -701,26 +659,24 @@
 
     function startMorph(){
       portraitIndices = Array.from({length: PORTRAIT}, (_,i)=>i);
-      for(let i=0; i<PARTICLES; i++){ isPortrait[i]=0; portraitMap[i]=-1; }
-      for(let i=0; i<PORTRAIT; i++){ isPortrait[i]=1; portraitMap[i]=i; }
+      for(let i=0; i<PARTICLES; i++) isPortrait[i]=0;
+      for(const idx of portraitIndices) isPortrait[idx]=1;
 
-      sampleImageGrid("https://i.ibb.co/W4N6XfsN/portrait.png", PORTRAIT, function(samples, lums, edges){
+      sampleImageGrid("https://i.ibb.co/W4N6XfsN/portrait.png", PORTRAIT, function(samples, lums, sharps){
         morphLums = lums;
-        edgeStrengths = edges;
-
-        const forward = new THREE.Vector3(); camera.getWorldDirection(forward).normalize();
-        const portraitDepth = 320;
-        portraitCenterW = camera.position.clone().add(forward.multiplyScalar(portraitDepth));
-        const right = new THREE.Vector3(); right.crossVectors(forward, camera.up).normalize();
-
+        sharpArr = sharps;
         for(let i=0;i<PARTICLES;++i){
           if(isPortrait[i]){
-            const pi = portraitMap[i]; // 0..PORTRAIT-1
-            const pos = portraitCenterW.clone();
+            const pi = portraitIndices.indexOf(i);
+            const forward = new THREE.Vector3(); camera.getWorldDirection(forward); forward.normalize();
+            const portraitDepth = 320;
+            const portraitCenter = camera.position.clone().add(forward.multiplyScalar(portraitDepth));
+            const right = new THREE.Vector3(); right.crossVectors(forward, camera.up).normalize();
+            const pos = portraitCenter.clone();
             pos.add(right.multiplyScalar(samples[pi].x));
             pos.add(camera.up.clone().multiplyScalar(samples[pi].y));
             morphTargets[i*3]=pos.x; morphTargets[i*3+1]=pos.y; morphTargets[i*3+2]=pos.z;
-            sharpness[i] = samples[pi].sharp;
+            sharpness[i] = sharps[pi];
           } else {
             morphTargets[i*3]=basePositions[i*3];
             morphTargets[i*3+1]=basePositions[i*3+1];
@@ -750,7 +706,6 @@
         const orbMag = 9.5 + (isPortrait[i]?1.1:0), orbFreq = 0.42 + (i%17)*0.012,
               wob = Math.sin(t*orbFreq + i) * orbMag, wob2 = Math.cos(t*orbFreq*0.63 + i*0.74) * (orbMag*0.5);
         let nx, ny, nz;
-
         if(fullyReady && morphReady && morphing && isPortrait[i]){
           const tx = morphTargets[i*3], ty = morphTargets[i*3+1], tz = morphTargets[i*3+2];
           if (morphPhase < 1.0) {
@@ -760,32 +715,17 @@
           } else {
             nx = tx + wob; ny = ty + wob2; nz = tz;
           }
-          const pi = portraitMap[i];
-          let lum = applyContrast(morphLums[pi], CONTRAST);
+          let sharp = sharpness[i], lum = applyContrast(morphLums[portraitIndices.indexOf(i)], CONTRAST);
           lum = clamp(lum, MIN_GRAY, 1.0);
-          const edge = edgeStrengths[pi] || 0.0;
-          const edgeShrink = 1.0 - 0.25 * edge; // smaller where edges are strong to look crisper
-          sizes[i] = PARTICLE_SIZE * sharpness[i] * edgeShrink * (morphPhase>0.999 ? PORTRAIT_SCALE_FACTOR : 1.0);
+          sizes[i] = PARTICLE_SIZE * sharp * (morphPhase>0.999 ? PORTRAIT_SCALE_FACTOR : 1.0);
           colors[i*3]   = 1.0 + (lum-1.0)*morphPhase;
           colors[i*3+1] = 1.0 + (lum-1.0)*morphPhase;
           colors[i*3+2] = 1.0 + (lum-1.0)*morphPhase;
-          alphas[i] = 0.95; // solid face points
         } else {
           nx = gx + wob; ny = gy + wob2; nz = gz;
           colors[i*3]=1.0; colors[i*3+1]=1.0; colors[i*3+2]=1.0;
           sizes[i]=PARTICLE_SIZE;
-
-          // ambient fade based on distance to portrait center
-          let alpha = AMBIENT_MAX_ALPHA;
-          if (portraitCenterW){
-            const dx = nx - portraitCenterW.x, dy = ny - portraitCenterW.y, dz = nz - portraitCenterW.z;
-            const dist = Math.sqrt(dx*dx+dy*dy+dz*dz);
-            const tNorm = clamp(dist / AMBIENT_FADE_RADIUS, 0, 1);
-            alpha = AMBIENT_MIN_ALPHA + (AMBIENT_MAX_ALPHA - AMBIENT_MIN_ALPHA) * tNorm;
-          }
-          alphas[i] = alpha;
         }
-
         positions[i*3]   = nx;
         positions[i*3+1] = ny;
         positions[i*3+2] = nz;
@@ -793,7 +733,6 @@
       geometry.attributes.position.needsUpdate = true;
       geometry.attributes.color.needsUpdate = true;
       geometry.attributes.aSize.needsUpdate = true;
-      geometry.attributes.aAlpha.needsUpdate = true; // NEW
       renderer.render(scene, camera);
       requestAnimationFrame(animate);
     }
@@ -1234,7 +1173,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // Helpers for files
   function extOf(name){
     const i = name.lastIndexOf('.');
-       return i>=0 ? name.slice(i+1).toLowerCase() : '';
+    return i>=0 ? name.slice(i+1).toLowerCase() : '';
   }
   function renderList(files){
     list.innerHTML = '';
@@ -1251,7 +1190,7 @@ document.addEventListener('DOMContentLoaded', () => {
     for(const f of files){
       if(f.size > LIMIT_SIZE){ toast(`"${f.name}" is larger than 25 MB.`); return false; }
       const ext = extOf(f.name);
-      if(!ACCEPT.has(ext)){ toast(\`"\${f.name}" type not allowed.\`); return false; }
+      if(!ACCEPT.has(ext)){ toast(`"${f.name}" type not allowed.`); return false; }
     }
     return true;
   }
