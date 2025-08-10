@@ -669,49 +669,62 @@
   }
 
   function startMorph(){
-    for(let i=0; i<PARTICLES; i++) isPortrait[i] = (i < PORTRAIT) ? 1 : 0;
+  // اولین PORTRAIT ذره → پرتره
+  for(let i=0; i<PARTICLES; i++) isPortrait[i] = (i < PORTRAIT) ? 1 : 0;
 
-    sampleImageGrid(PORTRAIT_SRC, PORTRAIT, function(samples, lums, edges){
-      morphLums = lums;
-      edgeStrengths = edges;
+  sampleImageGrid(PORTRAIT_SRC, PORTRAIT, function(samples, lums, edges){
+    morphLums = lums;
+    edgeStrengths = edges;
 
-      const forward = new THREE.Vector3(); camera.getWorldDirection(forward).normalize();
-      const portraitDepth = 320;
-      portraitCenterW = camera.position.clone().add(forward.multiplyScalar(portraitDepth));
-      const right = new THREE.Vector3(); right.crossVectors(forward, camera.up).normalize();
+    // جهت‌ها
+    const forward = new THREE.Vector3();
+    camera.getWorldDirection(forward).normalize();
 
-      for(let i=0;i<PARTICLES;++i){
-        if(isPortrait[i]){
-          const pi = i; // 0..PORTRAIT-1
-          let s = samples[pi];
+    const portraitDepth = 320;
+    portraitCenterW = camera.position.clone().add(forward.clone().multiplyScalar(portraitDepth));
 
-          // Anti-NaN guard
-          if (!s || !Number.isFinite(s.x) || !Number.isFinite(s.y)) {
-            s = { x: 0, y: 0, sharp: 1 };
-          }
+    // مهم: clone/normalize جداگانه داشته باشیم
+    const up    = camera.up.clone().normalize();
+    let   right = new THREE.Vector3().crossVectors(forward, up).normalize();
 
-          const pos = portraitCenterW.clone();
-          pos.add(right.multiplyScalar(s.x));
-          pos.add(camera.up.clone().multiplyScalar(s.y));
-          morphTargets[i*3]   = pos.x;
-          morphTargets[i*3+1] = pos.y;
-          morphTargets[i*3+2] = pos.z;
-          sharpness[i] = Number.isFinite(s.sharp) ? s.sharp : 1.0;
-        } else {
-          morphTargets[i*3]=basePositions[i*3];
-          morphTargets[i*3+1]=basePositions[i*3+1];
-          morphTargets[i*3+2]=basePositions[i*3+2];
-          sharpness[i]=1.0;
+    // اگر right تصادفاً صفر شد (نباید بشه، ولی برای اطمینان):
+    if (right.lengthSq() < 1e-6) right = new THREE.Vector3(1,0,0);
+
+    for (let i = 0; i < PARTICLES; ++i) {
+      if (isPortrait[i]) {
+        const pi = i; // 0..PORTRAIT-1
+        let s = samples[pi];
+
+        // گارد ضد-NaN
+        if (!s || !Number.isFinite(s.x) || !Number.isFinite(s.y)) {
+          s = { x: 0, y: 0, sharp: 1 };
         }
+
+        // *** نکته‌ی اصلی: clone قبل از multiplyScalar تا right/up خراب نشن ***
+        const pos = portraitCenterW.clone()
+          .add(right.clone().multiplyScalar(s.x))
+          .add(up.clone().multiplyScalar(s.y));
+
+        morphTargets[i*3]   = pos.x;
+        morphTargets[i*3+1] = pos.y;
+        morphTargets[i*3+2] = pos.z;
+
+        sharpness[i] = Number.isFinite(s.sharp) ? s.sharp : 1.0;
+      } else {
+        morphTargets[i*3]   = basePositions[i*3];
+        morphTargets[i*3+1] = basePositions[i*3+1];
+        morphTargets[i*3+2] = basePositions[i*3+2];
+        sharpness[i] = 1.0;
       }
+    }
 
-      morphStartTime = performance.now();
-      morphReady = true; morphing = true; fullyReady = true;
-      requestAnimationFrame(animate);
+    morphStartTime = performance.now();
+    morphReady = true; morphing = true; fullyReady = true;
+    requestAnimationFrame(animate);
 
-      console.info('[portrait] samples:', samples.length, 'ready:', morphReady);
-    });
-  }
+    console.info('[portrait] samples:', samples.length, 'ready:', morphReady);
+  });
+}
 
   function animate(now){
     const t = now*0.001, globalPhase = t*GLOBAL_ROTATE_SPEED;
