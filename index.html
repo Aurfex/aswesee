@@ -648,28 +648,85 @@
   </script>
 
   <!-- Audio (served from /public/audio/...) -->
-  <audio id="bg-audio" preload="auto" playsinline>
-    <source src="/audio/manifesto_with_bg.mp3" type="audio/mpeg">
-    <source src="/audio/manifesto_with_bg.ogg" type="audio/ogg">
-    <source src="/audio/manifesto_with_bg.wav" type="audio/wav">
-  </audio>
-  <script>
-    const audioEl = document.getElementById('bg-audio');
+  <!-- Audio: attempt true autoplay with graceful fallbacks -->
+<audio id="bg-audio" preload="auto" playsinline autoplay muted>
+  <source src="/audio/manifesto_with_bg.mp3" type="audio/mpeg">
+  <source src="/audio/manifesto_with_bg.ogg" type="audio/ogg">
+  <source src="/audio/manifesto_with_bg.wav" type="audio/wav">
+</audio>
 
-    function tryPlay() {
-      audioEl.play().then(() => {
-        window.removeEventListener('click', playOnUserAction);
-        window.removeEventListener('touchstart', playOnUserAction);
-      }).catch(() => {});
+<script>
+  (function () {
+    const audio = document.getElementById('bg-audio');
+    const CONSENT_KEY = 'awsee_audio_consent';
+
+    function clamp01(v){ return Math.max(0, Math.min(1, v)); }
+
+    function fadeTo(target = 1, duration = 2000) {
+      target = clamp01(target);
+      const steps = 24;
+      const dt = duration / steps;
+      const start = audio.volume;
+      const delta = target - start;
+      let i = 0;
+      // ensure we are actually unmuted when ramping up
+      if (target > 0) audio.muted = false;
+      const iv = setInterval(() => {
+        i++;
+        audio.volume = clamp01(start + (delta * i / steps));
+        if (i >= steps) {
+          clearInterval(iv);
+          audio.volume = target;
+        }
+      }, dt);
     }
-    function playOnUserAction() {
-      audioEl.play().catch(() => {});
-      window.removeEventListener('click', playOnUserAction);
-      window.removeEventListener('touchstart', playOnUserAction);
+
+    async function tryAutoplay() {
+      try {
+        // Start muted so browsers allow autoplay
+        audio.muted = true;
+        audio.volume = 0;
+        await audio.play();
+
+        // If user previously allowed sound, fade in automatically
+        if (localStorage.getItem(CONSENT_KEY) === '1') {
+          fadeTo(1, 2500);
+        }
+      } catch (e) {
+        // Autoplay might be blocked on some setups; we'll wait for a gesture.
+      }
     }
-    window.addEventListener('DOMContentLoaded', () => { setTimeout(tryPlay, 2500); });
-    window.addEventListener('click', playOnUserAction);
-    window.addEventListener('touchstart', playOnUserAction);
-  </script>
+
+    function grantAudio() {
+      localStorage.setItem(CONSENT_KEY, '1');
+      // Ensure it's playing (in case it was paused)
+      audio.play().catch(() => {});
+      fadeTo(1, 1800);
+      removeGestureListeners();
+    }
+
+    function onVisible() {
+      if (document.visibilityState === 'visible' && localStorage.getItem(CONSENT_KEY) === '1') {
+        grantAudio();
+      }
+    }
+
+    function removeGestureListeners() {
+      ['click','touchstart','keydown','scroll','mousemove','wheel'].forEach(ev =>
+        window.removeEventListener(ev, grantAudio, { capture: false })
+      );
+      document.removeEventListener('visibilitychange', onVisible);
+    }
+
+    // Attach very liberal gesture listeners (first one wins)
+    ['click','touchstart','keydown','scroll','mousemove','wheel'].forEach(ev =>
+      window.addEventListener(ev, grantAudio, { once: true, passive: true })
+    );
+    document.addEventListener('visibilitychange', onVisible);
+
+    // Kick off
+    window.addEventListener('DOMContentLoaded', tryAutoplay);
+  })();
+</script>
 </body>
 </html>
