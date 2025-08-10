@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -108,26 +108,6 @@
         max-height: 40vh; background: rgba(0,0,0,.7);
         border: 1px solid rgba(255,255,255,.12);
       }
-    }
-
-    /* === Gallery: smaller thumbnails + perfect centering (ADD-ONLY) === */
-    :root {
-      --thumb-max: 200px; /* default card width */
-    }
-    @media (min-width: 640px) { :root { --thumb-max: 180px; } }  /* sm */
-    @media (min-width: 768px) { :root { --thumb-max: 200px; } }  /* md */
-    @media (min-width: 1024px){ :root { --thumb-max: 220px; } }  /* lg */
-    @media (min-width: 1280px){ :root { --thumb-max: 240px; } }  /* xl */
-
-    #gallery-grid{
-      grid-template-columns: repeat(auto-fit, minmax(var(--thumb-max), var(--thumb-max)));
-      justify-content: center;
-      align-content: center;
-      min-height: 80vh;
-    }
-    #gallery-grid > div{
-      width: 100%;
-      max-width: var(--thumb-max);
     }
   </style>
 </head>
@@ -376,9 +356,7 @@
       </p>
 
       <!-- Contact form (Formspree) -->
-      <form id="contact-form" action="https://formspree.io/f/mblkqyye" method="POST"
-            enctype="multipart/form-data"
-            class="mx-auto mt-8 max-w-xl text-left space-y-4">
+      <form id="contact-form" action="https://formspree.io/f/mblkqyye" method="POST" class="mx-auto mt-8 max-w-xl text-left space-y-4">
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
             <label for="cf-name" class="block text-sm mb-1 opacity-80">Name</label>
@@ -396,29 +374,6 @@
           <label for="cf-message" class="block text-sm mb-1 opacity-80">Message</label>
           <textarea id="cf-message" name="message" rows="5" required
                     class="w-full rounded-md bg-black/40 border border-white/15 px-3 py-2 outline-none focus:ring-2 focus:ring-white/30"></textarea>
-        </div>
-
-        <!-- Attachments: drag & drop + file picker (ADD-ONLY) -->
-        <div>
-          <label class="block text-sm mb-1 opacity-80">Attachments (PDF / Work files)</label>
-          <div id="file-drop"
-               class="mt-1 flex items-center justify-center w-full rounded-md border border-white/15 bg-black/40
-                      px-4 py-8 text-center transition hover:bg-white/5">
-            <div>
-              <p class="text-sm opacity-80">Drag & drop files here, or <span class="underline">browse</span></p>
-              <p class="text-xs opacity-60 mt-1">Up to 10 files • 25 MB each • pdf, docx, zip, psd, ai, indd, tif, jpg, png, svg</p>
-            </div>
-            <input id="cf-files" name="attachments" type="file" multiple
-                   accept=".pdf,.doc,.docx,.zip,.rar,.7z,.psd,.ai,.indd,.tif,.tiff,.jpg,.jpeg,.png,.svg"
-                   class="sr-only" />
-          </div>
-          <ul id="cf-filelist" class="mt-3 text-sm space-y-1 max-h-40 overflow-auto"></ul>
-        </div>
-
-        <!-- Message counter (ADD-ONLY) -->
-        <div class="flex items-center justify-between">
-          <small class="text-xs opacity-70">Max 7000 characters</small>
-          <small id="cf-count" class="text-xs opacity-80">0 / 7000</small>
         </div>
 
         <!-- Honeypot -->
@@ -1091,123 +1046,6 @@ document.addEventListener('DOMContentLoaded', () => {
       btn.disabled = false; btn.style.opacity = 1;
     }
   });
-})();
-</script>
-
-<!-- === Smooth center-scroll for Gallery button (ADD-ONLY) === -->
-<script>
-(function(){
-  const btn = document.getElementById('enter-gallery');
-  const grid = document.getElementById('gallery-grid');
-  if(!btn || !grid) return;
-
-  btn.addEventListener('click', function(e){
-    e.preventDefault();
-    const rect = grid.getBoundingClientRect();
-    const targetY = window.scrollY + rect.top + (rect.height / 2) - (window.innerHeight / 2);
-    window.scrollTo({ top: Math.max(0, targetY), behavior: 'smooth' });
-  }, { passive: false });
-})();
-</script>
-
-<!-- === Attachments + 7000-char counter (ADD-ONLY) === -->
-<script>
-(function(){
-  const form    = document.getElementById('contact-form');
-  const msg     = document.getElementById('cf-message');
-  const count   = document.getElementById('cf-count');
-  const drop    = document.getElementById('file-drop');
-  const input   = document.getElementById('cf-files');
-  const list    = document.getElementById('cf-filelist');
-
-  if(!form || !msg || !count || !drop || !input || !list) return;
-
-  const LIMIT_CHARS = 7000;
-  const LIMIT_FILES = 10;
-  const LIMIT_SIZE  = 25 * 1024 * 1024; // 25MB
-  const ACCEPT = new Set(['pdf','doc','docx','zip','rar','7z','psd','ai','indd','tif','tiff','jpg','jpeg','png','svg']);
-
-  function toast(msg){
-    const n = document.createElement('div');
-    n.textContent = msg;
-    n.style.cssText = 'position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#1a1a1a;color:#fff;padding:10px 16px;border:1px solid rgba(255,255,255,.15);border-radius:8px;font-size:14px;z-index:9999;box-shadow:0 6px 18px rgba(0,0,0,.35)';
-    document.body.appendChild(n);
-    setTimeout(()=>n.remove(), 2800);
-  }
-
-  // Character counter
-  function updateCount(){
-    const len = msg.value.length;
-    count.textContent = `${len} / ${LIMIT_CHARS}`;
-    count.style.color = (len > LIMIT_CHARS) ? '#ff6b6b' : '';
-  }
-  msg.setAttribute('maxlength', LIMIT_CHARS);
-  msg.addEventListener('input', updateCount);
-  updateCount();
-
-  // Helpers for files
-  function extOf(name){
-    const i = name.lastIndexOf('.');
-    return i>=0 ? name.slice(i+1).toLowerCase() : '';
-  }
-  function renderList(files){
-    list.innerHTML = '';
-    Array.from(files).forEach(f=>{
-      const li = document.createElement('li');
-      const mb = (f.size/1048576).toFixed(2);
-      li.className = 'flex items-center justify-between gap-3';
-      li.innerHTML = `<span class="opacity-90">${f.name}</span><span class="opacity-60 text-xs">${mb} MB</span>`;
-      list.appendChild(li);
-    });
-  }
-  function validateFiles(files){
-    if(files.length > LIMIT_FILES){ toast(`Max ${LIMIT_FILES} files.`); return false; }
-    for(const f of files){
-      if(f.size > LIMIT_SIZE){ toast(`"${f.name}" is larger than 25 MB.`); return false; }
-      const ext = extOf(f.name);
-      if(!ACCEPT.has(ext)){ toast(`"${f.name}" type not allowed.`); return false; }
-    }
-    return true;
-  }
-
-  // Open file dialog when clicking dropzone
-  drop.addEventListener('click', () => input.click());
-
-  // Drag & Drop
-  drop.addEventListener('dragover', (e)=>{ e.preventDefault(); drop.style.borderColor='rgba(255,255,255,.35)'; });
-  drop.addEventListener('dragleave', ()=>{ drop.style.borderColor='rgba(255,255,255,.15)'; });
-  drop.addEventListener('drop', (e)=>{
-    e.preventDefault();
-    drop.style.borderColor='rgba(255,255,255,.15)';
-    const files = Array.from(e.dataTransfer.files || []);
-    if(!validateFiles(files)) return;
-    const dt = new DataTransfer();
-    files.forEach(f=>dt.items.add(f));
-    input.files = dt.files;
-    renderList(input.files);
-  });
-
-  // When selecting via picker
-  input.addEventListener('change', ()=>{
-    const files = Array.from(input.files || []);
-    if(!validateFiles(files)){ input.value = ''; list.innerHTML=''; return; }
-    renderList(files);
-  });
-
-  // Pre-submit validation (capture phase so it runs before existing listener)
-  form.addEventListener('submit', (e)=>{
-    if(msg.value.length > LIMIT_CHARS){
-      e.stopPropagation(); e.preventDefault();
-      toast('Message is too long (max 7000 characters).');
-      return;
-    }
-    const files = Array.from(input.files || []);
-    if(!validateFiles(files)){
-      e.stopPropagation(); e.preventDefault();
-      return;
-    }
-    // OK → let the existing AJAX handler proceed
-  }, true);
 })();
 </script>
 
