@@ -157,16 +157,14 @@
         </div>
 
         <!-- 5 -->
-        <!-- 5 (fixed URL: no space) -->
-	<div class="w-full">
-  	 <figure class="thumb-card" onclick="openFullscreenImage(4)">
-          <img class="thumb-image" loading="lazy"
-               src="https://i.ibb.co/84zvjMfj/When-Silence-Looked-Back.webp"
-               alt="When Silence Looked Back">
-         </figure>
-         <figcaption class="thumb-caption">When Silence Looked Back</figcaption>
-       </div>
-
+        <div class="w-full">
+          <figure class="thumb-card" onclick="openFullscreenImage(4)">
+            <img class="thumb-image" loading="lazy"
+                 src="https://i.ibb.co/84zvjMfj/When-Silence Looked-Back.webp"
+                 alt="When Silence Looked Back">
+          </figure>
+          <figcaption class="thumb-caption">When Silence Looked Back</figcaption>
+        </div>
 
         <!-- 6 -->
         <div class="w-full">
@@ -392,47 +390,10 @@
   </footer>
 
   <!-- Fullscreen Image Modal + Label Panel -->
-  <!-- Fullscreen Image Modal (enhanced) -->
-<div id="fullscreenImage"
-     class="fixed inset-0 bg-black/95 z-50 hidden"
-     role="dialog" aria-modal="true" aria-label="Artwork viewer">
-
-  <div class="w-full h-full flex items-center justify-center gap-6 px-4 md:px-8"
-       style="cursor:default;">
-    <!-- Label Panel -->
-    <aside id="labelPanel"
-           class="label-panel max-h-[80vh] overflow-auto select-text"
-           onclick="event.stopPropagation()">
-      <!-- filled by JS -->
-    </aside>
-
-    <!-- Image + Controls -->
-    <div class="relative flex-1 flex items-center justify-center max-h-[90vh]">
-      <img id="fullscreen-img"
-           src=""
-           alt=""
-           class="max-w-full max-h-[90vh] object-contain"
-           style="box-shadow:0 0 30px #000; background:#000;" />
-      <!-- Prev/Next -->
-      <button id="fs-prev" type="button"
-              aria-label="Previous"
-              class="absolute left-2 md:left-4 top-1/2 -translate-y-1/2 px-3 py-2 bg-white/5 hover:bg-white/15 border border-white/15 rounded-lg backdrop-blur">
-        ←
-      </button>
-      <button id="fs-next" type="button"
-              aria-label="Next"
-              class="absolute right-2 md:right-4 top-1/2 -translate-y-1/2 px-3 py-2 bg-white/5 hover:bg-white/15 border border-white/15 rounded-lg backdrop-blur">
-        →
-      </button>
-      <!-- Close -->
-      <button id="fs-close" type="button"
-              aria-label="Close"
-              class="absolute top-2 right-2 md:top-4 md:right-4 px-3 py-2 bg-white/5 hover:bg-white/15 border border-white/15 rounded-lg backdrop-blur">
-        ✕
-      </button>
-    </div>
+  <div id="fullscreenImage" class="fixed inset-0 bg-black bg-opacity-100 flex items-center justify-center z-50 hidden" onclick="closeFullscreenImage()" style="cursor:pointer;">
+    <div id="labelPanel" class="label-panel select-text pointer-events-none" onclick="event.stopPropagation()"></div>
+    <img id="fullscreen-img" src="" alt="Fullscreen" class="max-w-full max-h-full object-contain ml-[380px]" style="box-shadow: 0 0 30px #000; z-index:2; background:#000;" />
   </div>
-</div>
 
   <!-- PARTICLE THREE HERO -->
   <script src="https://cdn.jsdelivr.net/npm/three@0.155.0/build/three.min.js"></script>
