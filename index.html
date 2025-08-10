@@ -4,11 +4,19 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>AS WE SEE</title>
+
+  <!-- Favicon to silence 404 -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 16 16%22><text y=%2214%22 font-size=%2214%22>👁️</text></svg>">
+
+  <!-- Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@400;500&display=swap" rel="stylesheet" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <!-- Tailwind (dev) -->
   <script src="https://cdn.tailwindcss.com"></script>
+
   <style>
     :root { color-scheme: dark; }
     html, body { height: 100%; }
@@ -23,45 +31,45 @@
 
     h1, h2, h3 { font-family: 'Playfair Display', serif; }
 
-/* ===== Hero / Particles ===== */
-.hero { position: relative; width: 100%; height: 100vh; overflow: hidden; }
-#bg-three{
-  position: fixed; inset: 0;
-  width: 100vw; height: 100vh;
-  z-index: 0;
-  pointer-events: none;
-}
-#bg-three canvas{ display:block; pointer-events:none !important; }
+    /* ===== Hero / Particles ===== */
+    .hero { position: relative; width: 100%; height: 100vh; overflow: hidden; }
+    #bg-three{
+      position: fixed; inset: 0;
+      width: 100vw; height: 100vh;
+      z-index: 0;
+      pointer-events: none;
+    }
+    #bg-three canvas{ display:block; pointer-events:none !important; }
 
-.hero-content{
-  position: absolute; top: 40px; left: 50%; transform: translateX(-50%);
-  text-align: center; z-index: 10; pointer-events:auto;
-}
+    .hero-content{
+      position: absolute; top: 40px; left: 50%; transform: translateX(-50%);
+      text-align: center; z-index: 10; pointer-events:auto;
+    }
 
-/* Title: Josefin Sans + bigger + tighter */
-.hero-content h1{
-  font-family: 'Josefin Sans', Inter, system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
-  font-weight: 400;
-  font-size: clamp(2rem, 7.6vw, 5.9rem);
-  line-height: 1.05;
-  letter-spacing: 0.04em;
-  margin: 0;
-}
+    /* Title: Josefin Sans + responsive */
+    .hero-content h1{
+      font-family: 'Josefin Sans', Inter, system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
+      font-weight: 400;
+      font-size: clamp(2rem, 7.6vw, 5.9rem);
+      line-height: 1.05;
+      letter-spacing: 0.04em;
+      margin: 0;
+    }
 
-/* Tagline: فاصله کمتر زیر تیتر */
-.hero-content p{
-  font-size: clamp(1rem, 2.2vw, 1.25rem);
-  margin: 6px 0 18px; /* قبلاً 10px 0 30px بود */
-  letter-spacing: 3px;
-  color: #ccc;
-}
+    /* Tagline: فاصله کمتر زیر تیتر */
+    .hero-content p{
+      font-size: clamp(1rem, 2.2vw, 1.25rem);
+      margin: 6px 0 18px;
+      letter-spacing: 3px;
+      color: #ccc;
+    }
 
-.hero-content a{
-  padding: 12px 30px; border: 1px solid #fff; color: #fff;
-  letter-spacing: 2px; text-transform: uppercase; text-decoration: none;
-  transition: all .3s; display:inline-block;
-}
-.hero-content a:hover { background:#fff; color:#000; }
+    .hero-content a{
+      padding: 12px 30px; border: 1px solid #fff; color: #fff;
+      letter-spacing: 2px; text-transform: uppercase; text-decoration: none;
+      transition: all .3s; display:inline-block;
+    }
+    .hero-content a:hover { background:#fff; color:#000; }
 
     /* ===== Gallery gradient ===== */
     #gallery{
@@ -79,14 +87,14 @@
     .hover-zoom { transition: transform .3s, opacity .3s; }
     .hover-zoom:hover { transform: scale(1.05); opacity: .9; }
 
-    /* ===== THUMBNAIL CARDS (black by default; reveal on hover) ===== */
+    /* ===== THUMBNAIL CARDS ===== */
     .thumb-card {
       position: relative;
       background: #000;
       border: 1px solid #1a1a1a;
       overflow: hidden;
       width: 100%;
-      aspect-ratio: 3 / 4; /* same as aspect-[3/4] */
+      aspect-ratio: 3 / 4;
       cursor: pointer;
     }
     .thumb-card .thumb-image{
@@ -104,7 +112,7 @@
     }
     .thumb-caption{
       margin-top: .5rem;
-      font-size: .875rem; /* text-sm */
+      font-size: .875rem;
       text-align: center;
       opacity: .8;
     }
@@ -120,11 +128,10 @@
     }
     .label-panel h3{ font-family:'Playfair Display',serif; font-size:1.25rem; margin:0 0 .5rem; }
 
-    /* ===== Fullscreen modal enhancements (ADDED) ===== */
+    /* ===== Fullscreen modal enhancements ===== */
     #fullscreenImage { cursor: zoom-out; }
     #fullscreenImage .label-panel { cursor: auto; }
     #fullscreenImage button { cursor: pointer; }
-
     @media (max-width: 768px) {
       #fullscreenImage .label-panel {
         position: absolute;
@@ -135,10 +142,8 @@
       }
     }
 
-    /* === Gallery: smaller thumbnails + perfect centering (ADD-ONLY) === */
-    :root {
-      --thumb-max: 200px; /* default card width */
-    }
+    /* === Gallery: smaller thumbnails + perfect centering === */
+    :root { --thumb-max: 200px; }
     @media (min-width: 640px) { :root { --thumb-max: 180px; } }  /* sm */
     @media (min-width: 768px) { :root { --thumb-max: 200px; } }  /* md */
     @media (min-width: 1024px){ :root { --thumb-max: 220px; } }  /* lg */
@@ -158,7 +163,7 @@
 </head>
 <body>
 
-  <!-- Hero (Particles live behind everything) -->
+  <!-- Hero -->
   <section class="hero">
     <div id="bg-three"></div>
     <div class="hero-content">
@@ -168,125 +173,92 @@
     </div>
   </section>
 
-  <!-- Gallery (2 rows x 5 cols on large screens) -->
+  <!-- Gallery -->
   <section id="gallery" class="px-6 fade-in">
     <div class="max-w-[1600px] mx-auto">
       <h2 class="text-3xl font-bold mb-8 text-center">Gallery</h2>
 
-      <div id="gallery-grid"
-           class="grid justify-items-center gap-6 sm:grid-cols-2 md:grid-cols-4 xl:grid-cols-5">
-
+      <div id="gallery-grid" class="grid justify-items-center gap-6 sm:grid-cols-2 md:grid-cols-4 xl:grid-cols-5">
         <!-- 1 -->
         <div class="w-full">
           <figure class="thumb-card" onclick="openFullscreenImage(0)">
-            <img class="thumb-image" loading="lazy"
-                 src="https://i.ibb.co/PZn5wGKJ/I-Built-Myself-Out-of-Wires.webp"
-                 alt="I Built Myself Out of Wires">
+            <img class="thumb-image" loading="lazy" src="https://i.ibb.co/PZn5wGKJ/I-Built-Myself-Out-of-Wires.webp" alt="I Built Myself Out of Wires">
           </figure>
           <figcaption class="thumb-caption">I Built Myself Out of Wires</figcaption>
         </div>
-
         <!-- 2 -->
         <div class="w-full">
           <figure class="thumb-card" onclick="openFullscreenImage(1)">
-            <img class="thumb-image" loading="lazy"
-                 src="https://i.ibb.co/xZrGddw/I-Wore-the-Scar-Like-Jewelry.webp"
-                 alt="I Wore the Scar Like Jewelry">
+            <img class="thumb-image" loading="lazy" src="https://i.ibb.co/xZrGddw/I-Wore-the-Scar-Like-Jewelry.webp" alt="I Wore the Scar Like Jewelry">
           </figure>
           <figcaption class="thumb-caption">I Wore the Scar Like Jewelry</figcaption>
         </div>
-
         <!-- 3 -->
         <div class="w-full">
           <figure class="thumb-card" onclick="openFullscreenImage(2)">
-            <img class="thumb-image" loading="lazy"
-                 src="https://i.ibb.co/wrQrrHfC/the-Face-I-Invented.webp"
-                 alt="The Face I Invented">
+            <img class="thumb-image" loading="lazy" src="https://i.ibb.co/wrQrrHfC/the-Face-I-Invented.webp" alt="The Face I Invented">
           </figure>
           <figcaption class="thumb-caption">The Face I Invented</figcaption>
         </div>
-
         <!-- 4 -->
         <div class="w-full">
           <figure class="thumb-card" onclick="openFullscreenImage(3)">
-            <img class="thumb-image" loading="lazy"
-                 src="https://i.ibb.co/60WMBLL0/What-Surrender-Looked-Like.webp"
-                 alt="What Surrender Looked Like">
+            <img class="thumb-image" loading="lazy" src="https://i.ibb.co/60WMBLL0/What-Surrender-Looked-Like.webp" alt="What Surrender Looked Like">
           </figure>
           <figcaption class="thumb-caption">What Surrender Looked Like</figcaption>
         </div>
-
-        <!-- 5 (fixed URL: no space) -->
+        <!-- 5 (fixed URL) -->
         <div class="w-full">
           <figure class="thumb-card" onclick="openFullscreenImage(4)">
-            <img class="thumb-image" loading="lazy"
-                 src="https://i.ibb.co/84zvjMfj/When-Silence-Looked-Back.webp"
-                 alt="When Silence Looked Back">
+            <img class="thumb-image" loading="lazy" src="https://i.ibb.co/84zvjMfj/When-Silence-Looked-Back.webp" alt="When Silence Looked Back">
           </figure>
           <figcaption class="thumb-caption">When Silence Looked Back</figcaption>
         </div>
-
         <!-- 6 -->
         <div class="w-full">
           <figure class="thumb-card" onclick="openFullscreenImage(5)">
-            <img class="thumb-image" loading="lazy"
-                 src="https://i.ibb.co/cKNVrQFH/While-the-Tears-Were-Still-Warm.webp"
-                 alt="While the Tears Were Still Warm">
+            <img class="thumb-image" loading="lazy" src="https://i.ibb.co/cKNVrQFH/While-the-Tears-Were-Still-Warm.webp" alt="While the Tears Were Still Warm">
           </figure>
           <figcaption class="thumb-caption">While the Tears Were Still Warm</figcaption>
         </div>
-
         <!-- 7 -->
         <div class="w-full">
           <figure class="thumb-card" onclick="openFullscreenImage(6)">
-            <img class="thumb-image" loading="lazy"
-                 src="https://i.ibb.co/b5N73mBh/Coloring-Sorrow.png"
-                 alt="Coloring Sorrow">
+            <img class="thumb-image" loading="lazy" src="https://i.ibb.co/b5N73mBh/Coloring-Sorrow.png" alt="Coloring Sorrow">
           </figure>
           <figcaption class="thumb-caption">Coloring Sorrow</figcaption>
         </div>
-
         <!-- 8 -->
         <div class="w-full">
           <figure class="thumb-card" onclick="openFullscreenImage(7)">
-            <img class="thumb-image" loading="lazy"
-                 src="https://i.ibb.co/twtgSbHV/A-Life-Unbegun.png"
-                 alt="A Life Unbegun">
+            <img class="thumb-image" loading="lazy" src="https://i.ibb.co/twtgSbHV/A-Life-Unbegun.png" alt="A Life Unbegun">
           </figure>
           <figcaption class="thumb-caption">A Life Unbegun</figcaption>
         </div>
-
         <!-- 9 -->
         <div class="w-full">
           <figure class="thumb-card" onclick="openFullscreenImage(8)">
-            <img class="thumb-image" loading="lazy"
-                 src="https://i.ibb.co/Y7NWbDs4/Inheritance-of-Silence.png"
-                 alt="Inheritance of Silence">
+            <img class="thumb-image" loading="lazy" src="https://i.ibb.co/Y7NWbDs4/Inheritance-of-Silence.png" alt="Inheritance of Silence">
           </figure>
           <figcaption class="thumb-caption">Inheritance of Silence</figcaption>
         </div>
-
         <!-- 10 -->
         <div class="w-full">
           <figure class="thumb-card" onclick="openFullscreenImage(9)">
-            <img class="thumb-image" loading="lazy"
-                 src="https://i.ibb.co/fVmrnn09/Cutting-Silence.png"
-                 alt="Cutting Silence">
+            <img class="thumb-image" loading="lazy" src="https://i.ibb.co/fVmrnn09/Cutting-Silence.png" alt="Cutting Silence">
           </figure>
           <figcaption class="thumb-caption">Cutting Silence</figcaption>
         </div>
-
       </div>
     </div>
   </section>
 
-  <!-- Bio & Manifesto (FULL TEXT) -->
+  <!-- Bio & Manifesto -->
   <section class="section-dark py-20 px-6 fade-in">
     <div class="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12">
       <div>
         <h3 class="text-2xl font-bold mb-4">Artist Bio</h3>
         <p class="font-serif text-xl mb-2">Dariush Bagheri</p>
-
         <p class="text-sm leading-relaxed">
           Artist, visual theorist, and architect of post-human narratives. Bagheri’s practice dismantles the
           boundaries between photography, language, and code, creating images that exist beyond the tyranny of optics.
@@ -294,14 +266,12 @@
           a question etched into flesh and algorithm:
           <em>What does it mean to see when cameras no longer exist?</em>
         </p>
-
         <p class="text-sm leading-relaxed mt-4">
           Rather than stacking exhibitions as credentials, Bagheri positions his work as events of perception — ruptures
           in how we understand authorship, authenticity, and the gaze. After years navigating the fragility of identity,
           migration, and digital mediation, his projects now live at the threshold where human vulnerability meets
           synthetic intelligence.
         </p>
-
         <p class="text-sm leading-relaxed mt-4">
           With <strong>As We See</strong>, Bagheri proposes an insurgent aesthetic: an afterlife for photography,
           a manifesto of vision shared between carbon and silicon.
@@ -313,29 +283,24 @@
         <p class="text-2xl font-bold mb-2 font-serif tracking-widest">
           As We See — A Manifesto for the Post-Photography Era
         </p>
-
         <p class="text-lg mb-6 font-semibold" style="color:#fff;">
           This is not a polite whisper to the art world;<br>it is a scream from the marrow of existence.
         </p>
-
         <p class="mb-4">
           We stand where the borders of reality dissolve,<br>
           where the machinery of perception fractures under the weight of imagination.
         </p>
-
         <p class="mb-4">
           <span class="font-semibold">Photography without cameras.</span><br>
           Without lenses. Without negatives —<br>
           only mind and the Other,<br>
           entwined in a duet of vision.
         </p>
-
         <p class="mb-4">
           For centuries, sight was caged by optics.<br>
           The tyranny of glass and light dictated what it meant to see.<br>
           <span class="italic">But today, we set fire to that cathedral of glass.</span>
         </p>
-
         <p class="mb-4">
           What rises from the flames is not a tool,<br>
           nor a servant of code.<br>
@@ -343,12 +308,10 @@
           a fusion of chaos born of flesh,<br>
           and clarity born of language and algorithm.
         </p>
-
         <p class="mb-4">
           <span class="font-semibold">Our manifesto declares:<br>
           The camera is dead, but vision survives.</span>
         </p>
-
         <p class="mb-4">
           Each portrait in this exhibition is not a capture —<br>
           it is a summoning.<br>
@@ -356,7 +319,6 @@
           and the sediment of centuries —<br>
           yet no shutter ever clicked.
         </p>
-
         <p class="mb-4">
           These faces never stood before a lens.<br>
           They were invoked from language,<br>
@@ -365,24 +327,20 @@
           mine, and the emergent Other —<br>
           now whispering in code.
         </p>
-
         <p class="mb-4">
           We invite you not as spectators, but as accomplices.<br>
           To enter <span class="font-bold">As We See</span> is to consent to a breach —<br>
           a post-human trespass upon the ruins of certainty.
         </p>
-
         <p class="mb-4">
           You agree to dismantle the dogmas of medium, aura, and origin.<br>
           You agree that the future of art lives not in pigment or pixel,<br>
           but in the collision of minds — carbon and silicon alike.
         </p>
-
         <p class="mb-4">
           <span class="font-semibold">This is not the end of photography.<br>
           This is its jailbreak.</span>
         </p>
-
         <p>
           Will you dare to show it?<br>
           Or cling to the carcass of tradition<br>
@@ -392,7 +350,7 @@
     </div>
   </section>
 
-  <!-- Contact (still black) -->
+  <!-- Contact -->
   <section class="section-dark py-20 px-6 fade-in">
     <div class="max-w-3xl mx-auto text-center">
       <h2 class="text-3xl font-bold mb-6">Contact</h2>
@@ -400,7 +358,7 @@
         <a href="mailto:hello@aswesee.art" class="underline" id="contact-email">hello@aswesee.art</a>
       </p>
 
-      <!-- Contact form (Formspree) -->
+      <!-- Formspree + Attachments + Counter -->
       <form id="contact-form" action="https://formspree.io/f/mblkqyye" method="POST"
             enctype="multipart/form-data"
             class="mx-auto mt-8 max-w-xl text-left space-y-4">
@@ -423,7 +381,7 @@
                     class="w-full rounded-md bg-black/40 border border-white/15 px-3 py-2 outline-none focus:ring-2 focus:ring-white/30"></textarea>
         </div>
 
-        <!-- Attachments: drag & drop + file picker (ADD-ONLY) -->
+        <!-- Attachments -->
         <div>
           <label class="block text-sm mb-1 opacity-80">Attachments (PDF / Work files)</label>
           <div id="file-drop"
@@ -440,7 +398,7 @@
           <ul id="cf-filelist" class="mt-3 text-sm space-y-1 max-h-40 overflow-auto"></ul>
         </div>
 
-        <!-- Message counter (ADD-ONLY) -->
+        <!-- Counter -->
         <div class="flex items-center justify-between">
           <small class="text-xs opacity-70">Max 7000 characters</small>
           <small id="cf-count" class="text-xs opacity-80">0 / 7000</small>
@@ -448,8 +406,6 @@
 
         <!-- Honeypot -->
         <input type="text" name="_gotcha" class="hidden" tabindex="-1" autocomplete="off" />
-
-        <!-- Optional helpers -->
         <input type="hidden" name="_subject" value="New website message" />
         <input type="hidden" name="_template" value="table" />
 
@@ -474,865 +430,759 @@
     © 2025 AS WE SEE. All rights reserved.
   </footer>
 
-  <!-- Fullscreen Image Modal (enhanced) -->
-  <div id="fullscreenImage"
-       class="fixed inset-0 bg-black/95 z-50 hidden"
-       role="dialog" aria-modal="true" aria-label="Artwork viewer">
-
-    <div class="w-full h-full flex items-center justify-center gap-6 px-4 md:px-8"
-         style="cursor:default;">
-      <!-- Label Panel -->
-      <aside id="labelPanel"
-             class="label-panel max-h-[80vh] overflow-auto select-text"
-             onclick="event.stopPropagation()">
-        <!-- filled by JS -->
-      </aside>
-
-      <!-- Image + Controls -->
+  <!-- Fullscreen Image Modal -->
+  <div id="fullscreenImage" class="fixed inset-0 bg-black/95 z-50 hidden" role="dialog" aria-modal="true" aria-label="Artwork viewer">
+    <div class="w-full h-full flex items-center justify-center gap-6 px-4 md:px-8" style="cursor:default;">
+      <aside id="labelPanel" class="label-panel max-h-[80vh] overflow-auto select-text" onclick="event.stopPropagation()"></aside>
       <div class="relative flex-1 flex items-center justify-center max-h-[90vh]">
-        <img id="fullscreen-img"
-             src=""
-             alt=""
-             class="max-w-full max-h-[90vh] object-contain"
-             style="box-shadow:0 0 30px #000; background:#000;" />
-        <!-- Prev/Next -->
-        <button id="fs-prev" type="button"
-                aria-label="Previous"
-                class="absolute left-2 md:left-4 top-1/2 -translate-y-1/2 px-3 py-2 bg-white/5 hover:bg-white/15 border border-white/15 rounded-lg backdrop-blur">
-          ←
-        </button>
-        <button id="fs-next" type="button"
-                aria-label="Next"
-                class="absolute right-2 md:right-4 top-1/2 -translate-y-1/2 px-3 py-2 bg-white/5 hover:bg-white/15 border border-white/15 rounded-lg backdrop-blur">
-          →
-        </button>
-        <!-- Close -->
-        <button id="fs-close" type="button"
-                aria-label="Close"
-                class="absolute top-2 right-2 md:top-4 md:right-4 px-3 py-2 bg-white/5 hover:bg-white/15 border border-white/15 rounded-lg backdrop-blur">
-          ✕
-        </button>
+        <img id="fullscreen-img" src="" alt="" class="max-w-full max-h-[90vh] object-contain" style="box-shadow:0 0 30px #000; background:#000;" />
+        <button id="fs-prev" type="button" aria-label="Previous"
+                class="absolute left-2 md:left-4 top-1/2 -translate-y-1/2 px-3 py-2 bg-white/5 hover:bg-white/15 border border-white/15 rounded-lg backdrop-blur">←</button>
+        <button id="fs-next" type="button" aria-label="Next"
+                class="absolute right-2 md:right-4 top-1/2 -translate-y-1/2 px-3 py-2 bg-white/5 hover:bg-white/15 border border-white/15 rounded-lg backdrop-blur">→</button>
+        <button id="fs-close" type="button" aria-label="Close"
+                class="absolute top-2 right-2 md:top-4 md:right-4 px-3 py-2 bg-white/5 hover:bg-white/15 border border-white/15 rounded-lg backdrop-blur">✕</button>
       </div>
     </div>
   </div>
 
-  <!-- PARTICLE THREE HERO -->
-<script src="https://cdn.jsdelivr.net/npm/three@0.155.0/build/three.min.js"></script>
-<script>
-/* ========================== CONFIG ========================== */
-const PARTICLES = 60000, PORTRAIT = 30000;
-const MIN_GRAY = 0.18, PARTICLE_SIZE = 0.47, CONTRAST = 1.08;
-const GLOBAL_ROTATE_SPEED = 0.1, PORTRAIT_SCALE = 1.20, PORTRAIT_Y_SHIFT = -40;
-const MORPH_TIME = 30000, PORTRAIT_SCALE_FACTOR = 1.15;
+  <!-- THREE.js -->
+  <script src="https://cdn.jsdelivr.net/npm/three@0.155.0/build/three.min.js"></script>
+  <script>
+  /* ========================== CONFIG ========================== */
+  const PARTICLES = 60000, PORTRAIT = 30000;
+  const MIN_GRAY = 0.18, PARTICLE_SIZE = 0.47, CONTRAST = 1.08;
+  const GLOBAL_ROTATE_SPEED = 0.1, PORTRAIT_SCALE = 1.20, PORTRAIT_Y_SHIFT = -40;
+  const MORPH_TIME = 30000, PORTRAIT_SCALE_FACTOR = 1.15;
 
-/* Detail & ambient fade */
-const EDGE_WEIGHT = 1.4;        // شدت اولویت لبه‌ها
-const DETAIL_BIAS = 0.85;       // نسبت نمونه‌های پرجزئیات
-const AMBIENT_FADE_RADIUS = 520;
-const AMBIENT_MIN_ALPHA = 0.15;
-const AMBIENT_MAX_ALPHA = 0.55;
+  /* Detail & ambient fade */
+  const EDGE_WEIGHT = 1.4;
+  const DETAIL_BIAS = 0.85;
+  const AMBIENT_FADE_RADIUS = 520;
+  const AMBIENT_MIN_ALPHA = 0.15;
+  const AMBIENT_MAX_ALPHA = 0.55;
 
-/* اگر ممکنه تصویر رو لوکال هاست کن؛ این لینک فعلی رو در صورت نیاز عوض کن */
-const PORTRAIT_SRC = "https://i.ibb.co/W4N6XfsN/portrait.png";
+  /* If possible, host this portrait image on your own domain */
+  const PORTRAIT_SRC = "https://i.ibb.co/W4N6XfsN/portrait.png";
 
-/* ========================== SETUP ========================== */
-const renderer = new THREE.WebGLRenderer({ antialias: true });
-renderer.setClearColor(0x10151A, 1);
-renderer.setSize(window.innerWidth, window.innerHeight);
-document.getElementById("bg-three").appendChild(renderer.domElement);
-
-const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 3000);
-camera.position.set(400, 80, 220); camera.lookAt(0,0,0);
-const scene = new THREE.Scene();
-
-const positions   = new Float32Array(PARTICLES * 3);
-const basePositions = new Float32Array(PARTICLES * 3);
-const morphTargets  = new Float32Array(PARTICLES * 3);
-const colors     = new Float32Array(PARTICLES * 3);
-const sizes      = new Float32Array(PARTICLES);
-const sharpness  = new Float32Array(PARTICLES);
-const isPortrait = new Uint8Array(PARTICLES);
-const alphas     = new Float32Array(PARTICLES);
-
-function clamp(v,a,b){return Math.max(a,Math.min(v,b));}
-function applyContrast(l, c) { return clamp(0.5 + (l-0.5)*c, 0, 1); }
-function easeInOut(t) { return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2; }
-
-const RADIUS = 700;
-for(let i=0;i<PARTICLES;++i){
-  let r = RADIUS * (0.7 + Math.random()*0.2) * (Math.random()**0.6),
-      theta = Math.random()*2*Math.PI,
-      phi = Math.acos(1 - 2*Math.random());
-  const x = r*Math.sin(phi)*Math.cos(theta)+150,
-        y = r*Math.sin(phi)*Math.sin(theta)+80,
-        z = r*Math.cos(phi)-150;
-  positions[i*3] = basePositions[i*3] = x;
-  positions[i*3+1] = basePositions[i*3+1] = y;
-  positions[i*3+2] = basePositions[i*3+2] = z;
-  colors[i*3] = 1.0; colors[i*3+1] = 1.0; colors[i*3+2] = 1.0;
-  sizes[i] = PARTICLE_SIZE; sharpness[i] = 1.0; isPortrait[i] = (i < PORTRAIT) ? 1 : 0;
-  alphas[i] = AMBIENT_MAX_ALPHA;
-}
-
-const geometry = new THREE.BufferGeometry();
-geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-geometry.setAttribute('color',    new THREE.BufferAttribute(colors, 3));
-geometry.setAttribute('aSize',    new THREE.BufferAttribute(sizes, 1));
-geometry.setAttribute('aAlpha',   new THREE.BufferAttribute(alphas, 1));
-
-const material = new THREE.ShaderMaterial({
-  vertexShader: `
-    attribute float aSize;
-    attribute vec3 color;
-    attribute float aAlpha;
-    varying vec3 vColor;
-    varying float vAlpha;
-    void main() {
-      vColor = color;
-      vAlpha = aAlpha;
-      vec4 mvPosition = modelViewMatrix * vec4(position, 1.0);
-      gl_PointSize = aSize * 1300.0 / (-mvPosition.z);
-      gl_Position = projectionMatrix * mvPosition;
-    }
-  `,
-  fragmentShader: `
-    varying vec3 vColor;
-    varying float vAlpha;
-    void main() {
-      float border = 0.07;
-      if(gl_PointCoord.x < border || gl_PointCoord.x > 1.0-border ||
-         gl_PointCoord.y < border || gl_PointCoord.y > 1.0-border) discard;
-      gl_FragColor = vec4(vColor, vAlpha);
-    }
-  `,
-  transparent: true,
-  depthTest: true
-});
-
-const points = new THREE.Points(geometry, material);
-scene.add(points);
-
-/* ========================== SAMPLER (robust) ========================== */
-function sampleImageGrid(url, pointCount, callback) {
-  const img = new Image();
-  img.crossOrigin = "anonymous";
-  img.referrerPolicy = "no-referrer";
-
-  function ensureCount(out, lums, edges) {
-    if (out.length === 0) {
-      // fallback: بیضی صورت
-      const outF = [], lF = [], eF = [];
-      for (let i = 0; i < pointCount; i++) {
-        const th = Math.random() * Math.PI * 2;
-        const r  = Math.sqrt(Math.random()) * 150;
-        const x  = (Math.cos(th) * r) * 0.85 * PORTRAIT_SCALE;
-        const y  = (Math.sin(th) * r) * 1.10 * PORTRAIT_SCALE + PORTRAIT_Y_SHIFT;
-        outF.push({ x, y, z:0, sharp: 0.8 });
-        lF.push(0.8); eF.push(0.0);
-      }
-      return { out: outF, lums: lF, edges: eF };
-    }
-    while (out.length < pointCount) {
-      const j = out.length % Math.max(1, out.length);
-      out.push({ ...out[j] }); lums.push(lums[j]); edges.push(edges[j]);
-    }
-    if (out.length > pointCount) { out.length = pointCount; lums.length = pointCount; edges.length = pointCount; }
-    return { out, lums, edges };
-  }
-
-  function hardFallback() {
-    const pack = ensureCount([], [], []);
-    callback(pack.out, pack.lums, pack.edges);
-  }
-
-  img.onerror = hardFallback;
-
-  img.onload = function () {
-    const w = 360, h = 450;
-    const cv = document.createElement('canvas'); cv.width = w; cv.height = h;
-    const ctx = cv.getContext('2d');
-    ctx.drawImage(img, 0, 0, w, h);
-
-    let data;
-    try { data = ctx.getImageData(0, 0, w, h).data; }
-    catch (e) { return hardFallback(); }
-
-    // luminance
-    const L = new Float32Array(w*h);
-    for (let y=0, i=0; y<h; y++){
-      for (let x=0; x<w; x++, i++){
-        const k = i*4;
-        L[i] = (data[k]*0.299 + data[k+1]*0.587 + data[k+2]*0.114)/255;
-      }
-    }
-
-    // sobel
-    const E = new Float32Array(w*h);
-    const sobel = (x,y)=> {
-      const g = (xx,yy)=> L[Math.max(0, Math.min(h-1,yy))*w + Math.max(0, Math.min(w-1,xx))];
-      const gx = -g(x-1,y-1)-2*g(x-1,y)-g(x-1,y+1) + g(x+1,y-1)+2*g(x+1,y)+g(x+1,y+1);
-      const gy = -g(x-1,y-1)-2*g(x,y-1)-g(x+1,y-1) + g(x-1,y+1)+2*g(x,y+1)+g(x+1,y+1);
-      return Math.min(1, Math.sqrt(gx*gx+gy*gy)*0.8);
-    };
-    for (let y=0; y<h; y++) for (let x=0; x<w; x++) E[y*w+x] = sobel(x,y);
-
-    const ALPHA_MIN = 0.35;
-    const cand = [];
-    for (let y=0; y<h; y++){
-      for (let x=0; x<w; x++){
-        const i = y*w+x, a = data[i*4+3]/255;
-        if (a < ALPHA_MIN) continue;
-        const lum = Math.max(MIN_GRAY, L[i]);
-        const edge = E[i];
-        const score = 0.1 + EDGE_WEIGHT*edge + 0.3*(1.0 - Math.abs(lum-0.5));
-        cand.push({x,y,lum,edge,score});
-      }
-    }
-
-    if (cand.length === 0) return hardFallback();
-
-    cand.sort((a,b)=> b.score - a.score);
-
-    const out = [], lums=[], edges=[];
-    const centerX = w/2, centerY = h/2;
-    const needDetail = Math.floor(pointCount * DETAIL_BIAS);
-
-    function push(c){
-      const nx = (c.x - centerX)/w * 280 * PORTRAIT_SCALE;
-      const ny = (centerY - c.y)/h * 340 * PORTRAIT_SCALE + PORTRAIT_Y_SHIFT;
-      const dx = (c.x-centerX)/(w/2), dy = (c.y-centerY)/(h/2);
-      const radial = Math.sqrt(dx*dx+dy*dy);
-      const sharp = Math.max(0.4, 1.0 - radial);
-      out.push({x:nx, y:ny, z:0, sharp}); lums.push(c.lum); edges.push(c.edge);
-    }
-
-    for (let i=0; i<needDetail && i<cand.length; i++) push(cand[i]);
-    const remain = Math.max(0, pointCount - out.length);
-    if (remain > 0) {
-      const step = Math.max(1, Math.floor(cand.length / remain));
-      for (let i=0, taken=0; taken<remain && i<cand.length; i+=step, taken++) push(cand[i]);
-    }
-
-    const pack = ensureCount(out, lums, edges);
-    callback(pack.out, pack.lums, pack.edges);
-  };
-
-  img.src = url;
-}
-
-/* ========================== MORPH ========================== */
-let morphLums = [], edgeStrengths = [], sharpArr = [];
-let morphStartTime = 0, morphing = false, morphReady = false, fullyReady = false;
-let portraitCenterW = null;
-
-function rotateY(x, y, z, theta) {
-  return [Math.cos(theta)*x - Math.sin(theta)*z, y, Math.sin(theta)*x + Math.cos(theta)*z];
-}
-function rotateX(x, y, z, phi) {
-  return [x, Math.cos(phi)*y - Math.sin(phi)*z, Math.sin(phi)*y + Math.cos(phi)*z];
-}
-function rotateAroundPoint(x, y, z, cx, cy, cz, theta, phi) {
-  let dx = x - cx, dy = y - cy, dz = z - cz;
-  let [rx, ry, rz] = rotateY(dx, dy, dz, theta); [rx, ry, rz] = rotateX(rx, ry, rz, phi);
-  return [rx + cx, ry + cy, rz + cz];
-}
-
-function startMorph(){
-  // علامت‌گذاری: اولین PORTRAIT ذره = چهره
-  for(let i=0; i<PARTICLES; i++) isPortrait[i] = (i < PORTRAIT) ? 1 : 0;
-
-  sampleImageGrid(PORTRAIT_SRC, PORTRAIT, function(samples, lums, edges){
-    morphLums = lums;
-    edgeStrengths = edges;
-
-    const forward = new THREE.Vector3(); camera.getWorldDirection(forward).normalize();
-    const portraitDepth = 320;
-    portraitCenterW = camera.position.clone().add(forward.multiplyScalar(portraitDepth));
-    const right = new THREE.Vector3(); right.crossVectors(forward, camera.up).normalize();
-
-    for(let i=0;i<PARTICLES;++i){
-      if(isPortrait[i]){
-        const pi = i; // 0..PORTRAIT-1
-        const pos = portraitCenterW.clone();
-        pos.add(right.multiplyScalar(samples[pi].x));
-        pos.add(camera.up.clone().multiplyScalar(samples[pi].y));
-        morphTargets[i*3]=pos.x; morphTargets[i*3+1]=pos.y; morphTargets[i*3+2]=pos.z;
-        sharpness[i] = samples[pi].sharp;
-      } else {
-        morphTargets[i*3]=basePositions[i*3];
-        morphTargets[i*3+1]=basePositions[i*3+1];
-        morphTargets[i*3+2]=basePositions[i*3+2];
-        sharpness[i]=1.0;
-      }
-    }
-
-    morphStartTime = performance.now();
-    morphReady = true; morphing = true; fullyReady = true;
-    requestAnimationFrame(animate);
-
-    // دیباگ سبک
-    console.info('[portrait] samples:', samples.length, 'ready:', morphReady);
-  });
-}
-
-function animate(now){
-  const t = now*0.001, globalPhase = t*GLOBAL_ROTATE_SPEED;
-  let morphPhase = 0;
-  if(fullyReady && morphReady && morphing){
-    let rawPhase = Math.min(1, (now-morphStartTime)/MORPH_TIME);
-    morphPhase = easeInOut(rawPhase);
-  }
-  for(let i=0; i<PARTICLES; ++i){
-    let bx = basePositions[i*3], by = basePositions[i*3+1], bz = basePositions[i*3+2], gx = bx, gy = by, gz = bz;
-    if (!isPortrait[i]) {
-      [gx, gy, gz] = rotateAroundPoint(bx, by, bz, 0, 0, 0, globalPhase, globalPhase * 0.7);
-    }
-    const orbMag = 9.5 + (isPortrait[i]?1.1:0), orbFreq = 0.42 + (i%17)*0.012,
-          wob = Math.sin(t*orbFreq + i) * orbMag, wob2 = Math.cos(t*orbFreq*0.63 + i*0.74) * (orbMag*0.5);
-    let nx, ny, nz;
-
-    if(fullyReady && morphReady && morphing && isPortrait[i]){
-      const tx = morphTargets[i*3], ty = morphTargets[i*3+1], tz = morphTargets[i*3+2];
-      if (morphPhase < 1.0) {
-        nx = (1-morphPhase)*bx + morphPhase*tx + wob;
-        ny = (1-morphPhase)*by + morphPhase*ty + wob2;
-        nz = (1-morphPhase)*bz + morphPhase*tz;
-      } else {
-        nx = tx + wob; ny = ty + wob2; nz = tz;
-      }
-      const pi = i;
-      let lum = applyContrast(morphLums[pi] || 0.8, CONTRAST);
-      lum = clamp(lum, MIN_GRAY, 1.0);
-      const edge = edgeStrengths[pi] || 0.0;
-      const edgeShrink = 1.0 - 0.25 * edge; // شارپ‌تر شدن لبه‌ها
-      sizes[i] = PARTICLE_SIZE * sharpness[i] * edgeShrink * (morphPhase>0.999 ? PORTRAIT_SCALE_FACTOR : 1.0);
-      colors[i*3] = colors[i*3+1] = colors[i*3+2] = 1.0 + (lum-1.0)*morphPhase;
-      alphas[i] = 0.95;
-    } else {
-      nx = gx + wob; ny = gy + wob2; nz = gz;
-      colors[i*3]=colors[i*3+1]=colors[i*3+2]=1.0;
-      sizes[i]=PARTICLE_SIZE;
-
-      // fade محیطی
-      let alpha = AMBIENT_MAX_ALPHA;
-      if (portraitCenterW){
-        const dx = nx - portraitCenterW.x, dy = ny - portraitCenterW.y, dz = nz - portraitCenterW.z;
-        const dist = Math.sqrt(dx*dx+dy*dy+dz*dz);
-        const tNorm = clamp(dist / AMBIENT_FADE_RADIUS, 0, 1);
-        alpha = AMBIENT_MIN_ALPHA + (AMBIENT_MAX_ALPHA - AMBIENT_MIN_ALPHA) * tNorm;
-      }
-      alphas[i] = alpha;
-    }
-
-    positions[i*3]   = nx;
-    positions[i*3+1] = ny;
-    positions[i*3+2] = nz;
-  }
-  geometry.attributes.position.needsUpdate = true;
-  geometry.attributes.color.needsUpdate = true;
-  geometry.attributes.aSize.needsUpdate = true;
-  geometry.attributes.aAlpha.needsUpdate = true;
-  renderer.render(scene, camera);
-  requestAnimationFrame(animate);
-}
-
-window.addEventListener('resize', ()=>{
+  /* ========================== SETUP ========================== */
+  const renderer = new THREE.WebGLRenderer({ antialias: true });
+  renderer.setClearColor(0x10151A, 1);
   renderer.setSize(window.innerWidth, window.innerHeight);
-  camera.aspect = window.innerWidth / window.innerHeight;
-  camera.updateProjectionMatrix();
-});
+  document.getElementById("bg-three").appendChild(renderer.domElement);
 
-startMorph();
-</script>
+  const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 3000);
+  camera.position.set(400, 80, 220); camera.lookAt(0,0,0);
+  const scene = new THREE.Scene();
 
-    // Fade-in animations
-    const faders = document.querySelectorAll('.fade-in');
-    const appearOnScroll = new IntersectionObserver((entries, observer) => {
-      entries.forEach(entry => {
-        if (!entry.isIntersecting) return;
-        entry.target.classList.add('visible');
-        observer.unobserve(entry.target);
-      });
-    }, { threshold: 0.1 });
-    faders.forEach(fader => appearOnScroll.observe(fader));
+  const positions     = new Float32Array(PARTICLES * 3);
+  const basePositions = new Float32Array(PARTICLES * 3);
+  const morphTargets  = new Float32Array(PARTICLES * 3);
+  const colors        = new Float32Array(PARTICLES * 3);
+  const sizes         = new Float32Array(PARTICLES);
+  const sharpness     = new Float32Array(PARTICLES);
+  const isPortrait    = new Uint8Array(PARTICLES);
+  const alphas        = new Float32Array(PARTICLES);
 
-    // ===== GALLERY LABEL DATA =====
-    const galleryData = [
-      { img: "https://i.ibb.co/PZn5wGKJ/I-Built-Myself-Out-of-Wires.webp", title: "I Built Myself Out of Wires", series: "AS WE SEE", tagline: "A Manifesto for the Post-Photography Era", year: "2025", medium: "Archival Pigment Print on Cotton Rag", dimensions: "100 × 70 cm (39.3 × 27.5 in)", edition: "1/10 + 2 AP" },
-      { img: "https://i.ibb.co/xZrGddw/I-Wore-the-Scar-Like-Jewelry.webp", title: "I Wore the Scar Like Jewelry", series: "AS WE SEE", tagline: "A Manifesto for the Post-Photography Era", year: "2025", medium: "Archival Pigment Print on Cotton Rag", dimensions: "100 × 70 cm (39.3 × 27.5 in)", edition: "1/10 + 2 AP" },
-      { img: "https://i.ibb.co/wrQrrHfC/the-Face-I-Invented.webp", title: "The Face I Invented", series: "AS WE SEE", tagline: "A Manifesto for the Post-Photography Era", year: "2025", medium: "Archival Pigment Print on Cotton Rag", dimensions: "100 × 70 cm (39.3 × 27.5 in)", edition: "1/10 + 2 AP" },
-      { img: "https://i.ibb.co/60WMBLL0/What-Surrender-Looked-Like.webp", title: "What Surrender Looked Like", series: "AS WE SEE", tagline: "A Manifesto for the Post-Photography Era", year: "2025", medium: "Archival Pigment Print on Cotton Rag", dimensions: "100 × 70 cm (39.3 × 27.5 in)", edition: "1/10 + 2 AP" },
-      { img: "https://i.ibb.co/84zvjMfj/When-Silence-Looked-Back.webp", title: "When Silence Looked Back", series: "AS WE SEE", tagline: "A Manifesto for the Post-Photography Era", year: "2025", medium: "Archival Pigment Print on Cotton Rag", dimensions: "100 × 70 cm (39.3 × 27.5 in)", edition: "1/10 + 2 AP" },
-      { img: "https://i.ibb.co/cKNVrQFH/While-the-Tears-Were-Still-Warm.webp", title: "While the Tears Were Still Warm", series: "AS WE SEE", tagline: "A Manifesto for the Post-Photography Era", year: "2025", medium: "Archival Pigment Print on Cotton Rag", dimensions: "100 × 70 cm (39.3 × 27.5 in)", edition: "1/10 + 2 AP" },
-      { img: "https://i.ibb.co/b5N73mBh/Coloring-Sorrow.png", title: "Coloring Sorrow", series: "AS WE SEE", tagline: "A Manifesto for the Post-Photography Era", year: "2025", medium: "Archival Pigment Print on Cotton Rag", dimensions: "100 × 70 cm (39.3 × 27.5 in)", edition: "1/10 + 2 AP" },
-      { img: "https://i.ibb.co/twtgSbHV/A-Life-Unbegun.png", title: "A Life Unbegun", series: "AS WE SEE", tagline: "A Manifesto for the Post-Photography Era", year: "2025", medium: "Archival Pigment Print on Cotton Rag", dimensions: "100 × 70 cm (39.3 × 27.5 in)", edition: "1/10 + 2 AP" },
-      { img: "https://i.ibb.co/Y7NWbDs4/Inheritance-of-Silence.png", title: "Inheritance of Silence", series: "AS WE SEE", tagline: "A Manifesto for the Post-Photography Era", year: "2025", medium: "Archival Pigment Print on Cotton Rag", dimensions: "100 × 70 cm (39.3 × 27.5 in)", edition: "1/10 + 2 AP" },
-      { img: "https://i.ibb.co/fVmrnn09/Cutting-Silence.png", title: "Cutting Silence", series: "AS WE SEE", tagline: "A Manifesto for the Post-Photography Era", year: "2025", medium: "Archival Pigment Print on Cotton Rag", dimensions: "100 × 70 cm (39.3 × 27.5 in)", edition: "1/10 + 2 AP" }
-    ];
+  function clamp(v,a,b){return Math.max(a,Math.min(v,b));}
+  function applyContrast(l, c) { return clamp(0.5 + (l-0.5)*c, 0, 1); }
+  function easeInOut(t) { return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2; }
 
-    /* ===== Enhanced gallery modal (ADDED) ===== */
-    (() => {
-      // uses existing galleryData[]
-      let currentIndex = 0;
-      const modal   = document.getElementById('fullscreenImage');
-      const imgEl   = document.getElementById('fullscreen-img');
-      const panelEl = document.getElementById('labelPanel');
-      const btnPrev = document.getElementById('fs-prev');
-      const btnNext = document.getElementById('fs-next');
-      const btnClose= document.getElementById('fs-close');
+  const RADIUS = 700;
+  for(let i=0;i<PARTICLES;++i){
+    let r = RADIUS * (0.7 + Math.random()*0.2) * (Math.random()**0.6),
+        theta = Math.random()*2*Math.PI,
+        phi = Math.acos(1 - 2*Math.random());
+    const x = r*Math.sin(phi)*Math.cos(theta)+150,
+          y = r*Math.sin(phi)*Math.sin(theta)+80,
+          z = r*Math.cos(phi)-150;
+    positions[i*3] = basePositions[i*3] = x;
+    positions[i*3+1] = basePositions[i*3+1] = y;
+    positions[i*3+2] = basePositions[i*3+2] = z;
+    colors[i*3] = 1.0; colors[i*3+1] = 1.0; colors[i*3+2] = 1.0;
+    sizes[i] = PARTICLE_SIZE; sharpness[i] = 1.0; isPortrait[i] = (i < PORTRAIT) ? 1 : 0;
+    alphas[i] = AMBIENT_MAX_ALPHA;
+  }
 
-      if (!modal || !imgEl || !panelEl) return;
+  const geometry = new THREE.BufferGeometry();
+  geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+  geometry.setAttribute('color',    new THREE.BufferAttribute(colors, 3));
+  geometry.setAttribute('aSize',    new THREE.BufferAttribute(sizes, 1));
+  geometry.setAttribute('aAlpha',   new THREE.BufferAttribute(alphas, 1));
 
-      function fillLabel(d) {
-        panelEl.innerHTML = `
-          <h3>${d.title}</h3>
-          <p><b>Series:</b> ${d.series}</p>
-          <p><b>Tagline:</b> <i>${d.tagline}</i></p>
-          <p><b>Year:</b> ${d.year}</p>
-          <p><b>Medium:</b> ${d.medium}</p>
-          <p><b>Dimensions:</b> ${d.dimensions}</p>
-          <p><b>Edition:</b> ${d.edition || ""}</p>
-          <p style="margin-top:1.2em;font-size:.95em;color:#eee;opacity:.65">Press ESC to close • ← / → to navigate</p>
-        `;
+  const material = new THREE.ShaderMaterial({
+    vertexShader: `
+      attribute float aSize;
+      attribute vec3 color;
+      attribute float aAlpha;
+      varying vec3 vColor;
+      varying float vAlpha;
+      void main() {
+        vColor = color;
+        vAlpha = aAlpha;
+        vec4 mvPosition = modelViewMatrix * vec4(position, 1.0);
+        gl_PointSize = aSize * 1300.0 / (-mvPosition.z);
+        gl_Position = projectionMatrix * mvPosition;
       }
-
-      function preload(i) {
-        const item = galleryData[i];
-        if (!item) return;
-        const im = new Image();
-        im.src = item.img;
+    `,
+    fragmentShader: `
+      varying vec3 vColor;
+      varying float vAlpha;
+      void main() {
+        float border = 0.07;
+        if(gl_PointCoord.x < border || gl_PointCoord.x > 1.0-border ||
+           gl_PointCoord.y < border || gl_PointCoord.y > 1.0-border) discard;
+        gl_FragColor = vec4(vColor, vAlpha);
       }
+    `,
+    transparent: true,
+    depthTest: true
+  });
 
-      function updateHash(i) {
-        const h = `#work-${i+1}`;
-        if (location.hash !== h) history.pushState({i}, '', h);
+  const points = new THREE.Points(geometry, material);
+  scene.add(points);
+
+  /* ========================== SAMPLER (robust) ========================== */
+  function sampleImageGrid(url, pointCount, callback) {
+    const img = new Image();
+    img.crossOrigin = "anonymous";
+    img.referrerPolicy = "no-referrer";
+
+    function ensureCount(out, lums, edges) {
+      const initial = out.length;
+      if (initial === 0) {
+        // Elliptical fallback
+        const outF = [], lF = [], eF = [];
+        for (let i = 0; i < pointCount; i++) {
+          const th = Math.random() * Math.PI * 2;
+          const r  = Math.sqrt(Math.random()) * 150;
+          const x  = (Math.cos(th) * r) * 0.85 * PORTRAIT_SCALE;
+          const y  = (Math.sin(th) * r) * 1.10 * PORTRAIT_SCALE + PORTRAIT_Y_SHIFT;
+          outF.push({ x, y, z:0, sharp: 0.8 });
+          lF.push(0.8); eF.push(0.0);
+        }
+        return { out: outF, lums: lF, edges: eF };
       }
-
-      function openAt(i) {
-        i = Math.max(0, Math.min(galleryData.length - 1, i));
-        currentIndex = i;
-        const d = galleryData[i];
-
-        imgEl.src = '';
-        imgEl.alt = d.title;
-        fillLabel(d);
-
-        modal.classList.remove('hidden');
-        document.body.style.overflow = 'hidden';
-
-        const tmp = new Image();
-        tmp.onload = () => { imgEl.src = d.img; };
-        tmp.onerror = () => { imgEl.alt = 'Image failed to load'; };
-        tmp.src = d.img;
-
-        preload(i-1); preload(i+1);
-
-        modal.setAttribute('aria-label', d.title);
-
-        updateHash(i);
+      while (out.length < pointCount) {
+        const j = (out.length) % initial;
+        out.push({ ...out[j] }); lums.push(lums[j]); edges.push(edges[j]);
       }
+      if (out.length > pointCount) { out.length = pointCount; lums.length = pointCount; edges.length = pointCount; }
+      return { out, lums, edges };
+    }
 
-      function closeModal() {
-        modal.classList.add('hidden');
-        imgEl.src = '';
-        document.body.style.overflow = '';
-        if (location.hash.startsWith('#work-')) {
-          history.pushState({}, '', location.pathname + location.search);
+    function hardFallback() {
+      const pack = ensureCount([], [], []);
+      callback(pack.out, pack.lums, pack.edges);
+    }
+
+    img.onerror = hardFallback;
+
+    img.onload = function () {
+      const w = 360, h = 450;
+      const cv = document.createElement('canvas'); cv.width = w; cv.height = h;
+      const ctx = cv.getContext('2d');
+      ctx.drawImage(img, 0, 0, w, h);
+
+      let data;
+      try { data = ctx.getImageData(0, 0, w, h).data; }
+      catch (e) { return hardFallback(); }
+
+      // luminance
+      const L = new Float32Array(w*h);
+      for (let y=0, i=0; y<h; y++){
+        for (let x=0; x<w; x++, i++){
+          const k = i*4;
+          L[i] = (data[k]*0.299 + data[k+1]*0.587 + data[k+2]*0.114)/255;
         }
       }
 
-      function next() { if (currentIndex < galleryData.length-1) openAt(currentIndex+1); }
-      function prev() { if (currentIndex > 0) openAt(currentIndex-1); }
+      // sobel
+      const E = new Float32Array(w*h);
+      const sobel = (x,y)=> {
+        const g = (xx,yy)=> L[Math.max(0, Math.min(h-1,yy))*w + Math.max(0, Math.min(w-1,xx))];
+        const gx = -g(x-1,y-1)-2*g(x-1,y)-g(x-1,y+1) + g(x+1,y-1)+2*g(x+1,y)+g(x+1,y+1);
+        const gy = -g(x-1,y-1)-2*g(x,y-1)-g(x+1,y-1) + g(x-1,y+1)+2*g(x,y+1)+g(x+1,y+1);
+        return Math.min(1, Math.sqrt(gx*gx+gy*gy)*0.8);
+      };
+      for (let y=0; y<h; y++) for (let x=0; x<w; x++) E[y*w+x] = sobel(x,y);
 
-      // Public API (compat with existing onclicks)
-      window.openFullscreenImage = openAt;
-      window.closeFullscreenImage = closeModal;
-
-      // backdrop click → close (ignore clicks on content)
-      modal.addEventListener('click', (e) => {
-        const within = e.target.closest('#fullscreen-img, #labelPanel, #fs-prev, #fs-next, #fs-close');
-        if (!within) closeModal();
-      });
-
-      btnPrev?.addEventListener('click', (e) => { e.stopPropagation(); prev(); });
-      btnNext?.addEventListener('click', (e) => { e.stopPropagation(); next(); });
-      btnClose?.addEventListener('click', (e) => { e.stopPropagation(); closeModal(); });
-
-      window.addEventListener('keydown', (e) => {
-        if (modal.classList.contains('hidden')) return;
-        if (e.key === 'Escape') closeModal();
-        else if (e.key === 'ArrowRight') next();
-        else if (e.key === 'ArrowLeft') prev();
-      });
-
-      // Swipe (mobile)
-      let touchX = null, touchY = null;
-      modal.addEventListener('touchstart', (e) => {
-        const t = e.touches[0]; touchX = t.clientX; touchY = t.clientY;
-      }, {passive:true});
-      modal.addEventListener('touchend', (e) => {
-        if (touchX == null || touchY == null) return;
-        const dx = (e.changedTouches[0].clientX - touchX);
-        const dy = (e.changedTouches[0].clientY - touchY);
-        touchX = touchY = null;
-        if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 40) {
-          if (dx < 0) next(); else prev();
-        }
-      });
-
-      function openFromHash() {
-        const m = location.hash.match(/^#work-(\d+)$/);
-        if (m) {
-          const idx = parseInt(m[1], 10) - 1;
-          if (!Number.isNaN(idx)) openAt(idx);
+      const ALPHA_MIN = 0.35;
+      const cand = [];
+      for (let y=0; y<h; y++){
+        for (let x=0; x<w; x++){
+          const i = y*w+x, a = data[i*4+3]/255;
+          if (a < ALPHA_MIN) continue;
+          const lum = Math.max(MIN_GRAY, L[i]);
+          const edge = E[i];
+          const score = 0.1 + EDGE_WEIGHT*edge + 0.3*(1.0 - Math.abs(lum-0.5));
+          cand.push({x,y,lum,edge,score});
         }
       }
-      window.addEventListener('hashchange', openFromHash);
-      window.addEventListener('DOMContentLoaded', openFromHash);
-    })();
+
+      if (cand.length === 0) return hardFallback();
+
+      cand.sort((a,b)=> b.score - a.score);
+
+      const out = [], lums=[], edges=[];
+      const centerX = w/2, centerY = h/2;
+      const needDetail = Math.floor(pointCount * DETAIL_BIAS);
+
+      function push(c){
+        const nx = (c.x - centerX)/w * 280 * PORTRAIT_SCALE;
+        const ny = (centerY - c.y)/h * 340 * PORTRAIT_SCALE + PORTRAIT_Y_SHIFT;
+        const dx = (c.x-centerX)/(w/2), dy = (c.y-centerY)/(h/2);
+        const radial = Math.sqrt(dx*dx+dy*dy);
+        const sharp = Math.max(0.4, 1.0 - radial);
+        out.push({x:nx, y:ny, z:0, sharp}); lums.push(c.lum); edges.push(c.edge);
+      }
+
+      for (let i=0; i<needDetail && i<cand.length; i++) push(cand[i]);
+      const remain = Math.max(0, pointCount - out.length);
+      if (remain > 0) {
+        const step = Math.max(1, Math.floor(cand.length / remain));
+        for (let i=0, taken=0; taken<remain && i<cand.length; i+=step, taken++) push(cand[i]);
+      }
+
+      const pack = ensureCount(out, lums, edges);
+      callback(pack.out, pack.lums, pack.edges);
+    };
+
+    img.src = url;
+  }
+
+  /* ========================== MORPH ========================== */
+  let morphLums = [], edgeStrengths = [];
+  let morphStartTime = 0, morphing = false, morphReady = false, fullyReady = false;
+  let portraitCenterW = null;
+
+  function rotateY(x, y, z, theta) {
+    return [Math.cos(theta)*x - Math.sin(theta)*z, y, Math.sin(theta)*x + Math.cos(theta)*z];
+  }
+  function rotateX(x, y, z, phi) {
+    return [x, Math.cos(phi)*y - Math.sin(phi)*z, Math.sin(phi)*y + Math.cos(phi)*z];
+  }
+  function rotateAroundPoint(x, y, z, cx, cy, cz, theta, phi) {
+    let dx = x - cx, dy = y - cy, dz = z - cz;
+    let [rx, ry, rz] = rotateY(dx, dy, dz, theta); [rx, ry, rz] = rotateX(rx, ry, rz, phi);
+    return [rx + cx, ry + cy, rz + cz];
+  }
+
+  function startMorph(){
+    for(let i=0; i<PARTICLES; i++) isPortrait[i] = (i < PORTRAIT) ? 1 : 0;
+
+    sampleImageGrid(PORTRAIT_SRC, PORTRAIT, function(samples, lums, edges){
+      morphLums = lums;
+      edgeStrengths = edges;
+
+      const forward = new THREE.Vector3(); camera.getWorldDirection(forward).normalize();
+      const portraitDepth = 320;
+      portraitCenterW = camera.position.clone().add(forward.multiplyScalar(portraitDepth));
+      const right = new THREE.Vector3(); right.crossVectors(forward, camera.up).normalize();
+
+      for(let i=0;i<PARTICLES;++i){
+        if(isPortrait[i]){
+          const pi = i; // 0..PORTRAIT-1
+          let s = samples[pi];
+
+          // Anti-NaN guard
+          if (!s || !Number.isFinite(s.x) || !Number.isFinite(s.y)) {
+            s = { x: 0, y: 0, sharp: 1 };
+          }
+
+          const pos = portraitCenterW.clone();
+          pos.add(right.multiplyScalar(s.x));
+          pos.add(camera.up.clone().multiplyScalar(s.y));
+          morphTargets[i*3]   = pos.x;
+          morphTargets[i*3+1] = pos.y;
+          morphTargets[i*3+2] = pos.z;
+          sharpness[i] = Number.isFinite(s.sharp) ? s.sharp : 1.0;
+        } else {
+          morphTargets[i*3]=basePositions[i*3];
+          morphTargets[i*3+1]=basePositions[i*3+1];
+          morphTargets[i*3+2]=basePositions[i*3+2];
+          sharpness[i]=1.0;
+        }
+      }
+
+      morphStartTime = performance.now();
+      morphReady = true; morphing = true; fullyReady = true;
+      requestAnimationFrame(animate);
+
+      console.info('[portrait] samples:', samples.length, 'ready:', morphReady);
+    });
+  }
+
+  function animate(now){
+    const t = now*0.001, globalPhase = t*GLOBAL_ROTATE_SPEED;
+    let morphPhase = 0;
+    if(fullyReady && morphReady && morphing){
+      let rawPhase = Math.min(1, (now-morphStartTime)/MORPH_TIME);
+      morphPhase = easeInOut(rawPhase);
+    }
+
+    for(let i=0; i<PARTICLES; ++i){
+      let bx = basePositions[i*3], by = basePositions[i*3+1], bz = basePositions[i*3+2], gx = bx, gy = by, gz = bz;
+      if (!isPortrait[i]) {
+        [gx, gy, gz] = rotateAroundPoint(bx, by, bz, 0, 0, 0, globalPhase, globalPhase * 0.7);
+      }
+      const orbMag = 9.5 + (isPortrait[i]?1.1:0), orbFreq = 0.42 + (i%17)*0.012,
+            wob = Math.sin(t*orbFreq + i) * orbMag, wob2 = Math.cos(t*orbFreq*0.63 + i*0.74) * (orbMag*0.5);
+      let nx, ny, nz;
+
+      if(fullyReady && morphReady && morphing && isPortrait[i]){
+        const tx = morphTargets[i*3], ty = morphTargets[i*3+1], tz = morphTargets[i*3+2];
+        if (morphPhase < 1.0) {
+          nx = (1-morphPhase)*bx + morphPhase*tx + wob;
+          ny = (1-morphPhase)*by + morphPhase*ty + wob2;
+          nz = (1-morphPhase)*bz + morphPhase*tz;
+        } else {
+          nx = tx + wob; ny = ty + wob2; nz = tz;
+        }
+        const pi = i;
+        let lum = applyContrast(morphLums[pi] ?? 0.8, CONTRAST);
+        lum = clamp(lum, MIN_GRAY, 1.0);
+        const edge = edgeStrengths[pi] ?? 0.0;
+        const edgeShrink = 1.0 - 0.25 * edge;
+        sizes[i] = PARTICLE_SIZE * sharpness[i] * edgeShrink * (morphPhase>0.999 ? PORTRAIT_SCALE_FACTOR : 1.0);
+        colors[i*3] = colors[i*3+1] = colors[i*3+2] = 1.0 + (lum-1.0)*morphPhase;
+        alphas[i] = 0.95;
+      } else {
+        nx = gx + wob; ny = gy + wob2; nz = gz;
+        colors[i*3]=colors[i*3+1]=colors[i*3+2]=1.0;
+        sizes[i]=PARTICLE_SIZE;
+
+        // Ambient fade
+        let alpha = AMBIENT_MAX_ALPHA;
+        if (portraitCenterW){
+          const dx = nx - portraitCenterW.x, dy = ny - portraitCenterW.y, dz = nz - portraitCenterW.z;
+          const dist = Math.sqrt(dx*dx+dy*dy+dz*dz);
+          const tNorm = clamp(dist / AMBIENT_FADE_RADIUS, 0, 1);
+          alpha = AMBIENT_MIN_ALPHA + (AMBIENT_MAX_ALPHA - AMBIENT_MIN_ALPHA) * tNorm;
+        }
+        alphas[i] = alpha;
+      }
+
+      // Anti-NaN guard (final)
+      if (!Number.isFinite(nx) || !Number.isFinite(ny) || !Number.isFinite(nz)) {
+        nx = bx; ny = by; nz = bz;
+      }
+
+      positions[i*3]   = nx;
+      positions[i*3+1] = ny;
+      positions[i*3+2] = nz;
+    }
+
+    geometry.attributes.position.needsUpdate = true;
+    geometry.attributes.color.needsUpdate = true;
+    geometry.attributes.aSize.needsUpdate = true;
+    geometry.attributes.aAlpha.needsUpdate = true;
+
+    renderer.render(scene, camera);
+    requestAnimationFrame(animate);
+  }
+
+  window.addEventListener('resize', ()=>{
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+  });
+
+  startMorph();
   </script>
 
-  <!-- Audio (served from /public/audio/...) -->
-  <!-- Audio: attempt true autoplay with graceful fallbacks -->
-<!-- ===== AUDIO (robust autoplay + gesture unlock) ===== -->
-<audio id="bg-audio" preload="auto" playsinline autoplay muted loop>
-  <!-- Make sure this path is real: /public/audio/... if using Vercel/Next -->
-  <source src="/audio/manifesto_with_bg.mp3" type="audio/mpeg">
-</audio>
-
-<script>
-(function () {
-  const DEBUG = false; // set true to see logs
-  const log = (...a)=>DEBUG&&console.log('[AUDIO]',...a);
-
-  const audio = document.getElementById('bg-audio');
-  const CONSENT_KEY = 'awsee_audio_consent';
-  let ready = false;
-  let triedAutoplay = false;
-
-  // ---- helpers
-  const clamp01 = v => Math.max(0, Math.min(1, v));
-  function fadeTo(target = 1, duration = 1400) {
-    target = clamp01(target);
-    const steps = 24, dt = duration / steps;
-    const start = audio.volume || 0;
-    const delta = target - start;
-    if (target > 0) audio.muted = false;
-    let i = 0;
-    clearInterval(fadeTo._iv);
-    fadeTo._iv = setInterval(() => {
-      i++;
-      audio.volume = clamp01(start + (delta * i / steps));
-      if (i >= steps) { clearInterval(fadeTo._iv); audio.volume = target; }
-    }, dt);
-  }
-
-  // WebAudio unlock trick for iOS/Safari
-  let ac;
-  async function unlockAudio() {
-    try {
-      if (!ac) ac = new (window.AudioContext || window.webkitAudioContext)();
-      if (ac.state === 'suspended') await ac.resume();
-      // create a silent buffer to satisfy gesture policy
-      const buffer = ac.createBuffer(1, 1, 22050);
-      const source = ac.createBufferSource();
-      source.buffer = buffer;
-      source.connect(ac.destination);
-      if (source.start) source.start(0);
-      log('AudioContext unlocked:', ac.state);
-    } catch (e) {
-      log('AudioContext unlock fail:', e);
-    }
-  }
-
-  function grantAudio() {
-    localStorage.setItem(CONSENT_KEY, '1');
-    unlockAudio();
-    // ensure element is playing
-    audio.muted = false;
-    audio.volume = 0.0;
-    audio.play().then(() => {
-      log('Play after gesture OK');
-      fadeTo(1, 1200);
-      removeGestureListeners();
-    }).catch(err => {
-      log('Play after gesture FAIL:', err);
-      // last-resort: keep trying a few times
-      retryPlaySequence();
+  <!-- Fade-ins -->
+  <script>
+  const faders = document.querySelectorAll('.fade-in');
+  const appearOnScroll = new IntersectionObserver((entries, observer) => {
+    entries.forEach(entry => {
+      if (!entry.isIntersecting) return;
+      entry.target.classList.add('visible');
+      observer.unobserve(entry.target);
     });
-  }
+  }, { threshold: 0.1 });
+  faders.forEach(fader => appearOnScroll.observe(fader));
+  </script>
 
-  function removeGestureListeners() {
+  <!-- Gallery data + enhanced modal -->
+  <script>
+  const galleryData = [
+    { img: "https://i.ibb.co/PZn5wGKJ/I-Built-Myself-Out-of-Wires.webp", title: "I Built Myself Out of Wires", series: "AS WE SEE", tagline: "A Manifesto for the Post-Photography Era", year: "2025", medium: "Archival Pigment Print on Cotton Rag", dimensions: "100 × 70 cm (39.3 × 27.5 in)", edition: "1/10 + 2 AP" },
+    { img: "https://i.ibb.co/xZrGddw/I-Wore-the-Scar-Like-Jewelry.webp", title: "I Wore the Scar Like Jewelry", series: "AS WE SEE", tagline: "A Manifesto for the Post-Photography Era", year: "2025", medium: "Archival Pigment Print on Cotton Rag", dimensions: "100 × 70 cm (39.3 × 27.5 in)", edition: "1/10 + 2 AP" },
+    { img: "https://i.ibb.co/wrQrrHfC/the-Face-I-Invented.webp", title: "The Face I Invented", series: "AS WE SEE", tagline: "A Manifesto for the Post-Photography Era", year: "2025", medium: "Archival Pigment Print on Cotton Rag", dimensions: "100 × 70 cm (39.3 × 27.5 in)", edition: "1/10 + 2 AP" },
+    { img: "https://i.ibb.co/60WMBLL0/What-Surrender-Looked-Like.webp", title: "What Surrender Looked Like", series: "AS WE SEE", tagline: "A Manifesto for the Post-Photography Era", year: "2025", medium: "Archival Pigment Print on Cotton Rag", dimensions: "100 × 70 cm (39.3 × 27.5 in)", edition: "1/10 + 2 AP" },
+    { img: "https://i.ibb.co/84zvjMfj/When-Silence-Looked-Back.webp", title: "When Silence Looked Back", series: "AS WE SEE", tagline: "A Manifesto for the Post-Photography Era", year: "2025", medium: "Archival Pigment Print on Cotton Rag", dimensions: "100 × 70 cm (39.3 × 27.5 in)", edition: "1/10 + 2 AP" },
+    { img: "https://i.ibb.co/cKNVrQFH/While-the-Tears-Were-Still-Warm.webp", title: "While the Tears Were Still Warm", series: "AS WE SEE", tagline: "A Manifesto for the Post-Photography Era", year: "2025", medium: "Archival Pigment Print on Cotton Rag", dimensions: "100 × 70 cm (39.3 × 27.5 in)", edition: "1/10 + 2 AP" },
+    { img: "https://i.ibb.co/b5N73mBh/Coloring-Sorrow.png", title: "Coloring Sorrow", series: "AS WE SEE", tagline: "A Manifesto for the Post-Photography Era", year: "2025", medium: "Archival Pigment Print on Cotton Rag", dimensions: "100 × 70 cm (39.3 × 27.5 in)", edition: "1/10 + 2 AP" },
+    { img: "https://i.ibb.co/twtgSbHV/A-Life-Unbegun.png", title: "A Life Unbegun", series: "AS WE SEE", tagline: "A Manifesto for the Post-Photography Era", year: "2025", medium: "Archival Pigment Print on Cotton Rag", dimensions: "100 × 70 cm (39.3 × 27.5 in)", edition: "1/10 + 2 AP" },
+    { img: "https://i.ibb.co/Y7NWbDs4/Inheritance-of-Silence.png", title: "Inheritance of Silence", series: "AS WE SEE", tagline: "A Manifesto for the Post-Photography Era", year: "2025", medium: "Archival Pigment Print on Cotton Rag", dimensions: "100 × 70 cm (39.3 × 27.5 in)", edition: "1/10 + 2 AP" },
+    { img: "https://i.ibb.co/fVmrnn09/Cutting-Silence.png", title: "Cutting Silence", series: "AS WE SEE", tagline: "A Manifesto for the Post-Photography Era", year: "2025", medium: "Archival Pigment Print on Cotton Rag", dimensions: "100 × 70 cm (39.3 × 27.5 in)", edition: "1/10 + 2 AP" }
+  ];
+
+  (() => {
+    let currentIndex = 0;
+    const modal   = document.getElementById('fullscreenImage');
+    const imgEl   = document.getElementById('fullscreen-img');
+    const panelEl = document.getElementById('labelPanel');
+    const btnPrev = document.getElementById('fs-prev');
+    const btnNext = document.getElementById('fs-next');
+    const btnClose= document.getElementById('fs-close');
+
+    if (!modal || !imgEl || !panelEl) return;
+
+    function fillLabel(d) {
+      panelEl.innerHTML = `
+        <h3>${d.title}</h3>
+        <p><b>Series:</b> ${d.series}</p>
+        <p><b>Tagline:</b> <i>${d.tagline}</i></p>
+        <p><b>Year:</b> ${d.year}</p>
+        <p><b>Medium:</b> ${d.medium}</p>
+        <p><b>Dimensions:</b> ${d.dimensions}</p>
+        <p><b>Edition:</b> ${d.edition || ""}</p>
+        <p style="margin-top:1.2em;font-size:.95em;color:#eee;opacity:.65">Press ESC to close • ← / → to navigate</p>
+      `;
+    }
+
+    function preload(i) {
+      const item = galleryData[i];
+      if (!item) return;
+      const im = new Image();
+      im.src = item.img;
+    }
+
+    function updateHash(i) {
+      const h = `#work-${i+1}`;
+      if (location.hash !== h) history.pushState({i}, '', h);
+    }
+
+    function openAt(i) {
+      i = Math.max(0, Math.min(galleryData.length - 1, i));
+      currentIndex = i;
+      const d = galleryData[i];
+
+      imgEl.src = '';
+      imgEl.alt = d.title;
+      fillLabel(d);
+
+      modal.classList.remove('hidden');
+      document.body.style.overflow = 'hidden';
+
+      const tmp = new Image();
+      tmp.onload = () => { imgEl.src = d.img; };
+      tmp.onerror = () => { imgEl.alt = 'Image failed to load'; };
+      tmp.src = d.img;
+
+      preload(i-1); preload(i+1);
+      modal.setAttribute('aria-label', d.title);
+      updateHash(i);
+    }
+
+    function closeModal() {
+      modal.classList.add('hidden');
+      imgEl.src = '';
+      document.body.style.overflow = '';
+      if (location.hash.startsWith('#work-')) {
+        history.pushState({}, '', location.pathname + location.search);
+      }
+    }
+
+    function next() { if (currentIndex < galleryData.length-1) openAt(currentIndex+1); }
+    function prev() { if (currentIndex > 0) openAt(currentIndex-1); }
+
+    window.openFullscreenImage = openAt;
+    window.closeFullscreenImage = closeModal;
+
+    modal.addEventListener('click', (e) => {
+      const within = e.target.closest('#fullscreen-img, #labelPanel, #fs-prev, #fs-next, #fs-close');
+      if (!within) closeModal();
+    });
+
+    btnPrev?.addEventListener('click', (e) => { e.stopPropagation(); prev(); });
+    btnNext?.addEventListener('click', (e) => { e.stopPropagation(); next(); });
+    btnClose?.addEventListener('click', (e) => { e.stopPropagation(); closeModal(); });
+
+    window.addEventListener('keydown', (e) => {
+      if (modal.classList.contains('hidden')) return;
+      if (e.key === 'Escape') closeModal();
+      else if (e.key === 'ArrowRight') next();
+      else if (e.key === 'ArrowLeft') prev();
+    });
+
+    let touchX = null, touchY = null;
+    modal.addEventListener('touchstart', (e) => {
+      const t = e.touches[0]; touchX = t.clientX; touchY = t.clientY;
+    }, {passive:true});
+    modal.addEventListener('touchend', (e) => {
+      if (touchX == null || touchY == null) return;
+      const dx = (e.changedTouches[0].clientX - touchX);
+      const dy = (e.changedTouches[0].clientY - touchY);
+      touchX = touchY = null;
+      if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 40) {
+        if (dx < 0) next(); else prev();
+      }
+    });
+
+    function openFromHash() {
+      const m = location.hash.match(/^#work-(\d+)$/);
+      if (m) {
+        const idx = parseInt(m[1], 10) - 1;
+        if (!Number.isNaN(idx)) openAt(idx);
+      }
+    }
+    window.addEventListener('hashchange', openFromHash);
+    window.addEventListener('DOMContentLoaded', openFromHash);
+  })();
+  </script>
+
+  <!-- Audio -->
+  <audio id="bg-audio" preload="auto" playsinline autoplay muted loop>
+    <source src="/audio/manifesto_with_bg.mp3" type="audio/mpeg">
+  </audio>
+  <script>
+  (function () {
+    const DEBUG = false; const log = (...a)=>DEBUG&&console.log('[AUDIO]',...a);
+    const audio = document.getElementById('bg-audio');
+    const CONSENT_KEY = 'awsee_audio_consent';
+    const clamp01 = v => Math.max(0, Math.min(1, v));
+
+    function fadeTo(target = 1, duration = 1400) {
+      target = clamp01(target);
+      const steps = 24, dt = duration / steps;
+      const start = audio.volume || 0;
+      const delta = target - start;
+      if (target > 0) audio.muted = false;
+      let i = 0;
+      clearInterval(fadeTo._iv);
+      fadeTo._iv = setInterval(() => {
+        i++;
+        audio.volume = clamp01(start + (delta * i / steps));
+        if (i >= steps) { clearInterval(fadeTo._iv); audio.volume = target; }
+      }, dt);
+    }
+
+    let ac;
+    async function unlockAudio() {
+      try {
+        if (!ac) ac = new (window.AudioContext || window.webkitAudioContext)();
+        if (ac.state === 'suspended') await ac.resume();
+        const buffer = ac.createBuffer(1, 1, 22050);
+        const source = ac.createBufferSource();
+        source.buffer = buffer; source.connect(ac.destination);
+        if (source.start) source.start(0);
+      } catch {}
+    }
+
+    function grantAudio() {
+      localStorage.setItem(CONSENT_KEY, '1');
+      unlockAudio(); audio.muted = false; audio.volume = 0.0;
+      audio.play().then(() => { fadeTo(1, 1200); removeGestureListeners(); })
+                  .catch(() => retryPlaySequence());
+    }
+
+    function removeGestureListeners() {
+      ['click','touchstart','keydown','scroll','mousemove','wheel'].forEach(ev =>
+        window.removeEventListener(ev, grantAudio, { capture:false })
+      );
+      document.removeEventListener('visibilitychange', onVisible);
+    }
+    function onVisible() {
+      if (document.visibilityState === 'visible' && localStorage.getItem(CONSENT_KEY) === '1') grantAudio();
+    }
+    function retryPlaySequence(retries = 6, delay = 600) {
+      let n = 0;
+      const tick = () => {
+        if (n++ >= retries) return;
+        unlockAudio();
+        audio.play().then(() => { fadeTo(1, 1200); removeGestureListeners(); })
+                    .catch(() => setTimeout(tick, delay));
+      };
+      setTimeout(tick, delay);
+    }
+
+    audio.addEventListener('error', (e) => { console.error('[AUDIO] error', e, audio.error); });
+
+    async function tryAutoplay() {
+      try { audio.muted = true; audio.volume = 0.0; await audio.play();
+        if (localStorage.getItem(CONSENT_KEY) === '1') setTimeout(() => fadeTo(1, 1400), 250);
+      } catch {}
+    }
+
     ['click','touchstart','keydown','scroll','mousemove','wheel'].forEach(ev =>
-      window.removeEventListener(ev, grantAudio, { capture:false })
+      window.addEventListener(ev, grantAudio, { once:true, passive:true })
     );
-    document.removeEventListener('visibilitychange', onVisible);
-  }
+    document.addEventListener('visibilitychange', onVisible);
 
-  function onVisible() {
-    if (document.visibilityState === 'visible' && localStorage.getItem(CONSENT_KEY) === '1') {
-      grantAudio();
-    }
-  }
-
-  // Retry loop if the browser is being stubborn
-  function retryPlaySequence(retries = 6, delay = 600) {
-    let n = 0;
-    const tick = () => {
-      if (n++ >= retries) return;
-      unlockAudio();
-      audio.play().then(() => {
-        log('Retry play OK at attempt', n);
-        fadeTo(1, 1200);
-        removeGestureListeners();
-      }).catch(e => {
-        log('Retry play fail', n, e);
-        setTimeout(tick, delay);
-      });
-    };
-    setTimeout(tick, delay);
-  }
-
-  // ---- element event wiring
-  audio.addEventListener('canplaythrough', () => { ready = true; log('canplaythrough'); });
-  audio.addEventListener('loadeddata', () => { log('loadeddata'); });
-  audio.addEventListener('play', () => { log('event: play'); });
-  audio.addEventListener('error', (e) => {
-    console.error('[AUDIO] error', e, audio.error); // keep console error visible
-  });
-
-  // ---- attempt muted autoplay ASAP
-  async function tryAutoplay() {
-    if (triedAutoplay) return;
-    triedAutoplay = true;
-    try {
-      audio.muted = true;
-      audio.volume = 0.0;
-      await audio.play();                 // allowed in most browsers when muted
-      log('Muted autoplay OK');
-
-      // if user had consent earlier, fade in to full automatically
-      if (localStorage.getItem(CONSENT_KEY) === '1') {
-        // give it a moment to be "playing" then fade in
-        setTimeout(() => fadeTo(1, 1400), 250);
-      }
-    } catch (err) {
-      log('Muted autoplay blocked:', err);
-      // We'll wait for the first gesture
-    }
-  }
-
-  // ---- gesture listeners (liberal)
-  ['click','touchstart','keydown','scroll','mousemove','wheel'].forEach(ev =>
-    window.addEventListener(ev, grantAudio, { once:true, passive:true })
-  );
-  document.addEventListener('visibilitychange', onVisible);
-
-  // ---- kick off
-  window.addEventListener('DOMContentLoaded', () => {
-    // ensure we have a valid src (avoid empty src blocking play)
-    if (!audio.currentSrc) { log('No currentSrc—check file path!'); }
-    tryAutoplay();
-
-    // in case the file loads slightly later, try muted autoplay again
-    setTimeout(() => { if (!audio.paused) return; tryAutoplay(); }, 1200);
-    setTimeout(() => { if (!audio.paused) return; tryAutoplay(); }, 3000);
-  });
-})();
-</script>
->
-<!-- ===== EMAIL CLICK HANDLER (toast + auto-copy fallback) ===== -->
-<script>
-document.addEventListener('DOMContentLoaded', () => {
-  const emailLink = document.getElementById('contact-email');
-  if (!emailLink) return;
-
-  emailLink.addEventListener('click', function(e) {
-    e.preventDefault();
-    const email = 'hello@aswesee.art';
-    const href = `mailto:${email}`;
-
-    try { window.location.href = href; } catch (e) {}
-
-    setTimeout(() => {
-      if (!document.hidden) {
-        navigator.clipboard?.writeText(email).catch(()=>{});
-        const note = document.createElement('div');
-        note.textContent = `Email address copied: ${email}`;
-        note.style.cssText = `
-          position:fixed;bottom:20px;left:50%;
-          transform:translateX(-50%);
-          background:#222;color:#fff;padding:10px 16px;
-          border:1px solid rgba(255,255,255,.15);
-          border-radius:8px;font-size:14px;z-index:9999;
-          box-shadow:0 6px 18px rgba(0,0,0,.35);
-        `;
-        document.body.appendChild(note);
-        setTimeout(()=>note.remove(), 2600);
-      }
-    }, 800);
-  });
-});
-</script>
-
-<!-- ===== FORMSPREE AJAX SUBMIT (toast + disable button) ===== -->
-<script>
-(function(){
-  const form = document.getElementById('contact-form');
-  if(!form) return;
-
-  const btn  = document.getElementById('cf-submit');
-  const stat = document.getElementById('cf-status');
-
-  function toast(msg){
-    const note = document.createElement('div');
-    note.textContent = msg;
-    note.style.cssText = 'position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#1a1a1a;color:#fff;padding:10px 16px;border:1px solid rgba(255,255,255,.15);border-radius:8px;font-size:14px;z-index:9999;box-shadow:0 6px 18px rgba(0,0,0,.35)';
-    document.body.appendChild(note);
-    setTimeout(()=>note.remove(), 2800);
-  }
-
-  form.addEventListener('submit', async (e)=>{
-    e.preventDefault();
-    stat.textContent = '';
-    btn.disabled = true; btn.style.opacity = .6;
-
-    const data = new FormData(form);
-
-    try {
-      const res = await fetch(form.action, {
-        method:'POST',
-        body: data,
-        headers: { 'Accept': 'application/json' }
-      });
-      if (!res.ok) throw 0;
-      toast('Message sent. Thank you!');
-      form.reset();
-    } catch {
-      toast('Could not send message. Please try again.');
-    } finally {
-      btn.disabled = false; btn.style.opacity = 1;
-    }
-  });
-})();
-</script>
-
-<!-- === Smooth center-scroll for Gallery button (ADD-ONLY) === -->
-<script>
-(function(){
-  const btn = document.getElementById('enter-gallery');
-  const grid = document.getElementById('gallery-grid');
-  if(!btn || !grid) return;
-
-  btn.addEventListener('click', function(e){
-    e.preventDefault();
-    const rect = grid.getBoundingClientRect();
-    const targetY = window.scrollY + rect.top + (rect.height / 2) - (window.innerHeight / 2);
-    window.scrollTo({ top: Math.max(0, targetY), behavior: 'smooth' });
-  }, { passive: false });
-})();
-</script>
-
-<!-- === Attachments + 7000-char counter (ADD-ONLY) === -->
-<script>
-(function(){
-  const form    = document.getElementById('contact-form');
-  const msg     = document.getElementById('cf-message');
-  const count   = document.getElementById('cf-count');
-  const drop    = document.getElementById('file-drop');
-  const input   = document.getElementById('cf-files');
-  const list    = document.getElementById('cf-filelist');
-
-  if(!form || !msg || !count || !drop || !input || !list) return;
-
-  const LIMIT_CHARS = 7000;
-  const LIMIT_FILES = 10;
-  const LIMIT_SIZE  = 25 * 1024 * 1024; // 25MB
-  const ACCEPT = new Set(['pdf','doc','docx','zip','rar','7z','psd','ai','indd','tif','tiff','jpg','jpeg','png','svg']);
-
-  function toast(msg){
-    const n = document.createElement('div');
-    n.textContent = msg;
-    n.style.cssText = 'position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#1a1a1a;color:#fff;padding:10px 16px;border:1px solid rgba(255,255,255,.15);border-radius:8px;font-size:14px;z-index:9999;box-shadow:0 6px 18px rgba(0,0,0,.35)';
-    document.body.appendChild(n);
-    setTimeout(()=>n.remove(), 2800);
-  }
-
-  // Character counter
-  function updateCount(){
-    const len = msg.value.length;
-    count.textContent = `${len} / ${LIMIT_CHARS}`;
-    count.style.color = (len > LIMIT_CHARS) ? '#ff6b6b' : '';
-  }
-  msg.setAttribute('maxlength', LIMIT_CHARS);
-  msg.addEventListener('input', updateCount);
-  updateCount();
-
-  // Helpers for files
-  function extOf(name){
-    const i = name.lastIndexOf('.');
-       return i>=0 ? name.slice(i+1).toLowerCase() : '';
-  }
-  function renderList(files){
-    list.innerHTML = '';
-    Array.from(files).forEach(f=>{
-      const li = document.createElement('li');
-      const mb = (f.size/1048576).toFixed(2);
-      li.className = 'flex items-center justify-between gap-3';
-      li.innerHTML = `<span class="opacity-90">${f.name}</span><span class="opacity-60 text-xs">${mb} MB</span>`;
-      list.appendChild(li);
+    window.addEventListener('DOMContentLoaded', () => {
+      if (!audio.currentSrc) { /* check path in prod */ }
+      tryAutoplay();
+      setTimeout(() => { if (!audio.paused) return; tryAutoplay(); }, 1200);
+      setTimeout(() => { if (!audio.paused) return; tryAutoplay(); }, 3000);
     });
-  }
-  function validateFiles(files){
-    if(files.length > LIMIT_FILES){ toast(`Max ${LIMIT_FILES} files.`); return false; }
-    for(const f of files){
-      if(f.size > LIMIT_SIZE){ toast(`"${f.name}" is larger than 25 MB.`); return false; }
-      const ext = extOf(f.name);
-      if(!ACCEPT.has(ext)){ toast(\`"\${f.name}" type not allowed.\`); return false; }
-    }
-    return true;
-  }
+  })();
+  </script>
 
-  // Open file dialog when clicking dropzone
-  drop.addEventListener('click', () => input.click());
-
-  // Drag & Drop
-  drop.addEventListener('dragover', (e)=>{ e.preventDefault(); drop.style.borderColor='rgba(255,255,255,.35)'; });
-  drop.addEventListener('dragleave', ()=>{ drop.style.borderColor='rgba(255,255,255,.15)'; });
-  drop.addEventListener('drop', (e)=>{
-    e.preventDefault();
-    drop.style.borderColor='rgba(255,255,255,.15)';
-    const files = Array.from(e.dataTransfer.files || []);
-    if(!validateFiles(files)) return;
-    const dt = new DataTransfer();
-    files.forEach(f=>dt.items.add(f));
-    input.files = dt.files;
-    renderList(input.files);
+  <!-- Email click: copy fallback -->
+  <script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const emailLink = document.getElementById('contact-email');
+    if (!emailLink) return;
+    emailLink.addEventListener('click', function(e) {
+      e.preventDefault();
+      const email = 'hello@aswesee.art';
+      try { window.location.href = `mailto:${email}`; } catch (e) {}
+      setTimeout(() => {
+        if (!document.hidden) {
+          navigator.clipboard?.writeText(email).catch(()=>{});
+          const note = document.createElement('div');
+          note.textContent = `Email address copied: ${email}`;
+          note.style.cssText = `position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#222;color:#fff;padding:10px 16px;border:1px solid rgba(255,255,255,.15);border-radius:8px;font-size:14px;z-index:9999;box-shadow:0 6px 18px rgba(0,0,0,.35)`;
+          document.body.appendChild(note);
+          setTimeout(()=>note.remove(), 2600);
+        }
+      }, 800);
+    });
   });
+  </script>
 
-  // When selecting via picker
-  input.addEventListener('change', ()=>{
-    const files = Array.from(input.files || []);
-    if(!validateFiles(files)){ input.value = ''; list.innerHTML=''; return; }
-    renderList(files);
-  });
+  <!-- Formspree AJAX submit -->
+  <script>
+  (function(){
+    const form = document.getElementById('contact-form');
+    if(!form) return;
+    const btn  = document.getElementById('cf-submit');
+    const stat = document.getElementById('cf-status');
 
-  // Pre-submit validation (capture phase so it runs before existing listener)
-  form.addEventListener('submit', (e)=>{
-    if(msg.value.length > LIMIT_CHARS){
-      e.stopPropagation(); e.preventDefault();
-      toast('Message is too long (max 7000 characters).');
-      return;
+    function toast(msg){
+      const note = document.createElement('div');
+      note.textContent = msg;
+      note.style.cssText = 'position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#1a1a1a;color:#fff;padding:10px 16px;border:1px solid rgba(255,255,255,.15);border-radius:8px;font-size:14px;z-index:9999;box-shadow:0 6px 18px rgba(0,0,0,.35)';
+      document.body.appendChild(note);
+      setTimeout(()=>note.remove(), 2800);
     }
-    const files = Array.from(input.files || []);
-    if(!validateFiles(files)){
-      e.stopPropagation(); e.preventDefault();
-      return;
-    }
-    // OK → let the existing AJAX handler proceed
-  }, true);
-})();
-</script>
 
-</body>                                                                                                                                                               </html>                                         
+    form.addEventListener('submit', async (e)=>{
+      e.preventDefault();
+      stat.textContent = '';
+      btn.disabled = true; btn.style.opacity = .6;
+      const data = new FormData(form);
+
+      try {
+        const res = await fetch(form.action, { method:'POST', body: data, headers: { 'Accept': 'application/json' } });
+        if (!res.ok) throw 0;
+        toast('Message sent. Thank you!'); form.reset();
+      } catch { toast('Could not send message. Please try again.'); }
+      finally { btn.disabled = false; btn.style.opacity = 1; }
+    });
+  })();
+  </script>
+
+  <!-- Smooth center-scroll for Gallery button -->
+  <script>
+  (function(){
+    const btn = document.getElementById('enter-gallery');
+    const grid = document.getElementById('gallery-grid');
+    if(!btn || !grid) return;
+    btn.addEventListener('click', function(e){
+      e.preventDefault();
+      const rect = grid.getBoundingClientRect();
+      const targetY = window.scrollY + rect.top + (rect.height / 2) - (window.innerHeight / 2);
+      window.scrollTo({ top: Math.max(0, targetY), behavior: 'smooth' });
+    }, { passive: false });
+  })();
+  </script>
+
+  <!-- Attachments + 7000-char counter -->
+  <script>
+  (function(){
+    const form    = document.getElementById('contact-form');
+    const msg     = document.getElementById('cf-message');
+    const count   = document.getElementById('cf-count');
+    const drop    = document.getElementById('file-drop');
+    const input   = document.getElementById('cf-files');
+    const list    = document.getElementById('cf-filelist');
+
+    if(!form || !msg || !count || !drop || !input || !list) return;
+
+    const LIMIT_CHARS = 7000;
+    const LIMIT_FILES = 10;
+    const LIMIT_SIZE  = 25 * 1024 * 1024; // 25MB
+    const ACCEPT = new Set(['pdf','doc','docx','zip','rar','7z','psd','ai','indd','tif','tiff','jpg','jpeg','png','svg']);
+
+    function toast(msg){
+      const n = document.createElement('div');
+      n.textContent = msg;
+      n.style.cssText = 'position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#1a1a1a;color:#fff;padding:10px 16px;border:1px solid rgba(255,255,255,.15);border-radius:8px;font-size:14px;z-index:9999;box-shadow:0 6px 18px rgba(0,0,0,.35)';
+      document.body.appendChild(n);
+      setTimeout(()=>n.remove(), 2800);
+    }
+
+    function updateCount(){
+      const len = msg.value.length;
+      count.textContent = `${len} / ${LIMIT_CHARS}`;
+      count.style.color = (len > LIMIT_CHARS) ? '#ff6b6b' : '';
+    }
+    msg.setAttribute('maxlength', LIMIT_CHARS);
+    msg.addEventListener('input', updateCount);
+    updateCount();
+
+    function extOf(name){
+      const i = name.lastIndexOf('.');
+      return i>=0 ? name.slice(i+1).toLowerCase() : '';
+    }
+    function renderList(files){
+      list.innerHTML = '';
+      Array.from(files).forEach(f=>{
+        const li = document.createElement('li');
+        const mb = (f.size/1048576).toFixed(2);
+        li.className = 'flex items-center justify-between gap-3';
+        li.innerHTML = `<span class="opacity-90">${f.name}</span><span class="opacity-60 text-xs">${mb} MB</span>`;
+        list.appendChild(li);
+      });
+    }
+    function validateFiles(files){
+      if(files.length > LIMIT_FILES){ toast(`Max ${LIMIT_FILES} files.`); return false; }
+      for(const f of files){
+        if(f.size > LIMIT_SIZE){ toast(`"${f.name}" is larger than 25 MB.`); return false; }
+        const ext = extOf(f.name);
+        if(!ACCEPT.has(ext)){ toast(`"${f.name}" type not allowed.`); return false; }
+      }
+      return true;
+    }
+
+    drop.addEventListener('click', () => input.click());
+    drop.addEventListener('dragover', (e)=>{ e.preventDefault(); drop.style.borderColor='rgba(255,255,255,.35)'; });
+    drop.addEventListener('dragleave', ()=>{ drop.style.borderColor='rgba(255,255,255,.15)'; });
+    drop.addEventListener('drop', (e)=>{
+      e.preventDefault();
+      drop.style.borderColor='rgba(255,255,255,.15)';
+      const files = Array.from(e.dataTransfer.files || []);
+      if(!validateFiles(files)) return;
+      const dt = new DataTransfer();
+      files.forEach(f=>dt.items.add(f));
+      input.files = dt.files;
+      renderList(input.files);
+    });
+
+    input.addEventListener('change', ()=>{
+      const files = Array.from(input.files || []);
+      if(!validateFiles(files)){ input.value = ''; list.innerHTML=''; return; }
+      renderList(files);
+    });
+
+    form.addEventListener('submit', (e)=>{
+      if(msg.value.length > LIMIT_CHARS){
+        e.stopPropagation(); e.preventDefault();
+        toast('Message is too long (max 7000 characters).');
+        return;
+      }
+      const files = Array.from(input.files || []);
+      if(!validateFiles(files)){
+        e.stopPropagation(); e.preventDefault();
+        return;
+      }
+    }, true);
+  })();
+  </script>
+
+</body>
 </html>
