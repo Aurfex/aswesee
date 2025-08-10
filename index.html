@@ -462,6 +462,10 @@
   const AMBIENT_MIN_ALPHA = 0.15;
   const AMBIENT_MAX_ALPHA = 0.55;
 
+  /* wobble magnitudes */
+  const ORB_MAG_PORTRAIT = 2.6;
+  const ORB_MAG_AMBIENT  = 9.5;
+
   /* If possible, host this portrait image on your own domain */
   const PORTRAIT_SRC = "https://i.ibb.co/W4N6XfsN/portrait.png";
 
@@ -542,110 +546,124 @@
   const points = new THREE.Points(geometry, material);
   scene.add(points);
 
-  /* ========================== SAMPLER (robust) ========================== */
+  /* ========================== SAMPLER (grid + jitter) ========================== */
   function sampleImageGrid(url, pointCount, callback) {
     const img = new Image();
     img.crossOrigin = "anonymous";
     img.referrerPolicy = "no-referrer";
 
-    function ensureCount(out, lums, edges) {
-      const initial = out.length;
-      if (initial === 0) {
-        // Elliptical fallback
-        const outF = [], lF = [], eF = [];
-        for (let i = 0; i < pointCount; i++) {
-          const th = Math.random() * Math.PI * 2;
-          const r  = Math.sqrt(Math.random()) * 150;
-          const x  = (Math.cos(th) * r) * 0.85 * PORTRAIT_SCALE;
-          const y  = (Math.sin(th) * r) * 1.10 * PORTRAIT_SCALE + PORTRAIT_Y_SHIFT;
-          outF.push({ x, y, z:0, sharp: 0.8 });
-          lF.push(0.8); eF.push(0.0);
-        }
-        return { out: outF, lums: lF, edges: eF };
-      }
-      while (out.length < pointCount) {
-        const j = (out.length) % initial;
-        out.push({ ...out[j] }); lums.push(lums[j]); edges.push(edges[j]);
-      }
-      if (out.length > pointCount) { out.length = pointCount; lums.length = pointCount; edges.length = pointCount; }
-      return { out, lums, edges };
-    }
-
     function hardFallback() {
-      const pack = ensureCount([], [], []);
-      callback(pack.out, pack.lums, pack.edges);
+      const out=[], lums=[], edges=[];
+      for (let i=0;i<pointCount;i++){
+        const th = Math.random()*Math.PI*2;
+        const r  = Math.sqrt(Math.random())*150;
+        const x  = (Math.cos(th)*r)*0.85*PORTRAIT_SCALE;
+        const y  = (Math.sin(th)*r)*1.10*PORTRAIT_SCALE + PORTRAIT_Y_SHIFT;
+        out.push({x,y,z:0,sharp:0.8}); lums.push(0.8); edges.push(0.0);
+      }
+      callback(out,lums,edges);
     }
 
     img.onerror = hardFallback;
 
-    img.onload = function () {
+    img.onload = function(){
       const w = 360, h = 450;
       const cv = document.createElement('canvas'); cv.width = w; cv.height = h;
-      const ctx = cv.getContext('2d');
-      ctx.drawImage(img, 0, 0, w, h);
+      const ctx = cv.getContext('2d'); ctx.drawImage(img, 0, 0, w, h);
 
-      let data;
-      try { data = ctx.getImageData(0, 0, w, h).data; }
-      catch (e) { return hardFallback(); }
+      let data; try { data = ctx.getImageData(0,0,w,h).data; } catch(e){ return hardFallback(); }
 
       // luminance
       const L = new Float32Array(w*h);
-      for (let y=0, i=0; y<h; y++){
+      for (let i=0, y=0; y<h; y++){
         for (let x=0; x<w; x++, i++){
-          const k = i*4;
+          const k=i*4;
           L[i] = (data[k]*0.299 + data[k+1]*0.587 + data[k+2]*0.114)/255;
         }
       }
-
-      // sobel
+      // sobel edge
       const E = new Float32Array(w*h);
-      const sobel = (x,y)=> {
-        const g = (xx,yy)=> L[Math.max(0, Math.min(h-1,yy))*w + Math.max(0, Math.min(w-1,xx))];
+      const sobel=(x,y)=>{
+        const g=(xx,yy)=> L[Math.max(0,Math.min(h-1,yy))*w + Math.max(0,Math.min(w-1,xx))];
         const gx = -g(x-1,y-1)-2*g(x-1,y)-g(x-1,y+1) + g(x+1,y-1)+2*g(x+1,y)+g(x+1,y+1);
         const gy = -g(x-1,y-1)-2*g(x,y-1)-g(x+1,y-1) + g(x-1,y+1)+2*g(x,y+1)+g(x+1,y+1);
-        return Math.min(1, Math.sqrt(gx*gx+gy*gy)*0.8);
+        return Math.min(1, Math.hypot(gx,gy)*0.8);
       };
-      for (let y=0; y<h; y++) for (let x=0; x<w; x++) E[y*w+x] = sobel(x,y);
+      for (let y=0; y<h; y++) for (let x=0; x<w; x++) E[y*w+x]=sobel(x,y);
 
-      const ALPHA_MIN = 0.35;
+      const ALPHA_MIN = 0.05; // lower threshold
       const cand = [];
       for (let y=0; y<h; y++){
         for (let x=0; x<w; x++){
-          const i = y*w+x, a = data[i*4+3]/255;
+          const i=y*w+x, a=data[i*4+3]/255;
           if (a < ALPHA_MIN) continue;
-          const lum = Math.max(MIN_GRAY, L[i]);
+          const lum  = Math.max(MIN_GRAY, L[i]);
           const edge = E[i];
-          const score = 0.1 + EDGE_WEIGHT*edge + 0.3*(1.0 - Math.abs(lum-0.5));
+          const score = 0.20 + 1.2*edge + 0.15*(1.0 - Math.abs(lum-0.5));
           cand.push({x,y,lum,edge,score});
         }
       }
+      if (!cand.length) return hardFallback();
 
-      if (cand.length === 0) return hardFallback();
+      // stratified grid
+      const ar = w/h;
+      let gridW = Math.max(6, Math.round(Math.sqrt(pointCount*ar)));
+      let gridH = Math.max(6, Math.round(pointCount / gridW));
+      const cellW = w/gridW, cellH = h/gridH;
 
-      cand.sort((a,b)=> b.score - a.score);
+      const buckets = Array.from({length:gridW*gridH}, ()=>null);
+      for (const c of cand){
+        const cx = Math.min(gridW-1, Math.floor(c.x / cellW));
+        const cy = Math.min(gridH-1, Math.floor(c.y / cellH));
+        const idx = cy*gridW + cx;
+        const b = buckets[idx];
+        if (!b || c.score > b.score) buckets[idx] = c;  // best per cell
+      }
 
-      const out = [], lums=[], edges=[];
+      const out=[], lums=[], edges=[];
       const centerX = w/2, centerY = h/2;
-      const needDetail = Math.floor(pointCount * DETAIL_BIAS);
+      const jitter = 0.35;
 
-      function push(c){
-        const nx = (c.x - centerX)/w * 280 * PORTRAIT_SCALE;
-        const ny = (centerY - c.y)/h * 340 * PORTRAIT_SCALE + PORTRAIT_Y_SHIFT;
-        const dx = (c.x-centerX)/(w/2), dy = (c.y-centerY)/(h/2);
-        const radial = Math.sqrt(dx*dx+dy*dy);
-        const sharp = Math.max(0.4, 1.0 - radial);
-        out.push({x:nx, y:ny, z:0, sharp}); lums.push(c.lum); edges.push(c.edge);
+      for (let cy=0; cy<gridH; cy++){
+        for (let cx=0; cx<gridW; cx++){
+          const c = buckets[cy*gridW + cx];
+          if (!c) continue;
+
+          const jx = (Math.random()-0.5)*cellW*jitter;
+          const jy = (Math.random()-0.5)*cellH*jitter;
+          const px = Math.max(0, Math.min(w-1, c.x + jx));
+          const py = Math.max(0, Math.min(h-1, c.y + jy));
+
+          const nx = (px - centerX)/w * 280 * PORTRAIT_SCALE;
+          const ny = (centerY - py)/h * 340 * PORTRAIT_SCALE + PORTRAIT_Y_SHIFT;
+
+          const dx = (px-centerX)/(w/2), dy = (py-centerY)/(h/2);
+          const radial = Math.sqrt(dx*dx + dy*dy);
+          const sharp = Math.max(0.4, 1.0 - radial);
+
+          out.push({x:nx, y:ny, z:0, sharp});
+          lums.push(Math.max(MIN_GRAY, c.lum));
+          edges.push(c.edge);
+        }
       }
 
-      for (let i=0; i<needDetail && i<cand.length; i++) push(cand[i]);
-      const remain = Math.max(0, pointCount - out.length);
-      if (remain > 0) {
-        const step = Math.max(1, Math.floor(cand.length / remain));
-        for (let i=0, taken=0; taken<remain && i<cand.length; i+=step, taken++) push(cand[i]);
+      // fill/cut to exact count
+      if (out.length < pointCount){
+        cand.sort((a,b)=>b.score-a.score);
+        for (let k=0; k<cand.length && out.length<pointCount; k+=Math.ceil(cand.length/(pointCount-out.length))){
+          const c=cand[k];
+          const nx = (c.x - centerX)/w * 280 * PORTRAIT_SCALE;
+          const ny = (centerY - c.y)/h * 340 * PORTRAIT_SCALE + PORTRAIT_Y_SHIFT;
+          const dx=(c.x-centerX)/(w/2), dy=(c.y-centerY)/(h/2);
+          const sharp = Math.max(0.4, 1.0 - Math.hypot(dx,dy));
+          out.push({x:nx,y:ny,z:0,sharp});
+          lums.push(Math.max(MIN_GRAY, c.lum));
+          edges.push(c.edge);
+        }
       }
+      if (out.length > pointCount){ out.length = pointCount; lums.length = pointCount; edges.length = pointCount; }
 
-      const pack = ensureCount(out, lums, edges);
-      callback(pack.out, pack.lums, pack.edges);
+      callback(out, lums, edges);
     };
 
     img.src = url;
@@ -669,62 +687,51 @@
   }
 
   function startMorph(){
-  // اولین PORTRAIT ذره → پرتره
-  for(let i=0; i<PARTICLES; i++) isPortrait[i] = (i < PORTRAIT) ? 1 : 0;
+    for(let i=0; i<PARTICLES; i++) isPortrait[i] = (i < PORTRAIT) ? 1 : 0;
 
-  sampleImageGrid(PORTRAIT_SRC, PORTRAIT, function(samples, lums, edges){
-    morphLums = lums;
-    edgeStrengths = edges;
+    sampleImageGrid(PORTRAIT_SRC, PORTRAIT, function(samples, lums, edges){
+      morphLums = lums;
+      edgeStrengths = edges;
 
-    // جهت‌ها
-    const forward = new THREE.Vector3();
-    camera.getWorldDirection(forward).normalize();
+      const forward = new THREE.Vector3(); camera.getWorldDirection(forward).normalize();
+      const portraitDepth = 320;
+      portraitCenterW = camera.position.clone().add(forward.clone().multiplyScalar(portraitDepth));
+      const up    = camera.up.clone().normalize();
+      let   right = new THREE.Vector3().crossVectors(forward, up).normalize();
+      if (right.lengthSq() < 1e-6) right = new THREE.Vector3(1,0,0);
 
-    const portraitDepth = 320;
-    portraitCenterW = camera.position.clone().add(forward.clone().multiplyScalar(portraitDepth));
+      for(let i=0;i<PARTICLES;++i){
+        if(isPortrait[i]){
+          const pi = i; // 0..PORTRAIT-1
+          let s = samples[pi];
 
-    // مهم: clone/normalize جداگانه داشته باشیم
-    const up    = camera.up.clone().normalize();
-    let   right = new THREE.Vector3().crossVectors(forward, up).normalize();
+          if (!s || !Number.isFinite(s.x) || !Number.isFinite(s.y)) {
+            s = { x: 0, y: 0, sharp: 1 };
+          }
 
-    // اگر right تصادفاً صفر شد (نباید بشه، ولی برای اطمینان):
-    if (right.lengthSq() < 1e-6) right = new THREE.Vector3(1,0,0);
+          const pos = portraitCenterW.clone()
+            .add(right.clone().multiplyScalar(s.x))
+            .add(up.clone().multiplyScalar(s.y));
 
-    for (let i = 0; i < PARTICLES; ++i) {
-      if (isPortrait[i]) {
-        const pi = i; // 0..PORTRAIT-1
-        let s = samples[pi];
-
-        // گارد ضد-NaN
-        if (!s || !Number.isFinite(s.x) || !Number.isFinite(s.y)) {
-          s = { x: 0, y: 0, sharp: 1 };
+          morphTargets[i*3]   = pos.x;
+          morphTargets[i*3+1] = pos.y;
+          morphTargets[i*3+2] = pos.z;
+          sharpness[i] = Number.isFinite(s.sharp) ? s.sharp : 1.0;
+        } else {
+          morphTargets[i*3]=basePositions[i*3];
+          morphTargets[i*3+1]=basePositions[i*3+1];
+          morphTargets[i*3+2]=basePositions[i*3+2];
+          sharpness[i]=1.0;
         }
-
-        // *** نکته‌ی اصلی: clone قبل از multiplyScalar تا right/up خراب نشن ***
-        const pos = portraitCenterW.clone()
-          .add(right.clone().multiplyScalar(s.x))
-          .add(up.clone().multiplyScalar(s.y));
-
-        morphTargets[i*3]   = pos.x;
-        morphTargets[i*3+1] = pos.y;
-        morphTargets[i*3+2] = pos.z;
-
-        sharpness[i] = Number.isFinite(s.sharp) ? s.sharp : 1.0;
-      } else {
-        morphTargets[i*3]   = basePositions[i*3];
-        morphTargets[i*3+1] = basePositions[i*3+1];
-        morphTargets[i*3+2] = basePositions[i*3+2];
-        sharpness[i] = 1.0;
       }
-    }
 
-    morphStartTime = performance.now();
-    morphReady = true; morphing = true; fullyReady = true;
-    requestAnimationFrame(animate);
+      morphStartTime = performance.now();
+      morphReady = true; morphing = true; fullyReady = true;
+      requestAnimationFrame(animate);
 
-    console.info('[portrait] samples:', samples.length, 'ready:', morphReady);
-  });
-}
+      console.info('[portrait] samples:', samples.length, 'ready:', morphReady);
+    });
+  }
 
   function animate(now){
     const t = now*0.001, globalPhase = t*GLOBAL_ROTATE_SPEED;
@@ -739,8 +746,11 @@
       if (!isPortrait[i]) {
         [gx, gy, gz] = rotateAroundPoint(bx, by, bz, 0, 0, 0, globalPhase, globalPhase * 0.7);
       }
-      const orbMag = 9.5 + (isPortrait[i]?1.1:0), orbFreq = 0.42 + (i%17)*0.012,
-            wob = Math.sin(t*orbFreq + i) * orbMag, wob2 = Math.cos(t*orbFreq*0.63 + i*0.74) * (orbMag*0.5);
+      const orbMag  = isPortrait[i] ? ORB_MAG_PORTRAIT : ORB_MAG_AMBIENT;
+      const orbFreq = 0.42 + (i%17)*0.012;
+      const wob = Math.sin(t*orbFreq + i) * orbMag;
+      const wob2 = Math.cos(t*orbFreq*0.63 + i*0.74) * (orbMag*0.5);
+
       let nx, ny, nz;
 
       if(fullyReady && morphReady && morphing && isPortrait[i]){
@@ -776,7 +786,7 @@
         alphas[i] = alpha;
       }
 
-      // Anti-NaN guard (final)
+      // Anti-NaN guard
       if (!Number.isFinite(nx) || !Number.isFinite(ny) || !Number.isFinite(nz)) {
         nx = bx; ny = by; nz = bz;
       }
