@@ -23,45 +23,31 @@
 
     h1, h2, h3 { font-family: 'Playfair Display', serif; }
 
-/* ===== Hero / Particles ===== */
-.hero { position: relative; width: 100%; height: 100vh; overflow: hidden; }
-#bg-three{
-  position: fixed; inset: 0;
-  width: 100vw; height: 100vh;
-  z-index: 0;
-  pointer-events: none;
-}
-#bg-three canvas{ display:block; pointer-events:none !important; }
+    /* Hero title → Josefin Sans (override) */
+    .hero-content h1{
+      font-family: 'Josefin Sans', Inter, system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif !important;
+      font-weight: 400 !important; /* ensures it beats later 500 rules */
+      /* optional: letter-spacing: 0.04em; */
+    }
 
-.hero-content{
-  position: absolute; top: 40px; left: 50%; transform: translateX(-50%);
-  text-align: center; z-index: 10; pointer-events:auto;
-}
+    /* ===== Hero / Particles ===== */
+    .hero { position: relative; width: 100%; height: 100vh; overflow: hidden; }
+    #bg-three{
+      position: fixed; inset: 0;
+      width: 100vw; height: 100vh;
+      z-index: 0;
+      pointer-events: none;
+    }
+    #bg-three canvas{ display:block; pointer-events:none !important; }
 
-/* Title: Josefin Sans + bigger + tighter */
-.hero-content h1{
-  font-family: 'Josefin Sans', Inter, system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
-  font-weight: 400;
-  font-size: clamp(3.2rem, 9.5vw, 7.6rem);
-  line-height: 1.05;
-  letter-spacing: 0.04em;
-  margin: 0;
-}
-
-/* Tagline: فاصله کمتر زیر تیتر */
-.hero-content p{
-  font-size: clamp(1rem, 2.2vw, 1.25rem);
-  margin: 6px 0 18px; /* قبلاً 10px 0 30px بود */
-  letter-spacing: 3px;
-  color: #ccc;
-}
-
-.hero-content a{
-  padding: 12px 30px; border: 1px solid #fff; color: #fff;
-  letter-spacing: 2px; text-transform: uppercase; text-decoration: none;
-  transition: all .3s; display:inline-block;
-}
-.hero-content a:hover { background:#fff; color:#000; }
+    .hero-content{
+      position: absolute; top: 40px; left: 50%; transform: translateX(-50%);
+      text-align: center; z-index: 10; pointer-events:auto;
+    }
+    .hero-content h1 { font-size: 4rem; margin: 0; letter-spacing: 4px; font-weight: 500; }
+    .hero-content p  { font-size: 1.2rem; margin: 10px 0 30px; letter-spacing: 3px; color: #ccc; }
+    .hero-content a  { padding: 12px 30px; border: 1px solid #fff; color: #fff; letter-spacing: 2px; text-transform: uppercase; text-decoration: none; transition: all .3s; display:inline-block;}
+    .hero-content a:hover { background:#fff; color:#000; }
 
     /* ===== Gallery gradient ===== */
     #gallery{
