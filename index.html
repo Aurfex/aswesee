@@ -796,31 +796,38 @@
 })();
 </script>
 >
-<!-- ===== EMAIL CLICK HANDLER (added) ===== -->
+<!-- ===== EMAIL CLICK HANDLER (toast + auto-copy fallback) ===== -->
 <script>
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', () => {
   const emailLink = document.getElementById('contact-email');
   if (!emailLink) return;
+
   emailLink.addEventListener('click', function(e) {
     e.preventDefault();
-    const href = this.getAttribute('href'); // "mailto:hello@aswesee.art"
-    // Try to open default mail client
-    try {
-      window.location.href = href;
-      // Fallback: if nothing happens after a short delay, prompt copy
-      setTimeout(() => {
-        // if document still visible and no navigation happened, offer copy
-        if (!document.hidden) {
-          const ok = confirm('Couldn’t open your email app automatically.\nCopy address to clipboard?');
-          if (ok) {
-            navigator.clipboard.writeText('hello@aswesee.art').catch(()=>{});
-            alert('Email address copied: hello@aswesee.art');
-          }
-        }
-      }, 800);
-    } catch (err) {
-      alert('Unable to open email client. Please copy this address: hello@aswesee.art');
-    }
+    const email = 'hello@aswesee.art';
+    const href = `mailto:${email}`;
+
+    // Attempt to open default mail client
+    try { window.location.href = href; } catch (e) {}
+
+    // If navigation didn't happen, auto-copy + toast (no popup)
+    setTimeout(() => {
+      if (!document.hidden) {
+        navigator.clipboard?.writeText(email).catch(()=>{});
+        const note = document.createElement('div');
+        note.textContent = `Email address copied: ${email}`;
+        note.style.cssText = `
+          position:fixed;bottom:20px;left:50%;
+          transform:translateX(-50%);
+          background:#222;color:#fff;padding:10px 16px;
+          border:1px solid rgba(255,255,255,.15);
+          border-radius:8px;font-size:14px;z-index:9999;
+          box-shadow:0 6px 18px rgba(0,0,0,.35);
+        `;
+        document.body.appendChild(note);
+        setTimeout(()=>note.remove(), 2600);
+      }
+    }, 800);
   });
 });
 </script>
