@@ -56,7 +56,7 @@
       margin: 0;
     }
 
-    /* Tagline: فاصله کمتر زیر تیتر */
+    /* Tagline */
     .hero-content p{
       font-size: clamp(1rem, 2.2vw, 1.25rem);
       margin: 6px 0 18px;
@@ -79,7 +79,7 @@
       pointer-events: auto;
     }
 
-    /* ===== Sections after gallery ===== */
+    /* ===== Sections ===== */
     .section-dark{ position: relative; z-index:1; background:#000; color:#fff; pointer-events:auto; }
 
     .fade-in { opacity: 0; transform: translateY(20px); transition: opacity .8s, transform .8s; }
@@ -128,7 +128,7 @@
     }
     .label-panel h3{ font-family:'Playfair Display',serif; font-size:1.25rem; margin:0 0 .5rem; }
 
-    /* ===== Fullscreen modal enhancements ===== */
+    /* ===== Fullscreen modal ===== */
     #fullscreenImage { cursor: zoom-out; }
     #fullscreenImage .label-panel { cursor: auto; }
     #fullscreenImage button { cursor: pointer; }
@@ -207,12 +207,12 @@
           </figure>
           <figcaption class="thumb-caption">What Surrender Looked Like</figcaption>
         </div>
-        <!-- 5 (fixed URL) -->
+        <!-- 5 -->
         <div class="w-full">
           <figure class="thumb-card" onclick="openFullscreenImage(4)">
             <img class="thumb-image" loading="lazy" src="https://i.ibb.co/84zvjMfj/When-Silence-Looked-Back.webp" alt="When Silence Looked Back">
           </figure>
-          <figcaption class="thumb-caption">When Silence Looked Back</figcaption>
+        <figcaption class="thumb-caption">When Silence Looked Back</figcaption>
         </div>
         <!-- 6 -->
         <div class="w-full">
@@ -358,7 +358,6 @@
         <a href="mailto:hello@aswesee.art" class="underline" id="contact-email">hello@aswesee.art</a>
       </p>
 
-      <!-- Formspree + Attachments + Counter -->
       <form id="contact-form" action="https://formspree.io/f/mblkqyye" method="POST"
             enctype="multipart/form-data"
             class="mx-auto mt-8 max-w-xl text-left space-y-4">
@@ -398,13 +397,11 @@
           <ul id="cf-filelist" class="mt-3 text-sm space-y-1 max-h-40 overflow-auto"></ul>
         </div>
 
-        <!-- Counter -->
         <div class="flex items-center justify-between">
           <small class="text-xs opacity-70">Max 7000 characters</small>
           <small id="cf-count" class="text-xs opacity-80">0 / 7000</small>
         </div>
 
-        <!-- Honeypot -->
         <input type="text" name="_gotcha" class="hidden" tabindex="-1" autocomplete="off" />
         <input type="hidden" name="_subject" value="New website message" />
         <input type="hidden" name="_template" value="table" />
@@ -452,21 +449,19 @@
   /* ========================== CONFIG ========================== */
   const PARTICLES = 60000, PORTRAIT = 30000;
   const MIN_GRAY = 0.18, PARTICLE_SIZE = 0.47, CONTRAST = 1.08;
-  const GLOBAL_ROTATE_SPEED = 0.1, PORTRAIT_SCALE = 1.20, PORTRAIT_Y_SHIFT = -40;
+  const GLOBAL_ROTATE_SPEED = 0.16;   // بیشتر برای حیات زمینه
+  const PORTRAIT_SCALE = 1.20, PORTRAIT_Y_SHIFT = -40;
   const MORPH_TIME = 30000, PORTRAIT_SCALE_FACTOR = 1.15;
 
-  /* Detail & ambient fade */
-  const EDGE_WEIGHT = 1.4;
-  const DETAIL_BIAS = 0.85;
+  /* Timing & motion */
+  const STAGGER_MS = 6500;            // تأخیر تصادفی برای شروع هر ذره‌ی پرتره
+  const ORB_MAG_PORTRAIT = 2.2;       // لرزش داخل پرتره
+  const ORB_MAG_AMBIENT  = 13.5;      // لرزش محیط
   const AMBIENT_FADE_RADIUS = 520;
   const AMBIENT_MIN_ALPHA = 0.15;
   const AMBIENT_MAX_ALPHA = 0.55;
 
-  /* wobble magnitudes */
-  const ORB_MAG_PORTRAIT = 2.6;
-  const ORB_MAG_AMBIENT  = 9.5;
-
-  /* If possible, host this portrait image on your own domain */
+  /* Use your own hosted portrait if ممکن */
   const PORTRAIT_SRC = "https://i.ibb.co/W4N6XfsN/portrait.png";
 
   /* ========================== SETUP ========================== */
@@ -488,6 +483,13 @@
   const isPortrait    = new Uint8Array(PARTICLES);
   const alphas        = new Float32Array(PARTICLES);
 
+  // per-particle randoms
+  const randFreq   = new Float32Array(PARTICLES);
+  const randAmp    = new Float32Array(PARTICLES);
+  const morphDelay = new Float32Array(PARTICLES);
+  const flickFreq  = new Float32Array(PARTICLES);
+  const flickPhase = new Float32Array(PARTICLES);
+
   function clamp(v,a,b){return Math.max(a,Math.min(v,b));}
   function applyContrast(l, c) { return clamp(0.5 + (l-0.5)*c, 0, 1); }
   function easeInOut(t) { return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2; }
@@ -506,6 +508,12 @@
     colors[i*3] = 1.0; colors[i*3+1] = 1.0; colors[i*3+2] = 1.0;
     sizes[i] = PARTICLE_SIZE; sharpness[i] = 1.0; isPortrait[i] = (i < PORTRAIT) ? 1 : 0;
     alphas[i] = AMBIENT_MAX_ALPHA;
+
+    randFreq[i]   = 0.35 + Math.random()*0.9;
+    randAmp[i]    = 0.7  + Math.random()*0.6;
+    morphDelay[i] = isPortrait[i] ? Math.random()*STAGGER_MS : 0.0;
+    flickFreq[i]  = 0.5  + Math.random()*2.5;
+    flickPhase[i] = Math.random()*Math.PI*2;
   }
 
   const geometry = new THREE.BufferGeometry();
@@ -591,7 +599,7 @@
       };
       for (let y=0; y<h; y++) for (let x=0; x<w; x++) E[y*w+x]=sobel(x,y);
 
-      const ALPHA_MIN = 0.05; // lower threshold
+      const ALPHA_MIN = 0.05;
       const cand = [];
       for (let y=0; y<h; y++){
         for (let x=0; x<w; x++){
@@ -605,7 +613,6 @@
       }
       if (!cand.length) return hardFallback();
 
-      // stratified grid
       const ar = w/h;
       let gridW = Math.max(6, Math.round(Math.sqrt(pointCount*ar)));
       let gridH = Math.max(6, Math.round(pointCount / gridW));
@@ -617,7 +624,7 @@
         const cy = Math.min(gridH-1, Math.floor(c.y / cellH));
         const idx = cy*gridW + cx;
         const b = buckets[idx];
-        if (!b || c.score > b.score) buckets[idx] = c;  // best per cell
+        if (!b || c.score > b.score) buckets[idx] = c;
       }
 
       const out=[], lums=[], edges=[];
@@ -647,7 +654,6 @@
         }
       }
 
-      // fill/cut to exact count
       if (out.length < pointCount){
         cand.sort((a,b)=>b.score-a.score);
         for (let k=0; k<cand.length && out.length<pointCount; k+=Math.ceil(cand.length/(pointCount-out.length))){
@@ -702,12 +708,9 @@
 
       for(let i=0;i<PARTICLES;++i){
         if(isPortrait[i]){
-          const pi = i; // 0..PORTRAIT-1
+          const pi = i; 
           let s = samples[pi];
-
-          if (!s || !Number.isFinite(s.x) || !Number.isFinite(s.y)) {
-            s = { x: 0, y: 0, sharp: 1 };
-          }
+          if (!s || !Number.isFinite(s.x) || !Number.isFinite(s.y)) s = { x: 0, y: 0, sharp: 1 };
 
           const pos = portraitCenterW.clone()
             .add(right.clone().multiplyScalar(s.x))
@@ -735,47 +738,47 @@
 
   function animate(now){
     const t = now*0.001, globalPhase = t*GLOBAL_ROTATE_SPEED;
-    let morphPhase = 0;
-    if(fullyReady && morphReady && morphing){
-      let rawPhase = Math.min(1, (now-morphStartTime)/MORPH_TIME);
-      morphPhase = easeInOut(rawPhase);
-    }
 
     for(let i=0; i<PARTICLES; ++i){
       let bx = basePositions[i*3], by = basePositions[i*3+1], bz = basePositions[i*3+2], gx = bx, gy = by, gz = bz;
       if (!isPortrait[i]) {
         [gx, gy, gz] = rotateAroundPoint(bx, by, bz, 0, 0, 0, globalPhase, globalPhase * 0.7);
       }
-      const orbMag  = isPortrait[i] ? ORB_MAG_PORTRAIT : ORB_MAG_AMBIENT;
-      const orbFreq = 0.42 + (i%17)*0.012;
-      const wob = Math.sin(t*orbFreq + i) * orbMag;
+      const baseMag = isPortrait[i] ? ORB_MAG_PORTRAIT : ORB_MAG_AMBIENT;
+      const orbMag  = baseMag * randAmp[i];
+      const orbFreq = (0.42 + (i%17)*0.012) * randFreq[i];
+      const wob  = Math.sin(t*orbFreq + i) * orbMag;
       const wob2 = Math.cos(t*orbFreq*0.63 + i*0.74) * (orbMag*0.5);
 
       let nx, ny, nz;
 
       if(fullyReady && morphReady && morphing && isPortrait[i]){
+        // staggered local phase
+        const startI = morphStartTime + morphDelay[i];
+        const raw = clamp((now - startI) / MORPH_TIME, 0, 1);
+        const lp = easeInOut(raw);
+
         const tx = morphTargets[i*3], ty = morphTargets[i*3+1], tz = morphTargets[i*3+2];
-        if (morphPhase < 1.0) {
-          nx = (1-morphPhase)*bx + morphPhase*tx + wob;
-          ny = (1-morphPhase)*by + morphPhase*ty + wob2;
-          nz = (1-morphPhase)*bz + morphPhase*tz;
-        } else {
-          nx = tx + wob; ny = ty + wob2; nz = tz;
-        }
-        const pi = i;
-        let lum = applyContrast(morphLums[pi] ?? 0.8, CONTRAST);
+        nx = (1-lp)*bx + lp*tx + wob;
+        ny = (1-lp)*by + lp*ty + wob2;
+        nz = (1-lp)*bz + lp*tz;
+
+        let lum = applyContrast(morphLums[i] ?? 0.8, CONTRAST);
         lum = clamp(lum, MIN_GRAY, 1.0);
-        const edge = edgeStrengths[pi] ?? 0.0;
+        const edge = edgeStrengths[i] ?? 0.0;
         const edgeShrink = 1.0 - 0.25 * edge;
-        sizes[i] = PARTICLE_SIZE * sharpness[i] * edgeShrink * (morphPhase>0.999 ? PORTRAIT_SCALE_FACTOR : 1.0);
-        colors[i*3] = colors[i*3+1] = colors[i*3+2] = 1.0 + (lum-1.0)*morphPhase;
-        alphas[i] = 0.95;
+
+        // رشد تدریجی اندازه/شفافیت
+        const grow = 0.45 + 0.65*lp;
+        sizes[i]  = PARTICLE_SIZE * sharpness[i] * edgeShrink * grow * (lp>0.999 ? PORTRAIT_SCALE_FACTOR : 1.0);
+        colors[i*3] = colors[i*3+1] = colors[i*3+2] = 1.0 + (lum-1.0)*lp;
+        alphas[i] = 0.12 + 0.86*lp;  // ابتدا کم‌رمق، بعد روشن
       } else {
         nx = gx + wob; ny = gy + wob2; nz = gz;
         colors[i*3]=colors[i*3+1]=colors[i*3+2]=1.0;
         sizes[i]=PARTICLE_SIZE;
 
-        // Ambient fade
+        // Ambient fade + flicker
         let alpha = AMBIENT_MAX_ALPHA;
         if (portraitCenterW){
           const dx = nx - portraitCenterW.x, dy = ny - portraitCenterW.y, dz = nz - portraitCenterW.z;
@@ -783,13 +786,11 @@
           const tNorm = clamp(dist / AMBIENT_FADE_RADIUS, 0, 1);
           alpha = AMBIENT_MIN_ALPHA + (AMBIENT_MAX_ALPHA - AMBIENT_MIN_ALPHA) * tNorm;
         }
+        alpha *= (0.92 + 0.08*Math.sin(t*flickFreq[i] + flickPhase[i]));
         alphas[i] = alpha;
       }
 
-      // Anti-NaN guard
-      if (!Number.isFinite(nx) || !Number.isFinite(ny) || !Number.isFinite(nz)) {
-        nx = bx; ny = by; nz = bz;
-      }
+      if (!Number.isFinite(nx) || !Number.isFinite(ny) || !Number.isFinite(nz)) { nx = bx; ny = by; nz = bz; }
 
       positions[i*3]   = nx;
       positions[i*3+1] = ny;
@@ -1044,7 +1045,7 @@
   })();
   </script>
 
-  <!-- Email click: copy fallback -->
+  <!-- Email copy -->
   <script>
   document.addEventListener('DOMContentLoaded', () => {
     const emailLink = document.getElementById('contact-email');
@@ -1067,7 +1068,7 @@
   });
   </script>
 
-  <!-- Formspree AJAX submit -->
+  <!-- Formspree AJAX -->
   <script>
   (function(){
     const form = document.getElementById('contact-form');
@@ -1099,7 +1100,7 @@
   })();
   </script>
 
-  <!-- Smooth center-scroll for Gallery button -->
+  <!-- Smooth center-scroll -->
   <script>
   (function(){
     const btn = document.getElementById('enter-gallery');
@@ -1128,7 +1129,7 @@
 
     const LIMIT_CHARS = 7000;
     const LIMIT_FILES = 10;
-    const LIMIT_SIZE  = 25 * 1024 * 1024; // 25MB
+    const LIMIT_SIZE  = 25 * 1024 * 1024;
     const ACCEPT = new Set(['pdf','doc','docx','zip','rar','7z','psd','ai','indd','tif','tiff','jpg','jpeg','png','svg']);
 
     function toast(msg){
