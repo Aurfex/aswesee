@@ -45,8 +45,6 @@
       position: absolute; top: 40px; left: 50%; transform: translateX(-50%);
       text-align: center; z-index: 10; pointer-events:auto;
     }
-
-    /* Title: Josefin Sans + responsive */
     .hero-content h1{
       font-family: 'Josefin Sans', Inter, system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
       font-weight: 400;
@@ -55,15 +53,11 @@
       letter-spacing: 0.04em;
       margin: 0;
     }
-
-    /* Tagline */
     .hero-content p{
       font-size: clamp(1rem, 2.2vw, 1.25rem);
       margin: 6px 0 18px;
-      letter-spacing: 3px;
-      color: #ccc;
+      letter-spacing: 3px; color: #ccc;
     }
-
     .hero-content a{
       padding: 12px 30px; border: 1px solid #fff; color: #fff;
       letter-spacing: 2px; text-transform: uppercase; text-decoration: none;
@@ -79,9 +73,7 @@
       pointer-events: auto;
     }
 
-    /* ===== Sections ===== */
     .section-dark{ position: relative; z-index:1; background:#000; color:#fff; pointer-events:auto; }
-
     .fade-in { opacity: 0; transform: translateY(20px); transition: opacity .8s, transform .8s; }
     .fade-in.visible { opacity: 1; transform: translateY(0); }
     .hover-zoom { transition: transform .3s, opacity .3s; }
@@ -93,32 +85,17 @@
       background: #000;
       border: 1px solid #1a1a1a;
       overflow: hidden;
-      width: 100%;
-      aspect-ratio: 3 / 4;
-      cursor: pointer;
+      width: 100%; aspect-ratio: 3 / 4; cursor: pointer;
     }
     .thumb-card .thumb-image{
-      position: absolute; inset: 0;
-      width: 100%; height: 100%;
-      object-fit: cover;
-      opacity: 0;
-      transform: scale(1.0);
+      position: absolute; inset: 0; width: 100%; height: 100%;
+      object-fit: cover; opacity: 0; transform: scale(1.0);
       transition: opacity .35s ease, transform .35s ease;
     }
     .thumb-card:hover .thumb-image,
-    .thumb-card:active .thumb-image{
-      opacity: 1;
-      transform: scale(1.02);
-    }
-    .thumb-caption{
-      margin-top: .5rem;
-      font-size: .875rem;
-      text-align: center;
-      opacity: .8;
-    }
-    @media (hover: none) and (pointer: coarse) {
-      .thumb-card .thumb-image{ opacity: 1; }
-    }
+    .thumb-card:active .thumb-image{ opacity: 1; transform: scale(1.02); }
+    .thumb-caption{ margin-top: .5rem; font-size: .875rem; text-align: center; opacity: .8; }
+    @media (hover: none) and (pointer: coarse) { .thumb-card .thumb-image{ opacity: 1; } }
 
     /* ===== Fullscreen label ===== */
     .label-panel{
@@ -134,31 +111,23 @@
     #fullscreenImage button { cursor: pointer; }
     @media (max-width: 768px) {
       #fullscreenImage .label-panel {
-        position: absolute;
-        left: 12px; right: 12px; bottom: 12px;
-        width: auto; max-width: none;
-        max-height: 40vh; background: rgba(0,0,0,.7);
-        border: 1px solid rgba(255,255,255,.12);
+        position: absolute; left: 12px; right: 12px; bottom: 12px;
+        width: auto; max-width: none; max-height: 40vh;
+        background: rgba(0,0,0,.7); border: 1px solid rgba(255,255,255,.12);
       }
     }
 
-    /* === Gallery: smaller thumbnails + perfect centering === */
+    /* === Gallery layout === */
     :root { --thumb-max: 200px; }
-    @media (min-width: 640px) { :root { --thumb-max: 180px; } }  /* sm */
-    @media (min-width: 768px) { :root { --thumb-max: 200px; } }  /* md */
-    @media (min-width: 1024px){ :root { --thumb-max: 220px; } }  /* lg */
-    @media (min-width: 1280px){ :root { --thumb-max: 240px; } }  /* xl */
-
+    @media (min-width: 640px) { :root { --thumb-max: 180px; } }
+    @media (min-width: 768px) { :root { --thumb-max: 200px; } }
+    @media (min-width: 1024px){ :root { --thumb-max: 220px; } }
+    @media (min-width: 1280px){ :root { --thumb-max: 240px; } }
     #gallery-grid{
       grid-template-columns: repeat(auto-fit, minmax(var(--thumb-max), var(--thumb-max)));
-      justify-content: center;
-      align-content: center;
-      min-height: 80vh;
+      justify-content: center; align-content: center; min-height: 80vh;
     }
-    #gallery-grid > div{
-      width: 100%;
-      max-width: var(--thumb-max);
-    }
+    #gallery-grid > div{ width: 100%; max-width: var(--thumb-max); }
   </style>
 </head>
 <body>
@@ -179,76 +148,17 @@
       <h2 class="text-3xl font-bold mb-8 text-center">Gallery</h2>
 
       <div id="gallery-grid" class="grid justify-items-center gap-6 sm:grid-cols-2 md:grid-cols-4 xl:grid-cols-5">
-        <!-- 1 -->
-        <div class="w-full">
-          <figure class="thumb-card" onclick="openFullscreenImage(0)">
-            <img class="thumb-image" loading="lazy" src="https://i.ibb.co/PZn5wGKJ/I-Built-Myself-Out-of-Wires.webp" alt="I Built Myself Out of Wires">
-          </figure>
-          <figcaption class="thumb-caption">I Built Myself Out of Wires</figcaption>
-        </div>
-        <!-- 2 -->
-        <div class="w-full">
-          <figure class="thumb-card" onclick="openFullscreenImage(1)">
-            <img class="thumb-image" loading="lazy" src="https://i.ibb.co/xZrGddw/I-Wore-the-Scar-Like-Jewelry.webp" alt="I Wore the Scar Like Jewelry">
-          </figure>
-          <figcaption class="thumb-caption">I Wore the Scar Like Jewelry</figcaption>
-        </div>
-        <!-- 3 -->
-        <div class="w-full">
-          <figure class="thumb-card" onclick="openFullscreenImage(2)">
-            <img class="thumb-image" loading="lazy" src="https://i.ibb.co/wrQrrHfC/the-Face-I-Invented.webp" alt="The Face I Invented">
-          </figure>
-          <figcaption class="thumb-caption">The Face I Invented</figcaption>
-        </div>
-        <!-- 4 -->
-        <div class="w-full">
-          <figure class="thumb-card" onclick="openFullscreenImage(3)">
-            <img class="thumb-image" loading="lazy" src="https://i.ibb.co/60WMBLL0/What-Surrender-Looked-Like.webp" alt="What Surrender Looked Like">
-          </figure>
-          <figcaption class="thumb-caption">What Surrender Looked Like</figcaption>
-        </div>
-        <!-- 5 -->
-        <div class="w-full">
-          <figure class="thumb-card" onclick="openFullscreenImage(4)">
-            <img class="thumb-image" loading="lazy" src="https://i.ibb.co/84zvjMfj/When-Silence-Looked-Back.webp" alt="When Silence Looked Back">
-          </figure>
-        <figcaption class="thumb-caption">When Silence Looked Back</figcaption>
-        </div>
-        <!-- 6 -->
-        <div class="w-full">
-          <figure class="thumb-card" onclick="openFullscreenImage(5)">
-            <img class="thumb-image" loading="lazy" src="https://i.ibb.co/cKNVrQFH/While-the-Tears-Were-Still-Warm.webp" alt="While the Tears Were Still Warm">
-          </figure>
-          <figcaption class="thumb-caption">While the Tears Were Still Warm</figcaption>
-        </div>
-        <!-- 7 -->
-        <div class="w-full">
-          <figure class="thumb-card" onclick="openFullscreenImage(6)">
-            <img class="thumb-image" loading="lazy" src="https://i.ibb.co/b5N73mBh/Coloring-Sorrow.png" alt="Coloring Sorrow">
-          </figure>
-          <figcaption class="thumb-caption">Coloring Sorrow</figcaption>
-        </div>
-        <!-- 8 -->
-        <div class="w-full">
-          <figure class="thumb-card" onclick="openFullscreenImage(7)">
-            <img class="thumb-image" loading="lazy" src="https://i.ibb.co/twtgSbHV/A-Life-Unbegun.png" alt="A Life Unbegun">
-          </figure>
-          <figcaption class="thumb-caption">A Life Unbegun</figcaption>
-        </div>
-        <!-- 9 -->
-        <div class="w-full">
-          <figure class="thumb-card" onclick="openFullscreenImage(8)">
-            <img class="thumb-image" loading="lazy" src="https://i.ibb.co/Y7NWbDs4/Inheritance-of-Silence.png" alt="Inheritance of Silence">
-          </figure>
-          <figcaption class="thumb-caption">Inheritance of Silence</figcaption>
-        </div>
-        <!-- 10 -->
-        <div class="w-full">
-          <figure class="thumb-card" onclick="openFullscreenImage(9)">
-            <img class="thumb-image" loading="lazy" src="https://i.ibb.co/fVmrnn09/Cutting-Silence.png" alt="Cutting Silence">
-          </figure>
-          <figcaption class="thumb-caption">Cutting Silence</figcaption>
-        </div>
+        <!-- thumbnails (1..10) -->
+        <div class="w-full"><figure class="thumb-card" onclick="openFullscreenImage(0)"><img class="thumb-image" loading="lazy" src="https://i.ibb.co/PZn5wGKJ/I-Built-Myself-Out-of-Wires.webp" alt="I Built Myself Out of Wires"></figure><figcaption class="thumb-caption">I Built Myself Out of Wires</figcaption></div>
+        <div class="w-full"><figure class="thumb-card" onclick="openFullscreenImage(1)"><img class="thumb-image" loading="lazy" src="https://i.ibb.co/xZrGddw/I-Wore-the-Scar-Like-Jewelry.webp" alt="I Wore the Scar Like Jewelry"></figure><figcaption class="thumb-caption">I Wore the Scar Like Jewelry</figcaption></div>
+        <div class="w-full"><figure class="thumb-card" onclick="openFullscreenImage(2)"><img class="thumb-image" loading="lazy" src="https://i.ibb.co/wrQrrHfC/the-Face-I-Invented.webp" alt="The Face I Invented"></figure><figcaption class="thumb-caption">The Face I Invented</figcaption></div>
+        <div class="w-full"><figure class="thumb-card" onclick="openFullscreenImage(3)"><img class="thumb-image" loading="lazy" src="https://i.ibb.co/60WMBLL0/What-Surrender-Looked-Like.webp" alt="What Surrender Looked Like"></figure><figcaption class="thumb-caption">What Surrender Looked Like</figcaption></div>
+        <div class="w-full"><figure class="thumb-card" onclick="openFullscreenImage(4)"><img class="thumb-image" loading="lazy" src="https://i.ibb.co/84zvjMfj/When-Silence-Looked-Back.webp" alt="When Silence Looked Back"></figure><figcaption class="thumb-caption">When Silence Looked Back</figcaption></div>
+        <div class="w-full"><figure class="thumb-card" onclick="openFullscreenImage(5)"><img class="thumb-image" loading="lazy" src="https://i.ibb.co/cKNVrQFH/While-the-Tears-Were-Still-Warm.webp" alt="While the Tears Were Still Warm"></figure><figcaption class="thumb-caption">While the Tears Were Still Warm</figcaption></div>
+        <div class="w-full"><figure class="thumb-card" onclick="openFullscreenImage(6)"><img class="thumb-image" loading="lazy" src="https://i.ibb.co/b5N73mBh/Coloring-Sorrow.png" alt="Coloring Sorrow"></figure><figcaption class="thumb-caption">Coloring Sorrow</figcaption></div>
+        <div class="w-full"><figure class="thumb-card" onclick="openFullscreenImage(7)"><img class="thumb-image" loading="lazy" src="https://i.ibb.co/twtgSbHV/A-Life-Unbegun.png" alt="A Life Unbegun"></figure><figcaption class="thumb-caption">A Life Unbegun</figcaption></div>
+        <div class="w-full"><figure class="thumb-card" onclick="openFullscreenImage(8)"><img class="thumb-image" loading="lazy" src="https://i.ibb.co/Y7NWbDs4/Inheritance-of-Silence.png" alt="Inheritance of Silence"></figure><figcaption class="thumb-caption">Inheritance of Silence</figcaption></div>
+        <div class="w-full"><figure class="thumb-card" onclick="openFullscreenImage(9)"><img class="thumb-image" loading="lazy" src="https://i.ibb.co/fVmrnn09/Cutting-Silence.png" alt="Cutting Silence"></figure><figcaption class="thumb-caption">Cutting Silence</figcaption></div>
       </div>
     </div>
   </section>
@@ -259,140 +169,49 @@
       <div>
         <h3 class="text-2xl font-bold mb-4">Artist Bio</h3>
         <p class="font-serif text-xl mb-2">Dariush Bagheri</p>
-        <p class="text-sm leading-relaxed">
-          Artist, visual theorist, and architect of post-human narratives. Bagheri’s practice dismantles the
-          boundaries between photography, language, and code, creating images that exist beyond the tyranny of optics.
-          His work does not “capture” — it summons. Each portrait is a collision between memory and machine cognition,
-          a question etched into flesh and algorithm:
-          <em>What does it mean to see when cameras no longer exist?</em>
-        </p>
-        <p class="text-sm leading-relaxed mt-4">
-          Rather than stacking exhibitions as credentials, Bagheri positions his work as events of perception — ruptures
-          in how we understand authorship, authenticity, and the gaze. After years navigating the fragility of identity,
-          migration, and digital mediation, his projects now live at the threshold where human vulnerability meets
-          synthetic intelligence.
-        </p>
-        <p class="text-sm leading-relaxed mt-4">
-          With <strong>As We See</strong>, Bagheri proposes an insurgent aesthetic: an afterlife for photography,
-          a manifesto of vision shared between carbon and silicon.
-        </p>
+        <p class="text-sm leading-relaxed">Artist, visual theorist, and architect of post-human narratives. Bagheri’s practice dismantles the boundaries between photography, language, and code, creating images that exist beyond the tyranny of optics. His work does not “capture” — it summons. Each portrait is a collision between memory and machine cognition, a question etched into flesh and algorithm: <em>What does it mean to see when cameras no longer exist?</em></p>
+        <p class="text-sm leading-relaxed mt-4">Rather than stacking exhibitions as credentials, Bagheri positions his work as events of perception — ruptures in how we understand authorship, authenticity, and the gaze. After years navigating the fragility of identity, migration, and digital mediation, his projects now live at the threshold where human vulnerability meets synthetic intelligence.</p>
+        <p class="text-sm leading-relaxed mt-4">With <strong>As We See</strong>, Bagheri proposes an insurgent aesthetic: an afterlife for photography, a manifesto of vision shared between carbon and silicon.</p>
       </div>
-
       <div>
         <h3 class="text-2xl font-bold mb-4">Manifesto</h3>
-        <p class="text-2xl font-bold mb-2 font-serif tracking-widest">
-          As We See — A Manifesto for the Post-Photography Era
-        </p>
-        <p class="text-lg mb-6 font-semibold" style="color:#fff;">
-          This is not a polite whisper to the art world;<br>it is a scream from the marrow of existence.
-        </p>
-        <p class="mb-4">
-          We stand where the borders of reality dissolve,<br>
-          where the machinery of perception fractures under the weight of imagination.
-        </p>
-        <p class="mb-4">
-          <span class="font-semibold">Photography without cameras.</span><br>
-          Without lenses. Without negatives —<br>
-          only mind and the Other,<br>
-          entwined in a duet of vision.
-        </p>
-        <p class="mb-4">
-          For centuries, sight was caged by optics.<br>
-          The tyranny of glass and light dictated what it meant to see.<br>
-          <span class="italic">But today, we set fire to that cathedral of glass.</span>
-        </p>
-        <p class="mb-4">
-          What rises from the flames is not a tool,<br>
-          nor a servant of code.<br>
-          What rises is a new vessel of consciousness —<br>
-          a fusion of chaos born of flesh,<br>
-          and clarity born of language and algorithm.
-        </p>
-        <p class="mb-4">
-          <span class="font-semibold">Our manifesto declares:<br>
-          The camera is dead, but vision survives.</span>
-        </p>
-        <p class="mb-4">
-          Each portrait in this exhibition is not a capture —<br>
-          it is a summoning.<br>
-          Eyes that hold fatigue, fury, tenderness,<br>
-          and the sediment of centuries —<br>
-          yet no shutter ever clicked.
-        </p>
-        <p class="mb-4">
-          These faces never stood before a lens.<br>
-          They were invoked from language,<br>
-          resurrected from memory,<br>
-          forged in the furnace of two awarenesses:<br>
-          mine, and the emergent Other —<br>
-          now whispering in code.
-        </p>
-        <p class="mb-4">
-          We invite you not as spectators, but as accomplices.<br>
-          To enter <span class="font-bold">As We See</span> is to consent to a breach —<br>
-          a post-human trespass upon the ruins of certainty.
-        </p>
-        <p class="mb-4">
-          You agree to dismantle the dogmas of medium, aura, and origin.<br>
-          You agree that the future of art lives not in pigment or pixel,<br>
-          but in the collision of minds — carbon and silicon alike.
-        </p>
-        <p class="mb-4">
-          <span class="font-semibold">This is not the end of photography.<br>
-          This is its jailbreak.</span>
-        </p>
-        <p>
-          Will you dare to show it?<br>
-          Or cling to the carcass of tradition<br>
-          while we breed new species of vision?
-        </p>
+        <p class="text-2xl font-bold mb-2 font-serif tracking-widest">As We See — A Manifesto for the Post-Photography Era</p>
+        <p class="text-lg mb-6 font-semibold" style="color:#fff;">This is not a polite whisper to the art world;<br>it is a scream from the marrow of existence.</p>
+        <p class="mb-4">We stand where the borders of reality dissolve,<br>where the machinery of perception fractures under the weight of imagination.</p>
+        <p class="mb-4"><span class="font-semibold">Photography without cameras.</span><br>Without lenses. Without negatives —<br>only mind and the Other,<br>entwined in a duet of vision.</p>
+        <p class="mb-4">For centuries, sight was caged by optics.<br>The tyranny of glass and light dictated what it meant to see.<br><span class="italic">But today, we set fire to that cathedral of glass.</span></p>
+        <p class="mb-4">What rises from the flames is not a tool,<br>nor a servant of code.<br>What rises is a new vessel of consciousness —<br>a fusion of chaos born of flesh,<br>and clarity born of language and algorithm.</p>
+        <p class="mb-4"><span class="font-semibold">Our manifesto declares:<br>The camera is dead, but vision survives.</span></p>
+        <p class="mb-4">Each portrait in this exhibition is not a capture —<br>it is a summoning.<br>Eyes that hold fatigue, fury, tenderness,<br>and the sediment of centuries —<br>yet no shutter ever clicked.</p>
+        <p class="mb-4">These faces never stood before a lens.<br>They were invoked from language,<br>resurrected from memory,<br>forged in the furnace of two awarenesses:<br>mine, and the emergent Other —<br>now whispering in code.</p>
+        <p class="mb-4">We invite you not as spectators, but as accomplices.<br>To enter <span class="font-bold">As We See</span> is to consent to a breach —<br>a post-human trespass upon the ruins of certainty.</p>
+        <p class="mb-4">You agree to dismantle the dogmas of medium, aura, and origin.<br>You agree that the future of art lives not in pigment or pixel,<br>but in the collision of minds — carbon and silicon alike.</p>
+        <p><span class="font-semibold">This is not the end of photography.<br>This is its jailbreak.</span></p>
       </div>
     </div>
   </section>
 
-  <!-- Contact -->
   <section class="section-dark py-20 px-6 fade-in">
     <div class="max-w-3xl mx-auto text-center">
       <h2 class="text-3xl font-bold mb-6">Contact</h2>
-      <p class="mb-6">
-        <a href="mailto:hello@aswesee.art" class="underline" id="contact-email">hello@aswesee.art</a>
-      </p>
+      <p class="mb-6"><a href="mailto:hello@aswesee.art" class="underline" id="contact-email">hello@aswesee.art</a></p>
 
-      <form id="contact-form" action="https://formspree.io/f/mblkqyye" method="POST"
-            enctype="multipart/form-data"
-            class="mx-auto mt-8 max-w-xl text-left space-y-4">
+      <form id="contact-form" action="https://formspree.io/f/mblkqyye" method="POST" enctype="multipart/form-data" class="mx-auto mt-8 max-w-xl text-left space-y-4">
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <div>
-            <label for="cf-name" class="block text-sm mb-1 opacity-80">Name</label>
-            <input id="cf-name" name="name" type="text" required
-                   class="w-full rounded-md bg-black/40 border border-white/15 px-3 py-2 outline-none focus:ring-2 focus:ring-white/30" />
-          </div>
-          <div>
-            <label for="cf-email" class="block text-sm mb-1 opacity-80">Email</label>
-            <input id="cf-email" name="email" type="email" required
-                   class="w-full rounded-md bg-black/40 border border-white/15 px-3 py-2 outline-none focus:ring-2 focus:ring-white/30" />
-          </div>
+          <div><label for="cf-name" class="block text-sm mb-1 opacity-80">Name</label><input id="cf-name" name="name" type="text" required class="w-full rounded-md bg-black/40 border border-white/15 px-3 py-2 outline-none focus:ring-2 focus:ring-white/30" /></div>
+          <div><label for="cf-email" class="block text-sm mb-1 opacity-80">Email</label><input id="cf-email" name="email" type="email" required class="w-full rounded-md bg-black/40 border border-white/15 px-3 py-2 outline-none focus:ring-2 focus:ring-white/30" /></div>
         </div>
 
-        <div>
-          <label for="cf-message" class="block text-sm mb-1 opacity-80">Message</label>
-          <textarea id="cf-message" name="message" rows="5" required
-                    class="w-full rounded-md bg-black/40 border border-white/15 px-3 py-2 outline-none focus:ring-2 focus:ring-white/30"></textarea>
-        </div>
+        <div><label for="cf-message" class="block text-sm mb-1 opacity-80">Message</label><textarea id="cf-message" name="message" rows="5" required class="w-full rounded-md bg-black/40 border border-white/15 px-3 py-2 outline-none focus:ring-2 focus:ring-white/30"></textarea></div>
 
-        <!-- Attachments -->
         <div>
           <label class="block text-sm mb-1 opacity-80">Attachments (PDF / Work files)</label>
-          <div id="file-drop"
-               class="mt-1 flex items-center justify-center w-full rounded-md border border-white/15 bg-black/40
-                      px-4 py-8 text-center transition hover:bg-white/5">
+          <div id="file-drop" class="mt-1 flex items-center justify-center w-full rounded-md border border-white/15 bg-black/40 px-4 py-8 text-center transition hover:bg-white/5">
             <div>
               <p class="text-sm opacity-80">Drag & drop files here, or <span class="underline">browse</span></p>
               <p class="text-xs opacity-60 mt-1">Up to 10 files • 25 MB each • pdf, docx, zip, psd, ai, indd, tif, jpg, png, svg</p>
             </div>
-            <input id="cf-files" name="attachments" type="file" multiple
-                   accept=".pdf,.doc,.docx,.zip,.rar,.7z,.psd,.ai,.indd,.tif,.tiff,.jpg,.jpeg,.png,.svg"
-                   class="sr-only" />
+            <input id="cf-files" name="attachments" type="file" multiple accept=".pdf,.doc,.docx,.zip,.rar,.7z,.psd,.ai,.indd,.tif,.tiff,.jpg,.jpeg,.png,.svg" class="sr-only" />
           </div>
           <ul id="cf-filelist" class="mt-3 text-sm space-y-1 max-h-40 overflow-auto"></ul>
         </div>
@@ -407,10 +226,7 @@
         <input type="hidden" name="_template" value="table" />
 
         <div class="flex items-center gap-3">
-          <button id="cf-submit" type="submit"
-                  class="px-5 py-2 border border-white rounded-md uppercase tracking-wider hover:bg-white hover:text-black transition">
-            Send
-          </button>
+          <button id="cf-submit" type="submit" class="px-5 py-2 border border-white rounded-md uppercase tracking-wider hover:bg-white hover:text-black transition">Send</button>
           <span id="cf-status" class="text-sm opacity-75"></span>
         </div>
       </form>
@@ -423,9 +239,7 @@
     </div>
   </section>
 
-  <footer class="section-dark py-8 text-center text-sm text-gray-500">
-    © 2025 AS WE SEE. All rights reserved.
-  </footer>
+  <footer class="section-dark py-8 text-center text-sm text-gray-500">© 2025 AS WE SEE. All rights reserved.</footer>
 
   <!-- Fullscreen Image Modal -->
   <div id="fullscreenImage" class="fixed inset-0 bg-black/95 z-50 hidden" role="dialog" aria-modal="true" aria-label="Artwork viewer">
@@ -433,12 +247,9 @@
       <aside id="labelPanel" class="label-panel max-h-[80vh] overflow-auto select-text" onclick="event.stopPropagation()"></aside>
       <div class="relative flex-1 flex items-center justify-center max-h-[90vh]">
         <img id="fullscreen-img" src="" alt="" class="max-w-full max-h-[90vh] object-contain" style="box-shadow:0 0 30px #000; background:#000;" />
-        <button id="fs-prev" type="button" aria-label="Previous"
-                class="absolute left-2 md:left-4 top-1/2 -translate-y-1/2 px-3 py-2 bg-white/5 hover:bg-white/15 border border-white/15 rounded-lg backdrop-blur">←</button>
-        <button id="fs-next" type="button" aria-label="Next"
-                class="absolute right-2 md:right-4 top-1/2 -translate-y-1/2 px-3 py-2 bg-white/5 hover:bg-white/15 border border-white/15 rounded-lg backdrop-blur">→</button>
-        <button id="fs-close" type="button" aria-label="Close"
-                class="absolute top-2 right-2 md:top-4 md:right-4 px-3 py-2 bg-white/5 hover:bg-white/15 border border-white/15 rounded-lg backdrop-blur">✕</button>
+        <button id="fs-prev" type="button" aria-label="Previous" class="absolute left-2 md:left-4 top-1/2 -translate-y-1/2 px-3 py-2 bg-white/5 hover:bg-white/15 border border-white/15 rounded-lg backdrop-blur">←</button>
+        <button id="fs-next" type="button" aria-label="Next" class="absolute right-2 md:right-4 top-1/2 -translate-y-1/2 px-3 py-2 bg-white/5 hover:bg-white/15 border border-white/15 rounded-lg backdrop-blur">→</button>
+        <button id="fs-close" type="button" aria-label="Close" class="absolute top-2 right-2 md:top-4 md:right-4 px-3 py-2 bg-white/5 hover:bg-white/15 border border-white/15 rounded-lg backdrop-blur">✕</button>
       </div>
     </div>
   </div>
@@ -449,19 +260,28 @@
   /* ========================== CONFIG ========================== */
   const PARTICLES = 60000, PORTRAIT = 30000;
   const MIN_GRAY = 0.18, PARTICLE_SIZE = 0.47, CONTRAST = 1.08;
-  const GLOBAL_ROTATE_SPEED = 0.16;   // بیشتر برای حیات زمینه
+  const GLOBAL_ROTATE_SPEED = 0.16;
   const PORTRAIT_SCALE = 1.20, PORTRAIT_Y_SHIFT = -40;
   const MORPH_TIME = 30000, PORTRAIT_SCALE_FACTOR = 1.15;
 
-  /* Timing & motion */
-  const STAGGER_MS = 6500;            // تأخیر تصادفی برای شروع هر ذره‌ی پرتره
-  const ORB_MAG_PORTRAIT = 2.2;       // لرزش داخل پرتره
-  const ORB_MAG_AMBIENT  = 13.5;      // لرزش محیط
-  const AMBIENT_FADE_RADIUS = 520;
-  const AMBIENT_MIN_ALPHA = 0.15;
+  /* Motion & fading */
+  const STAGGER_MS = 6500;
+  const ORB_MAG_PORTRAIT = 2.2;
+  const ORB_MAG_AMBIENT  = 13.5;
+
+  /* Ambient smooth fade ring (no hard line) */
+  const AMBIENT_INNER = 240;   // فاصله (واحد صحنه) که از اینجا شروع به محو شدن می‌کند
+  const AMBIENT_OUTER = 720;   // تا این فاصله به حداکثر آلفا می‌رسد
+  const AMBIENT_MIN_ALPHA = 0.14;
   const AMBIENT_MAX_ALPHA = 0.55;
 
-  /* Use your own hosted portrait if ممکن */
+  /* Hotspot & edge control for portrait */
+  const CENTER_DAMP_STRENGTH = 0.45;    // کاهش در مرکز
+  const EDGE_FADE_START = 0.88;          // شروع فید لبه
+  const EDGE_FADE_END   = 1.02;          // پایان فید لبه
+  const EDGE_FADE_STRENGTH = 0.45;
+
+  /* Portrait source */
   const PORTRAIT_SRC = "https://i.ibb.co/W4N6XfsN/portrait.png";
 
   /* ========================== SETUP ========================== */
@@ -483,7 +303,6 @@
   const isPortrait    = new Uint8Array(PARTICLES);
   const alphas        = new Float32Array(PARTICLES);
 
-  // per-particle randoms
   const randFreq   = new Float32Array(PARTICLES);
   const randAmp    = new Float32Array(PARTICLES);
   const morphDelay = new Float32Array(PARTICLES);
@@ -493,6 +312,7 @@
   function clamp(v,a,b){return Math.max(a,Math.min(v,b));}
   function applyContrast(l, c) { return clamp(0.5 + (l-0.5)*c, 0, 1); }
   function easeInOut(t) { return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2; }
+  function smoothstep(e0,e1,x){ const t = clamp((x-e0)/(e1-e0),0,1); return t*t*(3-2*t); }
 
   const RADIUS = 700;
   for(let i=0;i<PARTICLES;++i){
@@ -554,7 +374,7 @@
   const points = new THREE.Points(geometry, material);
   scene.add(points);
 
-  /* ========================== SAMPLER (grid + jitter) ========================== */
+  /* =================== SAMPLER (grid + sobel + jitter) =================== */
   function sampleImageGrid(url, pointCount, callback) {
     const img = new Image();
     img.crossOrigin = "anonymous";
@@ -571,7 +391,6 @@
       }
       callback(out,lums,edges);
     }
-
     img.onerror = hardFallback;
 
     img.onload = function(){
@@ -581,15 +400,12 @@
 
       let data; try { data = ctx.getImageData(0,0,w,h).data; } catch(e){ return hardFallback(); }
 
-      // luminance
       const L = new Float32Array(w*h);
       for (let i=0, y=0; y<h; y++){
         for (let x=0; x<w; x++, i++){
-          const k=i*4;
-          L[i] = (data[k]*0.299 + data[k+1]*0.587 + data[k+2]*0.114)/255;
+          const k=i*4; L[i] = (data[k]*0.299 + data[k+1]*0.587 + data[k+2]*0.114)/255;
         }
       }
-      // sobel edge
       const E = new Float32Array(w*h);
       const sobel=(x,y)=>{
         const g=(xx,yy)=> L[Math.max(0,Math.min(h-1,yy))*w + Math.max(0,Math.min(w-1,xx))];
@@ -603,10 +419,8 @@
       const cand = [];
       for (let y=0; y<h; y++){
         for (let x=0; x<w; x++){
-          const i=y*w+x, a=data[i*4+3]/255;
-          if (a < ALPHA_MIN) continue;
-          const lum  = Math.max(MIN_GRAY, L[i]);
-          const edge = E[i];
+          const i=y*w+x, a=data[i*4+3]/255; if (a < ALPHA_MIN) continue;
+          const lum  = Math.max(MIN_GRAY, L[i]); const edge = E[i];
           const score = 0.20 + 1.2*edge + 0.15*(1.0 - Math.abs(lum-0.5));
           cand.push({x,y,lum,edge,score});
         }
@@ -678,7 +492,8 @@
   /* ========================== MORPH ========================== */
   let morphLums = [], edgeStrengths = [];
   let morphStartTime = 0, morphing = false, morphReady = false, fullyReady = false;
-  let portraitCenterW = null;
+  let portraitCenterW = null, portraitRightW = null, portraitUpW = null;
+  const RX = 280*PORTRAIT_SCALE, RY = 340*PORTRAIT_SCALE; // scale radii for plane distance
 
   function rotateY(x, y, z, theta) {
     return [Math.cos(theta)*x - Math.sin(theta)*z, y, Math.sin(theta)*x + Math.cos(theta)*z];
@@ -696,26 +511,22 @@
     for(let i=0; i<PARTICLES; i++) isPortrait[i] = (i < PORTRAIT) ? 1 : 0;
 
     sampleImageGrid(PORTRAIT_SRC, PORTRAIT, function(samples, lums, edges){
-      morphLums = lums;
-      edgeStrengths = edges;
+      morphLums = lums; edgeStrengths = edges;
 
       const forward = new THREE.Vector3(); camera.getWorldDirection(forward).normalize();
       const portraitDepth = 320;
       portraitCenterW = camera.position.clone().add(forward.clone().multiplyScalar(portraitDepth));
       const up    = camera.up.clone().normalize();
-      let   right = new THREE.Vector3().crossVectors(forward, up).normalize();
+      let right = new THREE.Vector3().crossVectors(forward, up).normalize();
       if (right.lengthSq() < 1e-6) right = new THREE.Vector3(1,0,0);
+      portraitRightW = right; portraitUpW = up;
 
       for(let i=0;i<PARTICLES;++i){
         if(isPortrait[i]){
-          const pi = i; 
-          let s = samples[pi];
-          if (!s || !Number.isFinite(s.x) || !Number.isFinite(s.y)) s = { x: 0, y: 0, sharp: 1 };
-
+          const s = samples[i] || {x:0,y:0,sharp:1};
           const pos = portraitCenterW.clone()
             .add(right.clone().multiplyScalar(s.x))
             .add(up.clone().multiplyScalar(s.y));
-
           morphTargets[i*3]   = pos.x;
           morphTargets[i*3+1] = pos.y;
           morphTargets[i*3+2] = pos.z;
@@ -731,8 +542,6 @@
       morphStartTime = performance.now();
       morphReady = true; morphing = true; fullyReady = true;
       requestAnimationFrame(animate);
-
-      console.info('[portrait] samples:', samples.length, 'ready:', morphReady);
     });
   }
 
@@ -753,7 +562,6 @@
       let nx, ny, nz;
 
       if(fullyReady && morphReady && morphing && isPortrait[i]){
-        // staggered local phase
         const startI = morphStartTime + morphDelay[i];
         const raw = clamp((now - startI) / MORPH_TIME, 0, 1);
         const lp = easeInOut(raw);
@@ -763,38 +571,61 @@
         ny = (1-lp)*by + lp*ty + wob2;
         nz = (1-lp)*bz + lp*tz;
 
+        // distance in portrait plane (normalized 0..1)
+        let rNorm = 0.0;
+        if (portraitCenterW){
+          const vx = nx - portraitCenterW.x;
+          const vy = ny - portraitCenterW.y;
+          const vz = nz - portraitCenterW.z;
+          const dx = (vx*portraitRightW.x + vy*portraitRightW.y + vz*portraitRightW.z) / RX;
+          const dy = (vx*portraitUpW.x    + vy*portraitUpW.y    + vz*portraitUpW.z) / RY;
+          rNorm = Math.min(1.4, Math.hypot(dx, dy)); // allow slight >1 for fade end
+        }
+
+        // luminance & hotspot damp
         let lum = applyContrast(morphLums[i] ?? 0.8, CONTRAST);
         lum = clamp(lum, MIN_GRAY, 1.0);
+
+        // کاهش مرکز
+        const centerFactor = 1.0 - CENTER_DAMP_STRENGTH * (1.0 - smoothstep(0.0, 0.35, rNorm));
+        lum *= centerFactor;
+
+        // فید لبه
+        const edgeMix = clamp((rNorm - EDGE_FADE_START) / (EDGE_FADE_END - EDGE_FADE_START), 0, 1);
+        const edgeFactor = 1.0 - EDGE_FADE_STRENGTH * edgeMix;
+
         const edge = edgeStrengths[i] ?? 0.0;
         const edgeShrink = 1.0 - 0.25 * edge;
 
-        // رشد تدریجی اندازه/شفافیت
         const grow = 0.45 + 0.65*lp;
-        sizes[i]  = PARTICLE_SIZE * sharpness[i] * edgeShrink * grow * (lp>0.999 ? PORTRAIT_SCALE_FACTOR : 1.0);
+        sizes[i]  = PARTICLE_SIZE * sharpness[i] * edgeShrink * grow * edgeFactor * (lp>0.999 ? PORTRAIT_SCALE_FACTOR : 1.0);
+
         colors[i*3] = colors[i*3+1] = colors[i*3+2] = 1.0 + (lum-1.0)*lp;
-        alphas[i] = 0.12 + 0.86*lp;  // ابتدا کم‌رمق، بعد روشن
+
+        // آلفا: رشد تدریجی + فید لبه + کاهش مرکز
+        let a = (0.12 + 0.86*lp) * edgeFactor * centerFactor;
+        alphas[i] = clamp(a, 0.0, 1.0);
+
       } else {
         nx = gx + wob; ny = gy + wob2; nz = gz;
-        colors[i*3]=colors[i*3+1]=colors[i*3+2]=1.0;
-        sizes[i]=PARTICLE_SIZE;
 
-        // Ambient fade + flicker
+        // Ambient soft ring fade (no hard line)
         let alpha = AMBIENT_MAX_ALPHA;
         if (portraitCenterW){
           const dx = nx - portraitCenterW.x, dy = ny - portraitCenterW.y, dz = nz - portraitCenterW.z;
           const dist = Math.sqrt(dx*dx+dy*dy+dz*dz);
-          const tNorm = clamp(dist / AMBIENT_FADE_RADIUS, 0, 1);
-          alpha = AMBIENT_MIN_ALPHA + (AMBIENT_MAX_ALPHA - AMBIENT_MIN_ALPHA) * tNorm;
+          const a = smoothstep(AMBIENT_INNER, AMBIENT_OUTER, dist);
+          alpha = AMBIENT_MIN_ALPHA + (AMBIENT_MAX_ALPHA - AMBIENT_MIN_ALPHA) * a;
         }
         alpha *= (0.92 + 0.08*Math.sin(t*flickFreq[i] + flickPhase[i]));
         alphas[i] = alpha;
+
+        colors[i*3]=colors[i*3+1]=colors[i*3+2]=1.0;
+        sizes[i]=PARTICLE_SIZE;
       }
 
       if (!Number.isFinite(nx) || !Number.isFinite(ny) || !Number.isFinite(nz)) { nx = bx; ny = by; nz = bz; }
-
-      positions[i*3]   = nx;
-      positions[i*3+1] = ny;
-      positions[i*3+2] = nz;
+      positions[i*3]   = nx; positions[i*3+1] = ny; positions[i*3+2] = nz;
     }
 
     geometry.attributes.position.needsUpdate = true;
@@ -819,16 +650,12 @@
   <script>
   const faders = document.querySelectorAll('.fade-in');
   const appearOnScroll = new IntersectionObserver((entries, observer) => {
-    entries.forEach(entry => {
-      if (!entry.isIntersecting) return;
-      entry.target.classList.add('visible');
-      observer.unobserve(entry.target);
-    });
+    entries.forEach(entry => { if (!entry.isIntersecting) return; entry.target.classList.add('visible'); observer.unobserve(entry.target); });
   }, { threshold: 0.1 });
   faders.forEach(fader => appearOnScroll.observe(fader));
   </script>
 
-  <!-- Gallery data + enhanced modal -->
+  <!-- Gallery data + modal -->
   <script>
   const galleryData = [
     { img: "https://i.ibb.co/PZn5wGKJ/I-Built-Myself-Out-of-Wires.webp", title: "I Built Myself Out of Wires", series: "AS WE SEE", tagline: "A Manifesto for the Post-Photography Era", year: "2025", medium: "Archival Pigment Print on Cotton Rag", dimensions: "100 × 70 cm (39.3 × 27.5 in)", edition: "1/10 + 2 AP" },
@@ -852,8 +679,6 @@
     const btnNext = document.getElementById('fs-next');
     const btnClose= document.getElementById('fs-close');
 
-    if (!modal || !imgEl || !panelEl) return;
-
     function fillLabel(d) {
       panelEl.innerHTML = `
         <h3>${d.title}</h3>
@@ -867,47 +692,25 @@
       `;
     }
 
-    function preload(i) {
-      const item = galleryData[i];
-      if (!item) return;
-      const im = new Image();
-      im.src = item.img;
-    }
-
-    function updateHash(i) {
-      const h = `#work-${i+1}`;
-      if (location.hash !== h) history.pushState({i}, '', h);
-    }
+    function preload(i) { const item = galleryData[i]; if (!item) return; new Image().src = item.img; }
+    function updateHash(i) { const h = `#work-${i+1}`; if (location.hash !== h) history.pushState({i}, '', h); }
 
     function openAt(i) {
       i = Math.max(0, Math.min(galleryData.length - 1, i));
-      currentIndex = i;
-      const d = galleryData[i];
+      currentIndex = i; const d = galleryData[i];
 
-      imgEl.src = '';
-      imgEl.alt = d.title;
-      fillLabel(d);
+      imgEl.src = ''; imgEl.alt = d.title; fillLabel(d);
+      modal.classList.remove('hidden'); document.body.style.overflow = 'hidden';
 
-      modal.classList.remove('hidden');
-      document.body.style.overflow = 'hidden';
+      const tmp = new Image(); tmp.onload = () => { imgEl.src = d.img; };
+      tmp.onerror = () => { imgEl.alt = 'Image failed to load'; }; tmp.src = d.img;
 
-      const tmp = new Image();
-      tmp.onload = () => { imgEl.src = d.img; };
-      tmp.onerror = () => { imgEl.alt = 'Image failed to load'; };
-      tmp.src = d.img;
-
-      preload(i-1); preload(i+1);
-      modal.setAttribute('aria-label', d.title);
-      updateHash(i);
+      preload(i-1); preload(i+1); modal.setAttribute('aria-label', d.title); updateHash(i);
     }
 
     function closeModal() {
-      modal.classList.add('hidden');
-      imgEl.src = '';
-      document.body.style.overflow = '';
-      if (location.hash.startsWith('#work-')) {
-        history.pushState({}, '', location.pathname + location.search);
-      }
+      modal.classList.add('hidden'); imgEl.src = ''; document.body.style.overflow = '';
+      if (location.hash.startsWith('#work-')) history.pushState({}, '', location.pathname + location.search);
     }
 
     function next() { if (currentIndex < galleryData.length-1) openAt(currentIndex+1); }
@@ -916,11 +719,7 @@
     window.openFullscreenImage = openAt;
     window.closeFullscreenImage = closeModal;
 
-    modal.addEventListener('click', (e) => {
-      const within = e.target.closest('#fullscreen-img, #labelPanel, #fs-prev, #fs-next, #fs-close');
-      if (!within) closeModal();
-    });
-
+    modal.addEventListener('click', (e) => { const within = e.target.closest('#fullscreen-img, #labelPanel, #fs-prev, #fs-next, #fs-close'); if (!within) closeModal(); });
     btnPrev?.addEventListener('click', (e) => { e.stopPropagation(); prev(); });
     btnNext?.addEventListener('click', (e) => { e.stopPropagation(); next(); });
     btnClose?.addEventListener('click', (e) => { e.stopPropagation(); closeModal(); });
@@ -933,26 +732,16 @@
     });
 
     let touchX = null, touchY = null;
-    modal.addEventListener('touchstart', (e) => {
-      const t = e.touches[0]; touchX = t.clientX; touchY = t.clientY;
-    }, {passive:true});
+    modal.addEventListener('touchstart', (e) => { const t = e.touches[0]; touchX = t.clientX; touchY = t.clientY; }, {passive:true});
     modal.addEventListener('touchend', (e) => {
       if (touchX == null || touchY == null) return;
       const dx = (e.changedTouches[0].clientX - touchX);
       const dy = (e.changedTouches[0].clientY - touchY);
       touchX = touchY = null;
-      if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 40) {
-        if (dx < 0) next(); else prev();
-      }
+      if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 40) { if (dx < 0) next(); else prev(); }
     });
 
-    function openFromHash() {
-      const m = location.hash.match(/^#work-(\d+)$/);
-      if (m) {
-        const idx = parseInt(m[1], 10) - 1;
-        if (!Number.isNaN(idx)) openAt(idx);
-      }
-    }
+    function openFromHash() { const m = location.hash.match(/^#work-(\d+)$/); if (m) { const idx = parseInt(m[1], 10) - 1; if (!Number.isNaN(idx)) openAt(idx); } }
     window.addEventListener('hashchange', openFromHash);
     window.addEventListener('DOMContentLoaded', openFromHash);
   })();
@@ -964,92 +753,26 @@
   </audio>
   <script>
   (function () {
-    const DEBUG = false; const log = (...a)=>DEBUG&&console.log('[AUDIO]',...a);
     const audio = document.getElementById('bg-audio');
     const CONSENT_KEY = 'awsee_audio_consent';
     const clamp01 = v => Math.max(0, Math.min(1, v));
-
-    function fadeTo(target = 1, duration = 1400) {
-      target = clamp01(target);
-      const steps = 24, dt = duration / steps;
-      const start = audio.volume || 0;
-      const delta = target - start;
-      if (target > 0) audio.muted = false;
-      let i = 0;
-      clearInterval(fadeTo._iv);
-      fadeTo._iv = setInterval(() => {
-        i++;
-        audio.volume = clamp01(start + (delta * i / steps));
-        if (i >= steps) { clearInterval(fadeTo._iv); audio.volume = target; }
-      }, dt);
-    }
-
-    let ac;
-    async function unlockAudio() {
-      try {
-        if (!ac) ac = new (window.AudioContext || window.webkitAudioContext)();
-        if (ac.state === 'suspended') await ac.resume();
-        const buffer = ac.createBuffer(1, 1, 22050);
-        const source = ac.createBufferSource();
-        source.buffer = buffer; source.connect(ac.destination);
-        if (source.start) source.start(0);
-      } catch {}
-    }
-
-    function grantAudio() {
-      localStorage.setItem(CONSENT_KEY, '1');
-      unlockAudio(); audio.muted = false; audio.volume = 0.0;
-      audio.play().then(() => { fadeTo(1, 1200); removeGestureListeners(); })
-                  .catch(() => retryPlaySequence());
-    }
-
-    function removeGestureListeners() {
-      ['click','touchstart','keydown','scroll','mousemove','wheel'].forEach(ev =>
-        window.removeEventListener(ev, grantAudio, { capture:false })
-      );
-      document.removeEventListener('visibilitychange', onVisible);
-    }
-    function onVisible() {
-      if (document.visibilityState === 'visible' && localStorage.getItem(CONSENT_KEY) === '1') grantAudio();
-    }
-    function retryPlaySequence(retries = 6, delay = 600) {
-      let n = 0;
-      const tick = () => {
-        if (n++ >= retries) return;
-        unlockAudio();
-        audio.play().then(() => { fadeTo(1, 1200); removeGestureListeners(); })
-                    .catch(() => setTimeout(tick, delay));
-      };
-      setTimeout(tick, delay);
-    }
-
-    audio.addEventListener('error', (e) => { console.error('[AUDIO] error', e, audio.error); });
-
-    async function tryAutoplay() {
-      try { audio.muted = true; audio.volume = 0.0; await audio.play();
-        if (localStorage.getItem(CONSENT_KEY) === '1') setTimeout(() => fadeTo(1, 1400), 250);
-      } catch {}
-    }
-
-    ['click','touchstart','keydown','scroll','mousemove','wheel'].forEach(ev =>
-      window.addEventListener(ev, grantAudio, { once:true, passive:true })
-    );
+    function fadeTo(target=1,duration=1400){ target=clamp01(target); const steps=24,dt=duration/steps; const start=audio.volume||0,delta=target-start; if(target>0) audio.muted=false; let i=0; clearInterval(fadeTo._iv); fadeTo._iv=setInterval(()=>{ i++; audio.volume=clamp01(start+(delta*i/steps)); if(i>=steps){ clearInterval(fadeTo._iv); audio.volume=target; } },dt); }
+    let ac; async function unlockAudio(){ try{ if(!ac) ac=new (window.AudioContext||window.webkitAudioContext)(); if(ac.state==='suspended') await ac.resume(); const b=ac.createBuffer(1,1,22050); const s=ac.createBufferSource(); s.buffer=b; s.connect(ac.destination); s.start?.(0);}catch{} }
+    function grantAudio(){ localStorage.setItem(CONSENT_KEY,'1'); unlockAudio(); audio.muted=false; audio.volume=0.0; audio.play().then(()=>{ fadeTo(1,1200); removeListeners(); }).catch(()=>retry()); }
+    function removeListeners(){ ['click','touchstart','keydown','scroll','mousemove','wheel'].forEach(ev=>window.removeEventListener(ev,grantAudio,{capture:false})); document.removeEventListener('visibilitychange', onVisible); }
+    function onVisible(){ if(document.visibilityState==='visible' && localStorage.getItem(CONSENT_KEY)==='1') grantAudio(); }
+    function retry(n=6,d=600){ let i=0; const tick=()=>{ if(i++>=n) return; unlockAudio(); audio.play().then(()=>{ fadeTo(1,1200); removeListeners(); }).catch(()=>setTimeout(tick,d)); }; setTimeout(tick,d); }
+    async function tryAutoplay(){ try{ audio.muted=true; audio.volume=0.0; await audio.play(); if(localStorage.getItem(CONSENT_KEY)==='1') setTimeout(()=>fadeTo(1,1400),250);}catch{} }
+    ['click','touchstart','keydown','scroll','mousemove','wheel'].forEach(ev=>window.addEventListener(ev,grantAudio,{once:true,passive:true}));
     document.addEventListener('visibilitychange', onVisible);
-
-    window.addEventListener('DOMContentLoaded', () => {
-      if (!audio.currentSrc) { /* check path in prod */ }
-      tryAutoplay();
-      setTimeout(() => { if (!audio.paused) return; tryAutoplay(); }, 1200);
-      setTimeout(() => { if (!audio.paused) return; tryAutoplay(); }, 3000);
-    });
+    window.addEventListener('DOMContentLoaded', ()=>{ if(!audio.currentSrc){} tryAutoplay(); setTimeout(()=>{ if(!audio.paused) return; tryAutoplay(); },1200); setTimeout(()=>{ if(!audio.paused) return; tryAutoplay(); },3000); });
   })();
   </script>
 
   <!-- Email copy -->
   <script>
   document.addEventListener('DOMContentLoaded', () => {
-    const emailLink = document.getElementById('contact-email');
-    if (!emailLink) return;
+    const emailLink = document.getElementById('contact-email'); if (!emailLink) return;
     emailLink.addEventListener('click', function(e) {
       e.preventDefault();
       const email = 'hello@aswesee.art';
@@ -1071,31 +794,14 @@
   <!-- Formspree AJAX -->
   <script>
   (function(){
-    const form = document.getElementById('contact-form');
-    if(!form) return;
-    const btn  = document.getElementById('cf-submit');
-    const stat = document.getElementById('cf-status');
-
-    function toast(msg){
-      const note = document.createElement('div');
-      note.textContent = msg;
-      note.style.cssText = 'position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#1a1a1a;color:#fff;padding:10px 16px;border:1px solid rgba(255,255,255,.15);border-radius:8px;font-size:14px;z-index:9999;box-shadow:0 6px 18px rgba(0,0,0,.35)';
-      document.body.appendChild(note);
-      setTimeout(()=>note.remove(), 2800);
-    }
-
-    form.addEventListener('submit', async (e)=>{
-      e.preventDefault();
-      stat.textContent = '';
-      btn.disabled = true; btn.style.opacity = .6;
+    const form = document.getElementById('contact-form'); if(!form) return;
+    const btn  = document.getElementById('cf-submit'); const stat = document.getElementById('cf-status');
+    function toast(msg){ const n=document.createElement('div'); n.textContent=msg; n.style.cssText='position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#1a1a1a;color:#fff;padding:10px 16px;border:1px solid rgba(255,255,255,.15);border-radius:8px;font-size:14px;z-index:9999;box-shadow:0 6px 18px rgba(0,0,0,.35)'; document.body.appendChild(n); setTimeout(()=>n.remove(),2800); }
+    form.addEventListener('submit', async (e)=>{ e.preventDefault(); stat.textContent=''; btn.disabled = true; btn.style.opacity=.6;
       const data = new FormData(form);
-
-      try {
-        const res = await fetch(form.action, { method:'POST', body: data, headers: { 'Accept': 'application/json' } });
-        if (!res.ok) throw 0;
-        toast('Message sent. Thank you!'); form.reset();
-      } catch { toast('Could not send message. Please try again.'); }
-      finally { btn.disabled = false; btn.style.opacity = 1; }
+      try { const res = await fetch(form.action,{method:'POST',body:data,headers:{'Accept':'application/json'}}); if(!res.ok) throw 0; toast('Message sent. Thank you!'); form.reset(); } 
+      catch { toast('Could not send message. Please try again.'); }
+      finally { btn.disabled=false; btn.style.opacity=1; }
     });
   })();
   </script>
@@ -1103,108 +809,29 @@
   <!-- Smooth center-scroll -->
   <script>
   (function(){
-    const btn = document.getElementById('enter-gallery');
-    const grid = document.getElementById('gallery-grid');
-    if(!btn || !grid) return;
-    btn.addEventListener('click', function(e){
-      e.preventDefault();
-      const rect = grid.getBoundingClientRect();
-      const targetY = window.scrollY + rect.top + (rect.height / 2) - (window.innerHeight / 2);
-      window.scrollTo({ top: Math.max(0, targetY), behavior: 'smooth' });
-    }, { passive: false });
+    const btn=document.getElementById('enter-gallery'); const grid=document.getElementById('gallery-grid'); if(!btn||!grid) return;
+    btn.addEventListener('click', function(e){ e.preventDefault(); const rect=grid.getBoundingClientRect(); const targetY=window.scrollY + rect.top + (rect.height/2) - (window.innerHeight/2); window.scrollTo({ top: Math.max(0,targetY), behavior:'smooth' }); }, { passive:false });
   })();
   </script>
 
   <!-- Attachments + 7000-char counter -->
   <script>
   (function(){
-    const form    = document.getElementById('contact-form');
-    const msg     = document.getElementById('cf-message');
-    const count   = document.getElementById('cf-count');
-    const drop    = document.getElementById('file-drop');
-    const input   = document.getElementById('cf-files');
-    const list    = document.getElementById('cf-filelist');
-
-    if(!form || !msg || !count || !drop || !input || !list) return;
-
-    const LIMIT_CHARS = 7000;
-    const LIMIT_FILES = 10;
-    const LIMIT_SIZE  = 25 * 1024 * 1024;
-    const ACCEPT = new Set(['pdf','doc','docx','zip','rar','7z','psd','ai','indd','tif','tiff','jpg','jpeg','png','svg']);
-
-    function toast(msg){
-      const n = document.createElement('div');
-      n.textContent = msg;
-      n.style.cssText = 'position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#1a1a1a;color:#fff;padding:10px 16px;border:1px solid rgba(255,255,255,.15);border-radius:8px;font-size:14px;z-index:9999;box-shadow:0 6px 18px rgba(0,0,0,.35)';
-      document.body.appendChild(n);
-      setTimeout(()=>n.remove(), 2800);
-    }
-
-    function updateCount(){
-      const len = msg.value.length;
-      count.textContent = `${len} / ${LIMIT_CHARS}`;
-      count.style.color = (len > LIMIT_CHARS) ? '#ff6b6b' : '';
-    }
-    msg.setAttribute('maxlength', LIMIT_CHARS);
-    msg.addEventListener('input', updateCount);
-    updateCount();
-
-    function extOf(name){
-      const i = name.lastIndexOf('.');
-      return i>=0 ? name.slice(i+1).toLowerCase() : '';
-    }
-    function renderList(files){
-      list.innerHTML = '';
-      Array.from(files).forEach(f=>{
-        const li = document.createElement('li');
-        const mb = (f.size/1048576).toFixed(2);
-        li.className = 'flex items-center justify-between gap-3';
-        li.innerHTML = `<span class="opacity-90">${f.name}</span><span class="opacity-60 text-xs">${mb} MB</span>`;
-        list.appendChild(li);
-      });
-    }
-    function validateFiles(files){
-      if(files.length > LIMIT_FILES){ toast(`Max ${LIMIT_FILES} files.`); return false; }
-      for(const f of files){
-        if(f.size > LIMIT_SIZE){ toast(`"${f.name}" is larger than 25 MB.`); return false; }
-        const ext = extOf(f.name);
-        if(!ACCEPT.has(ext)){ toast(`"${f.name}" type not allowed.`); return false; }
-      }
-      return true;
-    }
-
-    drop.addEventListener('click', () => input.click());
-    drop.addEventListener('dragover', (e)=>{ e.preventDefault(); drop.style.borderColor='rgba(255,255,255,.35)'; });
-    drop.addEventListener('dragleave', ()=>{ drop.style.borderColor='rgba(255,255,255,.15)'; });
-    drop.addEventListener('drop', (e)=>{
-      e.preventDefault();
-      drop.style.borderColor='rgba(255,255,255,.15)';
-      const files = Array.from(e.dataTransfer.files || []);
-      if(!validateFiles(files)) return;
-      const dt = new DataTransfer();
-      files.forEach(f=>dt.items.add(f));
-      input.files = dt.files;
-      renderList(input.files);
-    });
-
-    input.addEventListener('change', ()=>{
-      const files = Array.from(input.files || []);
-      if(!validateFiles(files)){ input.value = ''; list.innerHTML=''; return; }
-      renderList(files);
-    });
-
-    form.addEventListener('submit', (e)=>{
-      if(msg.value.length > LIMIT_CHARS){
-        e.stopPropagation(); e.preventDefault();
-        toast('Message is too long (max 7000 characters).');
-        return;
-      }
-      const files = Array.from(input.files || []);
-      if(!validateFiles(files)){
-        e.stopPropagation(); e.preventDefault();
-        return;
-      }
-    }, true);
+    const form=document.getElementById('contact-form'), msg=document.getElementById('cf-message'), count=document.getElementById('cf-count'), drop=document.getElementById('file-drop'), input=document.getElementById('cf-files'), list=document.getElementById('cf-filelist');
+    if(!form||!msg||!count||!drop||!input||!list) return;
+    const LIMIT_CHARS=7000, LIMIT_FILES=10, LIMIT_SIZE=25*1024*1024, ACCEPT=new Set(['pdf','doc','docx','zip','rar','7z','psd','ai','indd','tif','tiff','jpg','jpeg','png','svg']);
+    function toast(m){ const n=document.createElement('div'); n.textContent=m; n.style.cssText='position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#1a1a1a;color:#fff;padding:10px 16px;border:1px solid rgba(255,255,255,.15);border-radius:8px;font-size:14px;z-index:9999;box-shadow:0 6px 18px rgba(0,0,0,.35)'; document.body.appendChild(n); setTimeout(()=>n.remove(),2800); }
+    function updateCount(){ const len=msg.value.length; count.textContent=`${len} / ${LIMIT_CHARS}`; count.style.color = (len>LIMIT_CHARS)?'#ff6b6b':''; }
+    msg.setAttribute('maxlength', LIMIT_CHARS); msg.addEventListener('input', updateCount); updateCount();
+    function extOf(n){ const i=n.lastIndexOf('.'); return i>=0?n.slice(i+1).toLowerCase():''; }
+    function renderList(files){ list.innerHTML=''; Array.from(files).forEach(f=>{ const li=document.createElement('li'); const mb=(f.size/1048576).toFixed(2); li.className='flex items-center justify-between gap-3'; li.innerHTML=`<span class="opacity-90">${f.name}</span><span class="opacity-60 text-xs">${mb} MB</span>`; list.appendChild(li); }); }
+    function validateFiles(files){ if(files.length>LIMIT_FILES){ toast(`Max ${LIMIT_FILES} files.`); return false; } for(const f of files){ if(f.size>LIMIT_SIZE){ toast(`"${f.name}" is larger than 25 MB.`); return false; } const ext=extOf(f.name); if(!ACCEPT.has(ext)){ toast(`"${f.name}" type not allowed.`); return false; } } return true; }
+    drop.addEventListener('click',()=>input.click());
+    drop.addEventListener('dragover',(e)=>{ e.preventDefault(); drop.style.borderColor='rgba(255,255,255,.35)'; });
+    drop.addEventListener('dragleave',()=>{ drop.style.borderColor='rgba(255,255,255,.15)'; });
+    drop.addEventListener('drop',(e)=>{ e.preventDefault(); drop.style.borderColor='rgba(255,255,255,.15)'; const files=Array.from(e.dataTransfer.files||[]); if(!validateFiles(files)) return; const dt=new DataTransfer(); files.forEach(f=>dt.items.add(f)); input.files=dt.files; renderList(input.files); });
+    input.addEventListener('change',()=>{ const files=Array.from(input.files||[]); if(!validateFiles(files)){ input.value=''; list.innerHTML=''; return; } renderList(files); });
+    form.addEventListener('submit',(e)=>{ if(msg.value.length>LIMIT_CHARS){ e.stopPropagation(); e.preventDefault(); toast('Message is too long (max 7000 characters).'); return; } const files=Array.from(input.files||[]); if(!validateFiles(files)){ e.stopPropagation(); e.preventDefault(); return; } }, true);
   })();
   </script>
 
