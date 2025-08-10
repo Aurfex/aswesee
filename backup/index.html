@@ -796,34 +796,5 @@
 })();
 </script>
 >
-<!-- ===== EMAIL CLICK HANDLER (added) ===== -->
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-  const emailLink = document.getElementById('contact-email');
-  if (!emailLink) return;
-  emailLink.addEventListener('click', function(e) {
-    e.preventDefault();
-    const href = this.getAttribute('href'); // "mailto:hello@aswesee.art"
-    // Try to open default mail client
-    try {
-      window.location.href = href;
-      // Fallback: if nothing happens after a short delay, prompt copy
-      setTimeout(() => {
-        // if document still visible and no navigation happened, offer copy
-        if (!document.hidden) {
-          const ok = confirm('Couldn’t open your email app automatically.\nCopy address to clipboard?');
-          if (ok) {
-            navigator.clipboard.writeText('hello@aswesee.art').catch(()=>{});
-            alert('Email address copied: hello@aswesee.art');
-          }
-        }
-      }, 800);
-    } catch (err) {
-      alert('Unable to open email client. Please copy this address: hello@aswesee.art');
-    }
-  });
-});
-</script>
-
 </body>
 </html>
