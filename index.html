@@ -257,7 +257,7 @@
 <!-- THREE.js -->
 <script src="https://cdn.jsdelivr.net/npm/three@0.155.0/build/three.min.js"></script>
 <script>
-/* ========================== CONFIG (tuned) ========================== */
+/* ========================== CONFIG (visible & stable) ========================== */
 const PARTICLES = 60000, PORTRAIT = 30000;
 const MIN_GRAY = 0.18, PARTICLE_SIZE = 0.47, CONTRAST = 1.08;
 
@@ -267,22 +267,22 @@ const PORTRAIT_SCALE = 1.20, PORTRAIT_Y_SHIFT = -40;
 const MORPH_TIME = 30000;
 
 /* Portrait point tuning */
-const PORTRAIT_POINT_SCALE = 0.78;          // smaller portrait particles
+const PORTRAIT_POINT_SCALE = 0.78;
 const PORTRAIT_SIZE_GROW_MIN = 0.35;
 const PORTRAIT_SIZE_GROW_MAX = 0.45;
-const PORTRAIT_FINAL_ORBIT = 0.60;          // subtle post-morph orbit
+const PORTRAIT_FINAL_ORBIT = 0.60;
 const PORTRAIT_FINAL_ORBIT_Y = 0.36;
 const PORTRAIT_FINAL_FREQ = 0.28;
 
 /* Motion & fading */
 const STAGGER_MS = 6500;
-const ORB_MAG_PORTRAIT = 1.2;               // lower during morph
+const ORB_MAG_PORTRAIT = 1.2;
 const ORB_MAG_AMBIENT  = 13.5;
 
-/* Ambient gaussian vignette (no hard ring) */
+/* Ambient gaussian vignette (boosted a bit for visibility) */
 const AMBIENT_SIGMA = 560;
-const AMBIENT_MIN_ALPHA = 0.10;
-const AMBIENT_MAX_ALPHA = 0.55;
+const AMBIENT_MIN_ALPHA = 0.16;  // ↑
+const AMBIENT_MAX_ALPHA = 0.72;  // ↑
 
 /* Hotspot & edge control (forehead guard) */
 const CENTER_DAMP_STRENGTH = 0.62;
@@ -290,9 +290,9 @@ const EDGE_FADE_START = 0.84;
 const EDGE_FADE_END   = 1.04;
 const EDGE_FADE_STRENGTH = 0.50;
 
-const HOT_LUM_START = 0.82, HOT_LUM_END = 0.94;       // bright
-const HOT_EDGE_START = 0.08, HOT_EDGE_END = 0.28;     // low-edge
-const HOT_EARLY_MIN = 0.22, HOT_EARLY_MAX = 0.55;     // early in morph
+const HOT_LUM_START = 0.82, HOT_LUM_END = 0.94;
+const HOT_EDGE_START = 0.08, HOT_EDGE_END = 0.28;
+const HOT_EARLY_MIN = 0.22, HOT_EARLY_MAX = 0.55;
 
 /* Portrait source */
 const PORTRAIT_SRC = "https://i.ibb.co/W4N6XfsN/portrait.png";
@@ -355,28 +355,31 @@ for(let i=0;i<PARTICLES;++i){
 
 const geometry = new THREE.BufferGeometry();
 geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-geometry.setAttribute('color',    new THREE.BufferAttribute(colors, 3));
+geometry.setAttribute('aColor',   new THREE.BufferAttribute(colors, 3));   // rename to avoid conflicts
 geometry.setAttribute('aSize',    new THREE.BufferAttribute(sizes, 1));
 geometry.setAttribute('aAlpha',   new THREE.BufferAttribute(alphas, 1));
-geometry.setAttribute('aSharp',   new THREE.BufferAttribute(sharpness, 1)); // used in shader
+geometry.setAttribute('aSharp',   new THREE.BufferAttribute(sharpness, 1));
+geometry.computeBoundingSphere();
+geometry.boundingSphere = new THREE.Sphere(new THREE.Vector3(0,0,0), 1500); // ensure visible
 
-/* ===================== Soft-disc shader (fixed falloff) ===================== */
+/* ===================== Soft-disc shader (fixed + clamped size) ===================== */
 const material = new THREE.ShaderMaterial({
   vertexShader: `
     attribute float aSize;
-    attribute vec3 color;
+    attribute vec3 aColor;
     attribute float aAlpha;
     attribute float aSharp;
     varying vec3 vColor;
     varying float vAlpha;
     varying float vSharp;
     void main() {
-      vColor = color;
+      vColor = aColor;
       vAlpha = aAlpha;
       vSharp = aSharp;
       vec4 mvPosition = modelViewMatrix * vec4(position, 1.0);
-      float ps = aSize * 1300.0 / max(20.0, -mvPosition.z);
-      gl_PointSize = clamp(ps, 0.0, 20.0);   // ↑ larger cap to be visible on HiDPI
+      float depth = max(1.0, -mvPosition.z);
+      float ps = aSize * 4800.0 / depth;     // ↑ stronger scale so points don't go sub-pixel
+      gl_PointSize = clamp(ps, 1.25, 28.0);  // min clamp to guarantee visibility
       gl_Position = projectionMatrix * mvPosition;
     }
   `,
@@ -389,26 +392,25 @@ const material = new THREE.ShaderMaterial({
       float r2 = dot(uv, uv);
       if (r2 > 1.0) discard;
 
-      // ✅ correct radial falloff: 1 at center → 0 at edge
       float fallBase = 1.0 - smoothstep(0.0, 1.0, r2);
       float fall = pow(fallBase, mix(1.2, 2.6, clamp(vSharp, 0.0, 1.0)));
-
-      // subtle inner glow
       float glow = 1.0 - smoothstep(0.0, 0.55, r2);
 
+      float a  = clamp(vAlpha * fall, 0.0, 1.0);
       vec3 col = vColor * (0.86 + 0.14 * glow);
-      float a  = vAlpha * fall;
 
       gl_FragColor = vec4(col * a, a); // premultiplied
     }
   `,
   transparent: true,
   depthTest: true,
+  depthWrite: false,              // ← important for layered alpha
   blending: THREE.NormalBlending,
   premultipliedAlpha: true
 });
 
 const points = new THREE.Points(geometry, material);
+points.frustumCulled = false;      // ← avoid over-culling
 scene.add(points);
 
 /* =================== SAMPLER (grid + sobel + jitter) =================== */
@@ -457,7 +459,7 @@ function sampleImageGrid(url, pointCount, callback) {
     for (let y=0; y<h; y++){
       for (let x=0; x<w; x++){
         const i=y*w+x, a=data[i*4+3]/255; if (a < ALPHA_MIN) continue;
-        const lum  = Math.max(MIN_GRAY, L[i]); const edge = E[i];
+        const lum  = Math.max(MIN_GRAY, L[i]); const edge = E[i]);
         const score = 0.22 + 1.35*edge + 0.12*(1.0 - Math.abs(lum-0.5));
         cand.push({x,y,lum,edge,score});
       }
@@ -607,7 +609,6 @@ function animate(now){
 
       const tx = morphTargets[i*3], ty = morphTargets[i*3+1], tz = morphTargets[i*3+2];
 
-      // fading jitter to avoid over-dense clumps mid-morph
       const jitterFade = 1.0 - smoothstep(0.25, 0.85, lp);
       const jx = (Math.sin(i*12.9898)*43758.5453 % 1 - 0.5) * 0.8 * jitterFade;
       const jy = (Math.sin(i*78.233 )*19341.1211 % 1 - 0.5) * 0.8 * jitterFade;
@@ -616,18 +617,16 @@ function animate(now){
       ny = (1-lp)*by + lp*ty + wob2 + jy;
       nz = (1-lp)*bz + lp*tz;
 
-      // normalized radius in portrait plane
       let rNorm = 0.0;
       if (portraitCenterW){
         const vx = nx - portraitCenterW.x;
         const vy = ny - portraitCenterW.y;
         const vz = nz - portraitCenterW.z;
-        const dx = (vx*portraitRightW.x + vy*portraitRightW.y + vz*portraitRightW.z) / RX;
-        const dy = (vx*portraitUpW.x    + vy*portraitUpW.y    + vz*portraitUpW.z) / RY;
+        const dx = (vx*portraitRightW.x + vy*portraitRightW.y + vz*portraitRightW.z) / (280*PORTRAIT_SCALE);
+        const dy = (vx*portraitUpW.x    + vy*portraitUpW.y    + vz*portraitUpW.z) / (340*PORTRAIT_SCALE);
         rNorm = Math.min(1.4, Math.hypot(dx, dy));
       }
 
-      // luminance & center/edge control
       let lum = applyContrast(morphLums[i] ?? 0.8, CONTRAST);
       lum = clamp(lum, MIN_GRAY, 1.0);
 
@@ -643,17 +642,15 @@ function animate(now){
 
       colors[i*3] = colors[i*3+1] = colors[i*3+2] = 1.0 + (lum-1.0)*lp;
 
-      // Hotspot Guard
       const isHot   = smoothstep(HOT_LUM_START, HOT_LUM_END, morphLums[i] ?? 0.8);
       const isPlain = 1.0 - smoothstep(HOT_EDGE_START, HOT_EDGE_END, edge);
       const isEarly = 1.0 - smoothstep(HOT_EARLY_MIN, HOT_EARLY_MAX, lp);
       const hotspotDamp = 1.0 - 0.85 * (isHot * isPlain * isEarly);
 
-      let a = (0.12 + 0.86*lp) * edgeFactor * centerFactor;
+      let a = (0.14 + 0.88*lp) * edgeFactor * centerFactor; // slightly boosted base
       a *= hotspotDamp;
       alphas[i] = clamp(a, 0.0, 1.0);
 
-      // subtle post-morph orbit to keep the portrait alive
       const post = smoothstep(0.92, 1.0, lp);
       if (post > 0.0 && portraitRightW && portraitUpW){
         const ph = i * 0.37;
@@ -665,7 +662,6 @@ function animate(now){
       }
 
     } else {
-      // Ambient cloud with gaussian vignette
       nx = gx + wob; ny = gy + wob2; nz = gz;
 
       if (portraitCenterW){
@@ -688,7 +684,7 @@ function animate(now){
   }
 
   geometry.attributes.position.needsUpdate = true;
-  geometry.attributes.color.needsUpdate = true;
+  geometry.attributes.aColor.needsUpdate = true;
   geometry.attributes.aSize.needsUpdate = true;
   geometry.attributes.aAlpha.needsUpdate = true;
   geometry.attributes.aSharp.needsUpdate = true;
