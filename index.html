@@ -376,7 +376,7 @@
     let data; try { data = ctx.getImageData(0,0,w,h).data; } catch(e){ return hardFallback(); }
 
     // ---- Build luminance + soft alpha mask
-    const ALPHA_THRESH = 0.20; // (پایین‌تر از نسخه قبل تا سوراخ نیفته)
+    const ALPHA_THRESH = 0.10; // (پایین‌تر از نسخه قبل تا سوراخ نیفته)
     const L = new Float32Array(w*h);
     for (let i=0, y=0; y<h; y++){
       for (let x=0; x<w; x++, i++){
