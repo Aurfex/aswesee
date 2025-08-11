@@ -1,4 +1,5 @@
-<!DOCTYPE html><html lang="en">
+<!DOCTYPE html>
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -77,47 +78,6 @@
     .fade-in.visible { opacity: 1; transform: translateY(0); }
     .hover-zoom { transition: transform .3s, opacity .3s; }
     .hover-zoom:hover { transform: scale(1.05); opacity: .9; }
-
-    /* ===== Mobile fixes for fullscreen viewer (<=768px) ===== */
-    @media (max-width: 768px) {
-      /* Stack modal content vertically: image first, text below */
-      #fullscreenImage > div {
-        flex-direction: column !important;
-        align-items: center !important;
-        justify-content: center !important;
-        gap: 12px !important;
-        padding: 12px !important;
-      }
-
-      /* Let the label panel flow below the image, not overlay it */
-      #fullscreenImage .label-panel {
-        position: static !important;
-        width: 100% !important;
-        max-width: 680px !important;
-        max-height: none !important;
-        background: transparent !important;
-        border: 0 !important;
-        padding: 0 !important;
-        margin: 0 !important;
-        text-align: left;
-      }
-
-      /* Shorter image so the text has room */
-      #fullscreenImage #fullscreen-img {
-        max-height: 60vh !important;
-      }
-
-      /* Hide arrow buttons on mobile (swipe is active) */
-      #fs-prev, #fs-next {
-        display: none !important;
-      }
-    }
-
-    /* Safe spacing for gallery captions (non-modal) */
-    .thumb-card { margin-bottom: 0.5rem; }
-    .thumb-caption { margin-top: 0.5rem; }
-  </style>
-</head>
 
     /* ===== THUMBNAIL CARDS ===== */
     .thumb-card {
