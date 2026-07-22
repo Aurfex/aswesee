@@ -472,12 +472,21 @@ function animate(now){
     let nx,ny,nz;
     if(isP && morphPhase>0){
       const tx=morphTargets[i*3], ty=morphTargets[i*3+1], tz=morphTargets[i*3+2];
-      nx=(1-morphPhase)*bx+morphPhase*tx+wob;
-      ny=(1-morphPhase)*by+morphPhase*ty+wob2;
-      nz=(1-morphPhase)*bz+morphPhase*tz;
+      // Positional convergence reaches 1.0 by the time conceptual phase hits its cap.
+      // At morphPhase=0.85 -> posPhase=1.0 (face is geometrically assembled and readable).
+      // At morphPhase=0    -> posPhase=0   (particles fully at their random base positions).
+      const posPhase = Math.min(1.0, morphPhase * 1.18);
+      // Wobble amplitude drops to 35% once the face is formed, so features stay legible
+      // but visibly tremble.
+      const wobDamp = 1.0 - posPhase * 0.65;
+      nx=(1-posPhase)*bx+posPhase*tx+wob*wobDamp;
+      ny=(1-posPhase)*by+posPhase*ty+wob2*wobDamp;
+      nz=(1-posPhase)*bz+posPhase*tz;
       let lum=applyContrast(lumArr[i], CONTRAST);
       lum=clamp(lum, MIN_GRAY, 1.0);
       sizes[i]=PARTICLE_SIZE*sharpArrBuf[i];
+      // Color still tracks the *conceptual* phase (capped at 0.85), so the face never
+      // reaches full tonal contrast — it stays slightly unresolved even at hold.
       colors[i*3]=colors[i*3+1]=colors[i*3+2]=1.0+(lum-1.0)*morphPhase;
     } else {
       nx=gx+wob; ny=gy+wob2; nz=gz;
