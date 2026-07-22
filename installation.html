@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>I Live in the Dark — installation mode</title>
+<style>
+  html,body{margin:0;padding:0;background:#0B0A09;overflow:hidden;height:100%;cursor:none;}
+  #stage{position:fixed;inset:0;}
+  #stage canvas{display:block;}
+</style>
+</head>
+<body>
+<div id="stage"></div>
+<div id="hud" style="position:fixed;left:12px;bottom:10px;z-index:9;color:#6E6961;font:12px/1.6 monospace;white-space:pre;pointer-events:none;"></div>
+<script src="https://cdn.jsdelivr.net/npm/three@0.155.0/build/three.min.js"></script>
+<script>
+/* ============================================================
+   I LIVE IN THE DARK — installation prototype
+   Five portraits. The particles gather but are never allowed
+   to fully form a face. Convergence is capped, held, released.
+   ============================================================ */
+
+// ---- Debug HUD (press D to toggle) --------------------------------
+const HUD = { state:"boot", img:"-", mode:"-", phase:0, err:"" };
+const hudEl = document.getElementById("hud");
+let hudOn = true;
+window.addEventListener("keydown", e=>{ if(e.key==="d"||e.key==="D") hudOn=!hudOn; });
+window.onerror = (m)=>{ HUD.err = "ERR: "+m; };
+function drawHUD(){
+  hudEl.textContent = hudOn ? `state: ${HUD.state}   phase: ${(HUD.phase*100).toFixed(0)}%   img: ${HUD.img}   sampler: ${HUD.mode}   ${HUD.err}` : "";
+}
+
+// ---- Tunables ----------------------------------------------------
+const PORTRAIT_LIST = [
+  "images/Understudy-of-the-Self.png",
+  "images/bound in silence.png",
+  "images/trace.png",
+  "images/Through-the-Quiet-Defiance.png",
+  "images/Cutting-Silence.png"
+];
+const CONVERGENCE_CAP = 0.85;   // never reaches 1.0 — the face never closes
+const GATHER_MS   = 22000;      // dust -> almost-face
+const HOLD_MS     = 10000;      // almost-face, breathing
+const DISPERSE_MS = 9000;       // almost-face -> dust
+const IDLE_MS     = 3000;       // pure dust between faces
+
+const PARTICLES = 68000, PORTRAIT = 38000, MIN_GRAY = 0.18,
+      PARTICLE_SIZE = 0.47, CONTRAST = 1.08,
+      GLOBAL_ROTATE_SPEED = 0.1, PORTRAIT_SCALE = 1.20, PORTRAIT_Y_SHIFT = -40;
+
+// ---- Renderer / camera / scene ----------------------------------
+const renderer = new THREE.WebGLRenderer({ antialias: true });
+renderer.setClearColor(0x0B0A09, 1);
+renderer.setSize(window.innerWidth, window.innerHeight);
+renderer.setPixelRatio(window.devicePixelRatio || 1);
+document.getElementById("stage").appendChild(renderer.domElement);
+
+const camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 1, 3000);
+camera.position.set(400, 80, 220); camera.lookAt(0,0,0);
+const scene = new THREE.Scene();
+
+// ---- Buffers -----------------------------------------------------
+const positions     = new Float32Array(PARTICLES*3),
+      basePositions = new Float32Array(PARTICLES*3),
+      morphTargets  = new Float32Array(PARTICLES*3),
+      colors        = new Float32Array(PARTICLES*3),
+      sizes         = new Float32Array(PARTICLES),
+      lumArr        = new Float32Array(PARTICLES),
+      sharpArrBuf   = new Float32Array(PARTICLES);
+
+const clamp = (v,a,b)=>Math.max(a,Math.min(b,v));
+const easeInOut = t => t<0.5 ? 2*t*t : -1+(4-2*t)*t;
+const applyContrast = (l,c)=> clamp((l-0.5)*c+0.5, 0, 1);
+
+for(let i=0;i<PARTICLES;++i){
+  const r = 900*Math.cbrt(Math.random()),
+        th = Math.random()*Math.PI*2,
+        ph = Math.acos(2*Math.random()-1);
+  const x = r*Math.sin(ph)*Math.cos(th),
+        y = r*Math.sin(ph)*Math.sin(th),
+        z = r*Math.cos(ph);
+  basePositions[i*3]=x; basePositions[i*3+1]=y; basePositions[i*3+2]=z;
+  positions[i*3]=x; positions[i*3+1]=y; positions[i*3+2]=z;
+  colors[i*3]=colors[i*3+1]=colors[i*3+2]=1.0;
+  sizes[i]=PARTICLE_SIZE; sharpArrBuf[i]=1.0; lumArr[i]=0.8;
+}
+
+const geometry = new THREE.BufferGeometry();
+geometry.setAttribute('position', new THREE.BufferAttribute(positions,3));
+geometry.setAttribute('color',    new THREE.BufferAttribute(colors,3));
+geometry.setAttribute('aSize',    new THREE.BufferAttribute(sizes,1));
+
+const material = new THREE.ShaderMaterial({
+  vertexShader: `
+    attribute float aSize;
+    attribute vec3 color;
+    varying vec3 vColor;
+    void main(){
+      vColor = color;
+      vec4 mvPosition = modelViewMatrix * vec4(position,1.0);
+      float sz = aSize * 1300.0 / max(1.0, -mvPosition.z);
+      gl_PointSize = clamp(sz, 1.0, 14.0);
+      gl_Position = projectionMatrix * mvPosition;
+    }`,
+  fragmentShader: `
+    varying vec3 vColor;
+    void main(){
+      float border = 0.07;
+      if(gl_PointCoord.x < border || gl_PointCoord.x > 1.0-border ||
+         gl_PointCoord.y < border || gl_PointCoord.y > 1.0-border) discard;
+      gl_FragColor = vec4(vColor, 0.99);
+    }`,
+  transparent: true, depthTest: false, depthWrite: false
+});
+
+const points = new THREE.Points(geometry, material);
+points.frustumCulled = false;
+scene.add(points);
+
+// ---- Image sampler (ported from site, url parametrized) ---------
+function sampleImageGrid(url, pointCount, callback){
+  const img = new Image();
+  img.crossOrigin = "anonymous";
+
+  function hardFallback(){
+    if(HUD.mode==="-") HUD.mode="FALLBACK-DISC";
+    const out=[], lums=[], sharps=[];
+    const R=170;
+    for(let i=0;i<pointCount;i++){
+      const th=Math.random()*Math.PI*2, r=Math.sqrt(Math.random())*R;
+      const x=r*Math.cos(th), y=r*Math.sin(th);
+      const nx=(x/320)*280*PORTRAIT_SCALE;
+      const ny=(-y/400)*340*PORTRAIT_SCALE + PORTRAIT_Y_SHIFT;
+      const radial=Math.hypot(x/(320*0.9), y/(400*0.9));
+      const sharp=Math.max(0.4, 1.0-radial);
+      out.push({x:nx,y:ny,z:0}); lums.push(0.8); sharps.push(sharp);
+    }
+    callback(out,lums,sharps);
+  }
+  img.onerror = hardFallback;
+
+  img.onload = function(){
+    const w=480, h=600;
+    const cv=document.createElement('canvas'); cv.width=w; cv.height=h;
+    const ctx=cv.getContext('2d');
+    const iw=img.naturalWidth||img.width, ih=img.naturalHeight||img.height;
+    const arI=iw/ih, arC=w/h;
+    let dw=w, dh=h, dx=0, dy=0;
+    if(arI>arC){ dh=Math.round(w/arI); dy=Math.floor((h-dh)/2); }
+    else       { dw=Math.round(h*arI); dx=Math.floor((w-dw)/2); }
+    ctx.clearRect(0,0,w,h);
+    ctx.drawImage(img,dx,dy,dw,dh);
+
+    let data; try{ data=ctx.getImageData(0,0,w,h).data; }catch(e){ HUD.mode="CORS-BLOCKED -> fallback"; return hardFallback(); }
+
+    // ---- Drawn-image rect (ignore letterbox bands outside it)
+    const rx0=dx, ry0=dy, rx1=dx+dw, ry1=dy+dh;
+    const inRect=(x,y)=> x>=rx0 && x<rx1 && y>=ry0 && y<ry1;
+
+    // ---- Raw luminance + alpha (stats only inside the rect)
+    const rawL=new Float32Array(w*h), A=new Float32Array(w*h);
+    let transparentCount=0, rectCount=0;
+    for(let y=0;y<h;y++){
+      for(let x=0;x<w;x++){
+        const i=y*w+x, k=i*4;
+        A[i]=data[k+3]/255;
+        rawL[i]=(data[k]*0.299+data[k+1]*0.587+data[k+2]*0.114)/255;
+        if(inRect(x,y)){ rectCount++; if(A[i]<0.10) transparentCount++; }
+      }
+    }
+    const alphaMode = transparentCount > (rectCount*0.05); // cutout PNG (like portrait.png)
+
+    // ---- Sobel edges on raw luminance
+    const E=new Float32Array(w*h);
+    const g=(xx,yy)=>{ xx=clamp(xx,0,w-1); yy=clamp(yy,0,h-1); return rawL[yy*w+xx]; };
+    for(let y=0;y<h;y++){
+      for(let x=0;x<w;x++){
+        const gx=-g(x-1,y-1)-2*g(x-1,y)-g(x-1,y+1)+g(x+1,y-1)+2*g(x+1,y)+g(x+1,y+1);
+        const gy=-g(x-1,y-1)-2*g(x,y-1)-g(x+1,y-1)+g(x-1,y+1)+2*g(x,y+1)+g(x+1,y+1);
+        E[y*w+x]=Math.min(1, Math.hypot(gx,gy)*0.9);
+      }
+    }
+
+    // ---- Figure mask + display luminance
+    const mask=new Uint8Array(w*h);
+    const Ln=new Float32Array(w*h);      // display luminance
+    const bgw=new Float32Array(w*h);     // background-suppression weight
+
+    if(alphaMode){
+      HUD.mode="alpha-cutout";
+      for(let y=0;y<h;y++){
+        for(let x=0;x<w;x++){
+          const i=y*w+x;
+          if(!inRect(x,y)){ mask[i]=0; continue; }
+          mask[i] = (A[i]>=0.10 || rawL[i]>0.25) ? 1 : 0;
+          Ln[i] = Math.max(MIN_GRAY, rawL[i]);
+          bgw[i] = 1.0;
+        }
+      }
+    } else {
+      HUD.mode="bg-removal";
+      // background luminance = median of 8px band inside the drawn rect
+      const band=[];
+      for(let y=ry0;y<ry1;y++){
+        for(let x=rx0;x<rx1;x++){
+          if(x<rx0+8||x>=rx1-8||y<ry0+8||y>=ry1-8) band.push(rawL[y*w+x]);
+        }
+      }
+      band.sort((a,b)=>a-b);
+      const bgL=band[Math.floor(band.length/2)];
+
+      const rough=new Uint8Array(w*h);
+      for(let y=0;y<h;y++){
+        for(let x=0;x<w;x++){
+          const i=y*w+x;
+          if(!inRect(x,y)){ rough[i]=0; bgw[i]=0; continue; }
+          const diff=Math.abs(rawL[i]-bgL);
+          rough[i]=(diff>0.10 || E[i]>0.28)?1:0;
+          bgw[i]=Math.pow(Math.min(1, diff/0.22), 1.5);
+        }
+      }
+      // 3x3 majority vote to kill isolated noise
+      for(let y=0;y<h;y++){
+        for(let x=0;x<w;x++){
+          let c=0;
+          for(let oy=-1;oy<=1;oy++)for(let ox=-1;ox<=1;ox++){
+            const xx=clamp(x+ox,0,w-1), yy=clamp(y+oy,0,h-1);
+            c+=rough[yy*w+xx];
+          }
+          mask[y*w+x]=(c>=5)?1:0;
+        }
+      }
+      // percentile-normalize kept luminance -> [MIN_GRAY..1]
+      const kept=[];
+      for(let i=0;i<w*h;i+=3){ if(mask[i]) kept.push(rawL[i]); }
+      if(kept.length<200) return hardFallback();
+      kept.sort((a,b)=>a-b);
+      const p5=kept[Math.floor(kept.length*0.05)];
+      const p95=kept[Math.floor(kept.length*0.95)];
+      const span=Math.max(1e-5, p95-p5);
+      for(let i=0;i<w*h;i++){
+        Ln[i]=clamp((rawL[i]-p5)/span, 0, 1)*(1-MIN_GRAY)+MIN_GRAY;
+      }
+    }
+
+    // ---- Score
+    const EDGE_W=0.60, MID_W=0.30, LUM_W=0.10;
+    const S=new Float32Array(w*h);
+    let Ssum=0;
+    for(let i=0;i<w*h;i++){
+      if(!mask[i]){ S[i]=0; continue; }
+      const l=Ln[i];
+      const mid=1.0-Math.abs(l-0.5);
+      const s=(EDGE_W*E[i]+MID_W*mid+LUM_W*Math.min(1.0,l*1.2))*(0.15+0.85*bgw[i]);
+      S[i]=s; Ssum+=s;
+    }
+    if(Ssum<=0) return hardFallback();
+
+    // L used below by the grid allocator = masked display luminance
+    const L=new Float32Array(w*h);
+    for(let i=0;i<w*h;i++) L[i]=mask[i]?Ln[i]:0.0;
+
+    const cellsX=Math.max(16, Math.round(Math.sqrt(pointCount*(w/h))*0.95));
+    const cellsY=Math.max(16, Math.round(pointCount/cellsX));
+    const cellW=w/cellsX, cellH=h/cellsY;
+
+    const cellCands=new Array(cellsX*cellsY);
+    const cellScore=new Float32Array(cellsX*cellsY);
+    const cellMask=new Uint32Array(cellsX*cellsY);
+    for(let i=0;i<cellCands.length;i++){ cellCands[i]=[]; }
+
+    for(let y=0;y<h;y++){
+      for(let x=0;x<w;x++){
+        const i=y*w+x;
+        if(L[i]<=0) continue;
+        const cx=Math.min(cellsX-1, Math.floor(x/cellW));
+        const cy=Math.min(cellsY-1, Math.floor(y/cellH));
+        const idx=cy*cellsX+cx;
+        cellCands[idx].push({x,y,s:S[i],l:L[i]});
+        cellScore[idx]+=S[i];
+        cellMask[idx]+=1;
+      }
+    }
+
+    let activeCells=0; for(let i=0;i<cellMask.length;i++) if(cellMask[i]>0) activeCells++;
+    if(!activeCells) return hardFallback();
+
+    const alloc=new Int32Array(cellsX*cellsY);
+    let allocated=0;
+    for(let i=0;i<alloc.length;i++){ if(cellMask[i]>0){ alloc[i]=1; allocated++; } }
+    let remain=Math.max(0, pointCount-allocated);
+    let scoreSumActive=0; for(let i=0;i<cellScore.length;i++) if(cellMask[i]>0) scoreSumActive+=Math.max(1e-6,cellScore[i]);
+
+    for(let i=0;i<alloc.length && remain>0;i++){
+      if(cellMask[i]===0) continue;
+      const want=Math.floor((cellScore[i]/scoreSumActive)*remain);
+      alloc[i]+=Math.min(want, Math.max(0, cellCands[i].length-alloc[i]));
+    }
+    allocated=0; for(let i=0;i<alloc.length;i++) allocated+=alloc[i];
+
+    let leftover=pointCount-allocated;
+    if(leftover>0){
+      const order=[...Array(alloc.length).keys()].sort((a,b)=>cellScore[b]-cellScore[a]);
+      let k=0;
+      while(leftover>0 && k<order.length*4){
+        const i=order[k%order.length];
+        if(cellMask[i]>0 && alloc[i]<cellCands[i].length){ alloc[i]++; leftover--; }
+        k++;
+      }
+    }
+
+    const out=[], lums=[], sharps=[];
+    const centerX=w/2, centerY=h/2, JIT=0.35;
+
+    for(let idx=0; idx<cellCands.length; idx++){
+      const want=alloc[idx]; if(want<=0) continue;
+      const list=cellCands[idx];
+      if(!list.length) continue;
+      list.sort((a,b)=>b.s-a.s);
+      for(let k=0;k<want && k<list.length;k++){
+        const c=list[k];
+        const jx=(Math.random()-0.5)*cellW*JIT;
+        const jy=(Math.random()-0.5)*cellH*JIT;
+        const px=clamp(c.x+jx,0,w-1);
+        const py=clamp(c.y+jy,0,h-1);
+        const nx=(px-centerX)/w*280*PORTRAIT_SCALE;
+        const ny=(centerY-py)/h*340*PORTRAIT_SCALE + PORTRAIT_Y_SHIFT;
+        const dx=(px-centerX)/(w/2), dy=(py-centerY)/(h/2);
+        const radial=Math.hypot(dx,dy);
+        const sharp=Math.max(0.4, 1.0-radial);
+        out.push({x:nx,y:ny,z:0});
+        lums.push(Math.max(MIN_GRAY,c.l));
+        sharps.push(sharp);
+      }
+    }
+
+    if(out.length<pointCount){
+      const deficit=pointCount-out.length;
+      const pool=[];
+      for(let i=0;i<cellCands.length;i++){
+        const list=cellCands[i];
+        for(let k=alloc[i]; k<list.length; k++) pool.push(list[k]);
+      }
+      pool.sort((a,b)=>b.s-a.s);
+      for(let m=0;m<deficit && m<pool.length;m++){
+        const c=pool[m], px=c.x, py=c.y;
+        const nx=(px-centerX)/w*280*PORTRAIT_SCALE;
+        const ny=(centerY-py)/h*340*PORTRAIT_SCALE + PORTRAIT_Y_SHIFT;
+        const dx=(px-centerX)/(w/2), dy=(py-centerY)/(h/2);
+        const radial=Math.hypot(dx,dy);
+        const sharp=Math.max(0.4, 1.0-radial);
+        out.push({x:nx,y:ny,z:0}); lums.push(Math.max(MIN_GRAY,c.l)); sharps.push(sharp);
+      }
+    }
+
+    if(out.length>pointCount){ out.length=pointCount; lums.length=pointCount; sharps.length=pointCount; }
+    callback(out,lums,sharps);
+  };
+
+  img.src = url;
+}
+
+// ---- Rotation helpers -------------------------------------------
+function rotateY(x,y,z,theta){ return [Math.cos(theta)*x-Math.sin(theta)*z, y, Math.sin(theta)*x+Math.cos(theta)*z]; }
+function rotateX(x,y,z,phi){ return [x, Math.cos(phi)*y-Math.sin(phi)*z, Math.sin(phi)*y+Math.cos(phi)*z]; }
+function rotateAroundPoint(x,y,z,cx,cy,cz,theta,phi){
+  let dx=x-cx, dy=y-cy, dz=z-cz;
+  let [rx,ry,rz]=rotateY(dx,dy,dz,theta); [rx,ry,rz]=rotateX(rx,ry,rz,phi);
+  return [rx+cx, ry+cy, rz+cz];
+}
+
+// ---- Target application -----------------------------------------
+// Portrait particles are simply indices 0..PORTRAIT-1.
+function applySamples(samples, lums, sharps){
+  const forward = new THREE.Vector3(); camera.getWorldDirection(forward).normalize();
+  const portraitDepth = 320;
+  const portraitCenter = camera.position.clone().add(forward.clone().multiplyScalar(portraitDepth));
+  const right = new THREE.Vector3().crossVectors(forward, camera.up).normalize();
+  for(let i=0;i<PORTRAIT;i++){
+    const pos = portraitCenter.clone()
+      .add(right.clone().multiplyScalar(samples[i].x))
+      .add(camera.up.clone().multiplyScalar(samples[i].y));
+    morphTargets[i*3]=pos.x; morphTargets[i*3+1]=pos.y; morphTargets[i*3+2]=pos.z;
+    sharpArrBuf[i]=sharps[i];
+    lumArr[i]=lums[i];
+  }
+}
+
+// ---- Cycle state machine ----------------------------------------
+// IDLE -> GATHER -> HOLD -> DISPERSE -> IDLE (next portrait)
+let state = "LOADING";
+let stateStart = 0;
+let currentIdx = 0;
+let nextSamples = null;      // preloaded {samples,lums,sharps} for next portrait
+let loadingNext = false;
+
+function preload(idx){
+  loadingNext = true;
+  HUD.img = PORTRAIT_LIST[idx % PORTRAIT_LIST.length].split("/").pop();
+  sampleImageGrid(PORTRAIT_LIST[idx % PORTRAIT_LIST.length], PORTRAIT, (s,l,sh)=>{
+    nextSamples = {samples:s, lums:l, sharps:sh};
+    loadingNext = false;
+  });
+}
+
+function setState(s, now){ state = s; stateStart = now; }
+
+// kick off: preload first portrait
+preload(0);
+
+// ---- Animate -----------------------------------------------------
+requestAnimationFrame(animate);
+
+function animate(now){
+  const t = now*0.001, globalPhase = t*GLOBAL_ROTATE_SPEED;
+
+  // --- state transitions
+  const elapsed = now - stateStart;
+  let morphPhase = 0;
+
+  switch(state){
+    case "LOADING":
+      if(nextSamples){
+        applySamples(nextSamples.samples, nextSamples.lums, nextSamples.sharps);
+        nextSamples = null;
+        setState("GATHER", now);
+        // preload the NEXT portrait during this cycle
+        preload(currentIdx+1);
+      }
+      morphPhase = 0;
+      break;
+
+    case "GATHER":
+      morphPhase = CONVERGENCE_CAP * easeInOut(Math.min(1, elapsed/GATHER_MS));
+      if(elapsed >= GATHER_MS) setState("HOLD", now);
+      break;
+
+    case "HOLD":
+      morphPhase = CONVERGENCE_CAP;
+      if(elapsed >= HOLD_MS) setState("DISPERSE", now);
+      break;
+
+    case "DISPERSE":
+      morphPhase = CONVERGENCE_CAP * (1 - easeInOut(Math.min(1, elapsed/DISPERSE_MS)));
+      if(elapsed >= DISPERSE_MS){
+        currentIdx++;
+        setState("IDLE", now);
+      }
+      break;
+
+    case "IDLE":
+      morphPhase = 0;
+      if(elapsed >= IDLE_MS){
+        if(nextSamples){
+          applySamples(nextSamples.samples, nextSamples.lums, nextSamples.sharps);
+          nextSamples = null;
+          setState("GATHER", now);
+          preload(currentIdx+1);
+        }
+        // else: keep drifting as dust until the image arrives
+      }
+      break;
+  }
+
+  // --- particle update
+  for(let i=0;i<PARTICLES;++i){
+    const isP = i < PORTRAIT;
+    let bx=basePositions[i*3], by=basePositions[i*3+1], bz=basePositions[i*3+2], gx=bx, gy=by, gz=bz;
+    if(!isP){ [gx,gy,gz]=rotateAroundPoint(bx,by,bz,0,0,0,globalPhase,globalPhase*0.7); }
+    const orbMag=9.5+(isP?1.1:0), orbFreq=0.42+(i%17)*0.012,
+          wob=Math.sin(t*orbFreq+i)*orbMag, wob2=Math.cos(t*orbFreq*0.63+i*0.74)*(orbMag*0.5);
+    let nx,ny,nz;
+    if(isP && morphPhase>0){
+      const tx=morphTargets[i*3], ty=morphTargets[i*3+1], tz=morphTargets[i*3+2];
+      nx=(1-morphPhase)*bx+morphPhase*tx+wob;
+      ny=(1-morphPhase)*by+morphPhase*ty+wob2;
+      nz=(1-morphPhase)*bz+morphPhase*tz;
+      let lum=applyContrast(lumArr[i], CONTRAST);
+      lum=clamp(lum, MIN_GRAY, 1.0);
+      sizes[i]=PARTICLE_SIZE*sharpArrBuf[i];
+      colors[i*3]=colors[i*3+1]=colors[i*3+2]=1.0+(lum-1.0)*morphPhase;
+    } else {
+      nx=gx+wob; ny=gy+wob2; nz=gz;
+      colors[i*3]=colors[i*3+1]=colors[i*3+2]=1.0;
+      sizes[i]=PARTICLE_SIZE;
+    }
+    positions[i*3]=nx; positions[i*3+1]=ny; positions[i*3+2]=nz;
+  }
+
+  HUD.state = state; HUD.phase = morphPhase; drawHUD();
+  geometry.attributes.position.needsUpdate=true;
+  geometry.attributes.color.needsUpdate=true;
+  geometry.attributes.aSize.needsUpdate=true;
+  renderer.render(scene,camera);
+  requestAnimationFrame(animate);
+}
+
+window.addEventListener('resize', ()=>{
+  renderer.setSize(window.innerWidth, window.innerHeight);
+  camera.aspect=window.innerWidth/window.innerHeight;
+  camera.updateProjectionMatrix();
+});
+</script>
+</body>
+</html>
