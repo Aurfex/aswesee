@@ -1,1 +1,1 @@
-﻿{"rewrites":[{"source":"/","destination":"/installation.html"}]}
+{"routes":[{"src":"/","dest":"/installation.html"}]}
