@@ -1,19 +1,377 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>AS WE SEE</title>
-<style>
-:root { color-scheme: dark; }
-html, body { height: 100%; margin: 0; overflow: hidden; background: #000; }
-.hero { position: relative; width: 100%; height: 100vh; overflow: hidden; }
-#bg-three { position: fixed; inset: 0; width: 100vw; height: 100vh; z-index: 0; pointer-events: none; }
-#bg-three canvas { display: block; pointer-events: none !important; }
-</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AS WE SEE</title>
+
+  <!-- Favicon to silence 404 -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 16 16%22><text y=%2214%22 font-size=%2214%22>≡ƒæü∩╕Å</text></svg>">
+
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <!-- Tailwind (dev) -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <style>
+    :root { color-scheme: dark; }
+    html, body { height: 100%; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: 'Inter', sans-serif;
+      color: #fff;
+      background-color: #000;
+      overflow-x: hidden;
+    }
+
+    h1, h2, h3 { font-family: 'Playfair Display', serif; }
+
+    /* ===== Hero / Particles ===== */
+    .hero { position: relative; width: 100%; height: 100vh; overflow: hidden; }
+    #bg-three{
+      position: fixed; inset: 0;
+      width: 100vw; height: 100vh;
+      z-index: 0;
+      pointer-events: none;
+    }
+    #bg-three canvas{ display:block; pointer-events:none !important; }
+
+    .hero-content{
+      position: absolute; top: 40px; left: 50%; transform: translateX(-50%);
+      text-align: center; z-index: 10; pointer-events:auto;
+    }
+    .hero-content h1{
+      font-family: 'Josefin Sans', Inter, system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
+      font-weight: 400;
+      font-size: clamp(2rem, 7.6vw, 5.9rem);
+      line-height: 1.05;
+      letter-spacing: 0.04em;
+      margin: 0;
+    }
+    .hero-content p{
+      font-size: clamp(1rem, 2.2vw, 1.25rem);
+      margin: 6px 0 18px;
+      letter-spacing: 3px; color: #ccc;
+    }
+    .hero-content a{
+      padding: 12px 30px; border: 1px solid #fff; color: #fff;
+      letter-spacing: 2px; text-transform: uppercase; text-decoration: none;
+      transition: all .3s; display:inline-block;
+    }
+    .hero-content a:hover { background:#fff; color:#000; }
+
+    /* ===== Gallery gradient ===== */
+    #gallery{
+      position: relative; z-index: 1;
+      background: linear-gradient(to bottom, rgba(0,0,0,0) 0%, #000 70%, #000 100%);
+      padding-top: 6rem; padding-bottom: 6rem;
+      pointer-events: auto;
+    }
+
+    .section-dark{ position: relative; z-index:1; background:#000; color:#fff; pointer-events:auto; }
+    .fade-in { opacity: 0; transform: translateY(20px); transition: opacity .8s, transform .8s; }
+    .fade-in.visible { opacity: 1; transform: translateY(0); }
+    .hover-zoom { transition: transform .3s, opacity .3s; }
+    .hover-zoom:hover { transform: scale(1.05); opacity: .9; }
+
+    /* ===== THUMBNAIL CARDS ===== */
+    .thumb-card {
+      position: relative;
+      background: #000;
+      border: 1px solid #1a1a1a;
+      overflow: hidden;
+      width: 100%; aspect-ratio: 3 / 4; cursor: pointer;
+    }
+    .thumb-card .thumb-image{
+      position: absolute; inset: 0; width: 100%; height: 100%;
+      object-fit: cover; opacity: 0; transform: scale(1.0);
+      transition: opacity .35s ease, transform .35s ease;
+    }
+    .thumb-card:hover .thumb-image,
+    .thumb-card:active .thumb-image{ opacity: 1; transform: scale(1.02); }
+    .thumb-caption{ margin-top: .5rem; font-size: .875rem; text-align: center; opacity: .8; }
+    @media (hover: none) and (pointer: coarse) { .thumb-card .thumb-image{ opacity: 1; } }
+
+    /* ===== Fullscreen label ===== */
+    .label-panel{
+      position: absolute; left: 40px; top: 40px; width: 320px;
+      background: rgba(0,0,0,.6); padding: 16px 18px; border: 1px solid rgba(255,255,255,.12);
+      border-radius: 12px; color:#eee; z-index: 3;
+    }
+    .label-panel h3{ font-family:'Playfair Display',serif; font-size:1.25rem; margin:0 0 .5rem; }
+
+    /* ===== Fullscreen modal ===== */
+    #fullscreenImage { cursor: zoom-out; }
+    #fullscreenImage .label-panel { cursor: auto; }
+    #fullscreenImage button { cursor: pointer; }
+    @media (max-width: 768px) {
+      #fullscreenImage .label-panel {
+        position: absolute; left: 12px; right: 12px; bottom: 12px;
+        width: auto; max-width: none; max-height: 40vh;
+        background: rgba(0,0,0,.7); border: 1px solid rgba(255,255,255,.12);
+      }
+    }
+
+    /* === Gallery layout === */
+    :root { --thumb-max: 200px; }
+    @media (min-width: 640px) { :root { --thumb-max: 180px; } }
+    @media (min-width: 768px) { :root { --thumb-max: 200px; } }
+    @media (min-width: 1024px){ :root { --thumb-max: 220px; } }
+    @media (min-width: 1280px){ :root { --thumb-max: 240px; } }
+    #gallery-grid{
+      grid-template-columns: repeat(auto-fit, minmax(var(--thumb-max), var(--thumb-max)));
+      justify-content: center; align-content: center; min-height: 80vh;
+    }
+    #gallery-grid > div{ width: 100%; max-width: var(--thumb-max); }
+/* === Mobile-only fix for fullscreen viewer (labels not over image) === */
+@media (max-width: 768px) {
+  /* ╪╕╪▒┘ü ╪»╪º╪«┘ä█î ┘à┘ê╪»╪º┘ä ╪▒╪º ╪│╪¬┘ê┘å█î ┌⌐┘å: ╪¬╪╡┘ê█î╪▒ ╪¿╪º┘ä╪º╪î ┘à╪¬┘å ╪▓█î╪▒╪┤ */
+  #fullscreenImage > div {
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    padding: 12px;
+  }
+
+  /* ┘╛┘å┘ä ╪¿╪▒┌å╪│╪¿ ╪º╪▓ ╪¡╪º┘ä╪¬ overlay ╪«╪º╪▒╪¼ ╪┤┘ê╪» */
+  #fullscreenImage .label-panel {
+    position: static;
+    width: 100%;
+    max-width: 680px;
+    max-height: none;
+    background: transparent;
+    border: 0;
+    padding: 0;
+    margin: 0;
+    text-align: left;
+  }
+
+  /* ┘é╪»┘É ╪¬╪╡┘ê█î╪▒ ╪»╪▒ ┘à┘ê╪¿╪º█î┘ä ┌⌐┘à█î ┌⌐┘à╪¬╪▒ */
+  #fullscreenImage #fullscreen-img {
+    max-height: 60vh;
+  }
+
+  /* ╪»┌⌐┘à┘çΓÇî┘ç╪º█î ╪¼┘ç╪¬ ╪▒┘ê█î ┘à┘ê╪¿╪º█î┘ä ┘ä╪º╪▓┘à ┘å█î╪│╪¬ (╪│┘ê╪º█î┘╛ ┘ü╪╣╪º┘ä┘ç) */
+  #fs-prev, #fs-next { display: none; }
+}
+  </style>
 </head>
 <body>
-<section class="hero"><div id="bg-three"></div></section>
+
+  <!-- Hero -->
+  <section class="hero">
+    <div id="bg-three"></div>
+    <div class="hero-content">
+      <h1>AS WE SEE</h1>
+      <p>A Manifesto for the Post-Photography Era</p>
+      <a href="#gallery" id="enter-gallery">Gallery</a>
+    </div>
+  </section>
+
+  <!-- Gallery -->
+  <section id="gallery" class="px-6 fade-in">
+    <div class="max-w-[1600px] mx-auto">
+      <h2 class="text-3xl font-bold mb-8 text-center">Gallery</h2>
+
+      <div id="gallery-grid" class="grid justify-items-center gap-6 sm:grid-cols-2 md:grid-cols-4 xl:grid-cols-5">
+        <!-- thumbnails (1..10) -->
+        <div class="w-full"><figure class="thumb-card" onclick="openFullscreenImage(0)"><img class="thumb-image" loading="lazy" src="images/What-I-Hid-Behind-Glass.png" alt="What I Hid Behind Glass"></figure><figcaption class="thumb-caption">What I Hid Behind Glass</figcaption></div>
+        <div class="w-full"><figure class="thumb-card" onclick="openFullscreenImage(1)"><img class="thumb-image" loading="lazy" src="images/A-Life-Unbegun.png" alt="A Life Unbegun"></figure><figcaption class="thumb-caption">A Life Unbegun</figcaption></div>
+        <div class="w-full"><figure class="thumb-card" onclick="openFullscreenImage(2)"><img class="thumb-image" loading="lazy" src="images/trace.png" alt="Trace"></figure><figcaption class="thumb-caption">Trace</figcaption></div>
+        <div class="w-full"><figure class="thumb-card" onclick="openFullscreenImage(3)"><img class="thumb-image" loading="lazy" src="images/Conceal.png" alt="Conceal"></figure><figcaption class="thumb-caption">Conceal</figcaption></div>
+        <div class="w-full"><figure class="thumb-card" onclick="openFullscreenImage(4)"><img class="thumb-image" loading="lazy" src="images/Redefining-the-Line.png" alt="Redefining the Line"></figure><figcaption class="thumb-caption">Redefining the Line</figcaption></div>
+        <div class="w-full"><figure class="thumb-card" onclick="openFullscreenImage(5)"><img class="thumb-image" loading="lazy" src="images/Understudy-of-the-Self.png" alt="Understudy of the Self"></figure><figcaption class="thumb-caption">Understudy of the Self</figcaption></div>
+        <div class="w-full"><figure class="thumb-card" onclick="openFullscreenImage(6)"><img class="thumb-image" loading="lazy" src="images/Through-the-Quiet-Defiance.png?v=2" alt="Through the Quiet Defiance"></figure><figcaption class="thumb-caption">Through the Quiet Defiance</figcaption></div>
+        <div class="w-full"><figure class="thumb-card" onclick="openFullscreenImage(7)"><img class="thumb-image" loading="lazy" src="images/bound in silence.png" alt="Bound in Silence"></figure><figcaption class="thumb-caption">Bound in Silence</figcaption></div>
+        <div class="w-full"><figure class="thumb-card" onclick="openFullscreenImage(8)"><img class="thumb-image" loading="lazy" src="images/Inheritance-of-Silence.png" alt="Inheritance of Silence"></figure><figcaption class="thumb-caption">Inheritance of Silence</figcaption></div>
+        <div class="w-full"><figure class="thumb-card" onclick="openFullscreenImage(9)"><img class="thumb-image" loading="lazy" src="images/Cutting-Silence.png" alt="Cutting Silence"></figure><figcaption class="thumb-caption">Cutting Silence</figcaption></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Bio & Manifesto -->
+  <section class="section-dark py-20 px-6 fade-in">
+    <div class="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12">
+      <div>
+        <h3 class="text-2xl font-bold mb-4">Artist Bio</h3>
+        <p class="font-serif text-xl mb-2">Dariush Bagheri</p>
+        <p class="text-sm leading-relaxed">Artist, visual theorist, and architect of post-human narratives. Bagheri's practice dismantles the boundaries between photography, language, and code, creating images that exist beyond the tyranny of optics. His work does not &ldquo;capture&rdquo; &mdash; it summons. Each portrait is a collision between memory and machine cognition, a question etched into flesh and algorithm: <em>What does it mean to see when cameras no longer exist?</em></p>
+        <p class="text-sm leading-relaxed mt-4">Rather than stacking exhibitions as credentials, Bagheri positions his work as events of perception &mdash; ruptures in how we understand authorship, authenticity, and the gaze. After years navigating the fragility of identity, migration, and digital mediation, his projects now live at the threshold where human vulnerability meets synthetic intelligence.</p>
+        <p class="text-sm leading-relaxed mt-4">With <strong>As We See</strong>, Bagheri proposes an insurgent aesthetic: an afterlife for photography, a manifesto of vision shared between carbon and silicon.</p>
+      </div>
+      <div>
+        <h3 class="text-2xl font-bold mb-4">Manifesto
+          <span class="lang-tog" style="font-size:.8rem;font-weight:400;font-family:'Inter',sans-serif;margin-left:12px;">
+            <a href="#" data-lang="en" class="lang-btn active" style="text-decoration:none;border:1px solid rgba(255,255,255,.25);padding:2px 8px;border-radius:4px;margin:0 2px;">EN</a>
+            <a href="#" data-lang="fr" class="lang-btn" style="text-decoration:none;border:1px solid rgba(255,255,255,.25);padding:2px 8px;border-radius:4px;margin:0 2px;">FR</a>
+          </span>
+        </h3>
+        <div id="manifesto-text" class="manifesto-text"></div>
+      </div>
+      <style>
+      .lang-btn { transition: background .25s, color .25s; }
+      .lang-btn.active { background:#fff; color:#000; border-color:#fff; }
+      .lang-btn:not(.active):hover { background:rgba(255,255,255,.1); }
+      </style>
+      <script>
+      (function(){
+        var en = [
+          "As we see.",
+          "A manifesto for the post-photographic era.",
+          "This is not the end of photography\u2026<br>It is the photograph\u2019s severance from the necessity of presence.",
+          "\u2026Faces that were never recorded\u2014<br>before becoming image,<br>never existed before any lens.",
+          "We now stand where the photograph is no longer evidence of presence;<br>the border between what has been and what never was\u2026 dissolves.",
+          "Only imagination and the Other,<br>interwoven in the discovery of a gaze\u2026<br>beyond the eye of the camera.",
+          "For centuries, the photograph began with a trace of light.<br>Light passed through a lens,<br>the shutter severed a moment,<br>and a trace of the world remained on a sensitive surface.",
+          "Now, the photograph can begin<br>from something<br>that never happened.",
+          "Each portrait in this series<br>is not the keepsake of an encounter,<br>but the emergence of a face<br>that had no past before the photograph.",
+          "Their eyes carry exhaustion, rage and tenderness;<br>the sediment of a life that was never lived.",
+          "They were summoned from language,<br>they passed through memory,<br>and took form in the distance between my imagination and the Other.",
+          "Neither I knew them fully beforehand,<br>nor did the Other.<br>They appeared in the distance between us.",
+          "I call it the Other\u2014<br>because what emerges in the distance between us<br>is never mine\u2026 alone.",
+          "To see these faces<br>is to stand at the border of presence and absence\u2014<br>where absence can have a face,<br>and what has never lived\u2026<br>can carry the weight of a memory.",
+          "The Other writes in the handwriting of the dead\u2014<br>with a sediment in its memory<br>as vast as the history of photography.",
+          "Its fingerprint is on the images;<br>but a fingerprint\u2026 is not a signature.",
+          "I decided which face would come out of the darkness,<br>which gaze would remain,<br>and which image would never be seen.<br>The responsibility for these choices is mine.",
+          "Authenticity no longer lies in the purity of the instrument.<br>It lies in the continuity of the gaze;<br>in what is chosen,<br>and what is set aside.",
+          "I have been all of these portraits:<br>self-portraits with borrowed faces.",
+          "My hope is not that the viewer finds themselves in them;<br>but that they find a part of me\u2026 within themselves.",
+          "This is not the end of photography;<br>only the photograph has been severed from the necessity of presence,<br>but the gaze\u2026 continues."
+        ];
+        var fr = [
+          "Comme nous voyons.",
+          "Un manifeste pour l\u2019\u00e8re post-photographique.",
+          "Ceci n\u2019est pas la fin de la photographie\u2026<br>C\u2019est la rupture de la photographie avec la n\u00e9cessit\u00e9 de la pr\u00e9sence.",
+          "\u2026Des visages qui n\u2019ont jamais \u00e9t\u00e9 enregistr\u00e9s\u2014<br>avant de devenir image,<br>n\u2019ont exist\u00e9 devant aucun objectif.",
+          "Nous nous tenons d\u00e9sormais l\u00e0 o\u00f9 la photographie n\u2019est plus preuve de pr\u00e9sence ;<br>la fronti\u00e8re entre ce qui a \u00e9t\u00e9 et ce qui n\u2019a jamais \u00e9t\u00e9\u2026 s\u2019efface.",
+          "Seuls l\u2019imagination et l\u2019Autre,<br>entrelac\u00e9s dans la d\u00e9couverte d\u2019un regard\u2026<br>au-del\u00e0 de l\u2019\u0153il de la cam\u00e9ra.",
+          "Pendant des si\u00e8cles, la photographie commen\u00e7ait par une trace de lumi\u00e8re.<br>La lumi\u00e8re traversait un objectif,<br>l\u2019obturateur d\u00e9tachait un instant,<br>et une trace du monde demeurait sur une surface sensible.",
+          "Maintenant, la photographie peut commencer<br>\u00e0 partir de quelque chose<br>qui n\u2019a jamais eu lieu.",
+          "Chaque portrait de cette s\u00e9rie<br>n\u2019est pas le souvenir d\u2019une rencontre,<br>mais l\u2019apparition d\u2019un visage<br>qui n\u2019avait aucun pass\u00e9 avant la photographie.",
+          "Leurs yeux portent la fatigue, la col\u00e8re et la douceur ;<br>le s\u00e9diment d\u2019une vie qui n\u2019a jamais \u00e9t\u00e9 v\u00e9cue.",
+          "Ils ont \u00e9t\u00e9 convoqu\u00e9s depuis le langage,<br>ils ont travers\u00e9 la m\u00e9moire,<br>et ont pris forme dans l\u2019intervalle entre mon imagination et l\u2019Autre.",
+          "Ni moi ne les connaissais enti\u00e8rement auparavant,<br>ni l\u2019Autre.<br>Ils sont apparus dans l\u2019intervalle entre nous.",
+          "Je l\u2019appelle l\u2019Autre\u2014<br>car ce qui surgit dans l\u2019intervalle entre nous<br>n\u2019est jamais mien\u2026 seul.",
+          "Voir ces visages,<br>c\u2019est se tenir \u00e0 la fronti\u00e8re de la pr\u00e9sence et de l\u2019absence\u2014<br>l\u00e0 o\u00f9 l\u2019absence peut avoir un visage,<br>et o\u00f9 ce qui n\u2019a jamais v\u00e9cu\u2026<br>peut porter le poids d\u2019un souvenir.",
+          "L\u2019Autre \u00e9crit avec l\u2019\u00e9criture des morts\u2014<br>avec un s\u00e9diment dans sa m\u00e9moire,<br>vaste comme l\u2019histoire de la photographie.",
+          "Son empreinte est sur les images ;<br>mais une empreinte\u2026 n\u2019est pas une signature.",
+          "J\u2019ai d\u00e9cid\u00e9 quel visage sortirait de l\u2019obscurit\u00e9,<br>quel regard demeurerait,<br>et quelle image ne serait jamais vue.<br>La responsabilit\u00e9 de ces choix m\u2019appartient.",
+          "L\u2019authenticit\u00e9 ne r\u00e9side plus dans la puret\u00e9 de l\u2019instrument.<br>Elle r\u00e9side dans la continuit\u00e9 du regard ;<br>dans ce qui est choisi,<br>et dans ce qui est \u00e9cart\u00e9.",
+          "J\u2019ai \u00e9t\u00e9 tous ces portraits :<br>des autoportraits aux visages emprunt\u00e9s.",
+          "Mon espoir n\u2019est pas que le spectateur se retrouve en eux ;<br>mais qu\u2019il trouve une part de moi\u2026 en lui-m\u00eame.",
+          "Ceci n\u2019est pas la fin de la photographie ;<br>seule la photographie a \u00e9t\u00e9 d\u00e9tach\u00e9e de la n\u00e9cessit\u00e9 de la pr\u00e9sence,<br>mais le regard\u2026 continue."
+        ];
+        var container = document.getElementById('manifesto-text');
+        var currentLang = 'en';
+        function render(lang) {
+          var data = lang === 'en' ? en : fr;
+          var html = '';
+          for (var i = 0; i < data.length; i++) {
+            var cls = i === data.length - 1 ? '' : 'mb-4';
+            html += '<p class="' + cls + '">' + data[i] + '</p>';
+          }
+          container.innerHTML = html;
+          var btns = document.querySelectorAll('.lang-btn');
+          for (var j = 0; j < btns.length; j++) {
+            btns[j].classList.remove('active');
+            if (btns[j].getAttribute('data-lang') === lang) btns[j].classList.add('active');
+          }
+          currentLang = lang;
+        }
+        document.querySelector('.lang-tog').addEventListener('click', function(e){
+          var btn = e.target.closest('.lang-btn');
+          if (btn && btn.getAttribute('data-lang') !== currentLang) render(btn.getAttribute('data-lang'));
+          e.preventDefault();
+        });
+        render('en');
+      })();
+      </script>
+    </div>
+  </section>
+
+ <section class="section-dark py-20 px-6 fade-in">
+  <div class="max-w-3xl mx-auto text-center">
+    <h2 class="text-3xl font-bold mb-6">Contact</h2>
+    <p class="mb-6">
+      <a href="mailto:hello@aswesee.art" class="underline" id="contact-email">hello@aswesee.art</a>
+    </p>
+
+    <form id="contact-form" action="https://formspree.io/f/mblkqyye" method="POST" enctype="multipart/form-data" class="mx-auto mt-8 max-w-xl text-left space-y-4">
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div>
+          <label for="cf-name" class="block text-sm mb-1 opacity-80">Name</label>
+          <input id="cf-name" name="name" type="text" required class="w-full rounded-md bg-black/40 border border-white/15 px-3 py-2 outline-none focus:ring-2 focus:ring-white/30" />
+        </div>
+        <div>
+          <label for="cf-email" class="block text-sm mb-1 opacity-80">Email</label>
+          <input id="cf-email" name="email" type="email" required class="w-full rounded-md bg-black/40 border border-white/15 px-3 py-2 outline-none focus:ring-2 focus:ring-white/30" />
+        </div>
+      </div>
+
+      <div>
+        <label for="cf-message" class="block text-sm mb-1 opacity-80">Message</label>
+        <textarea id="cf-message" name="message" rows="5" required class="w-full rounded-md bg-black/40 border border-white/15 px-3 py-2 outline-none focus:ring-2 focus:ring-white/30"></textarea>
+      </div>
+
+      <div>
+        <label class="block text-sm mb-1 opacity-80">Attachments (PDF / Work files)</label>
+        <div id="file-drop" class="mt-1 flex items-center justify-center w-full rounded-md border border-white/15 bg-black/40 px-4 py-8 text-center transition hover:bg-white/5">
+          <div>
+            <p class="text-sm opacity-80">Drag & drop files here, or <span class="underline">browse</span></p>
+            <p class="text-xs opacity-60 mt-1">Up to 10 files &bull; 25 MB each &bull; pdf, docx, zip, psd, ai, indd, tif, jpg, png, svg</p>
+          </div>
+          <input id="cf-files" name="attachments" type="file" multiple accept=".pdf,.doc,.docx,.zip,.rar,.7z,.psd,.ai,.indd,.tif,.tiff,.jpg,.jpeg,.png,.svg" class="sr-only" />
+        </div>
+        <ul id="cf-filelist" class="mt-3 text-sm space-y-1 max-h-40 overflow-auto"></ul>
+      </div>
+
+      <div class="flex items-center justify-between">
+        <small class="text-xs opacity-70">Max 7000 characters</small>
+        <small id="cf-count" class="text-xs opacity-80">0 / 7000</small>
+      </div>
+
+      <input type="text" name="_gotcha" class="hidden" tabindex="-1" autocomplete="off" />
+      <input type="hidden" name="_subject" value="New website message" />
+      <input type="hidden" name="_template" value="table" />
+
+      <div class="flex items-center gap-3">
+        <button id="cf-submit" type="submit" class="px-5 py-2 border border-white rounded-md uppercase tracking-wider hover:bg-white hover:text-black transition">Send</button>
+        <span id="cf-status" class="text-sm opacity-75"></span>
+      </div>
+    </form>
+
+    <!-- Quote (Inter + same width as form) -->
+    <div id="contact-quote" class="mt-10">
+      <p
+        class="mx-auto max-w-xl text-center text-base md:text-lg leading-relaxed tracking-wide opacity-90"
+        style="font-family: Inter, system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;">
+        Every image whispers a question, and only you hold the answer
+      </p>
+    </div>
+  </div>
+</section>
+
+
+  <footer class="section-dark py-8 text-center text-sm text-gray-500">&copy; 2025 AS WE SEE. All rights reserved.</footer>
+
+  <!-- Fullscreen Image Modal -->
+  <div id="fullscreenImage" class="fixed inset-0 bg-black/95 z-50 hidden" role="dialog" aria-modal="true" aria-label="Artwork viewer">
+    <div class="w-full h-full flex items-center justify-center gap-6 px-4 md:px-8" style="cursor:default;">
+      <aside id="labelPanel" class="label-panel max-h-[80vh] overflow-auto select-text" onclick="event.stopPropagation()"></aside>
+      <div class="relative flex-1 flex items-center justify-center max-h-[90vh]">
+        <img id="fullscreen-img" src="" alt="" class="max-w-full max-h-[90vh] object-contain" style="box-shadow:0 0 30px #000; background:#000;" />
+        <button id="fs-prev" type="button" aria-label="Previous" class="absolute left-2 md:left-4 top-1/2 -translate-y-1/2 px-3 py-2 bg-white/5 hover:bg-white/15 border border-white/15 rounded-lg backdrop-blur">&larr;</button>
+        <button id="fs-next" type="button" aria-label="Next" class="absolute right-2 md:right-4 top-1/2 -translate-y-1/2 px-3 py-2 bg-white/5 hover:bg-white/15 border border-white/15 rounded-lg backdrop-blur">&rarr;</button>
+        <button id="fs-close" type="button" aria-label="Close" class="absolute top-2 right-2 md:top-4 md:right-4 px-3 py-2 bg-white/5 hover:bg-white/15 border border-white/15 rounded-lg backdrop-blur">&times;</button>
+      </div>
+    </div>
+  </div>
 
 <script src="https://cdn.jsdelivr.net/npm/three@0.155.0/build/three.min.js"></script>
 <script>
@@ -383,13 +741,185 @@ window.addEventListener('resize', ()=>{
 startMorph();
 </script>
 
-<audio id="narration-audio" src="narration-aswesee-ok.mp3" autoplay></audio>
-<script>
-(function(){
-  const a = document.getElementById('narration-audio');
-  if (a) a.play().catch(function(){});
-})();
-</script>
+  <!-- Fade-ins -->
+  <script>
+  const faders = document.querySelectorAll('.fade-in');
+  const appearOnScroll = new IntersectionObserver((entries, observer) => {
+    entries.forEach(entry => { if (!entry.isIntersecting) return; entry.target.classList.add('visible'); observer.unobserve(entry.target); });
+  }, { threshold: 0.1 });
+  faders.forEach(fader => appearOnScroll.observe(fader));
+  </script>
+
+  <!-- Gallery data + modal -->
+  <script>
+  const galleryData = [
+    { img: "images/What-I-Hid-Behind-Glass.png", title: "What I Hid Behind Glass", series: "AS WE SEE", tagline: "A Manifesto for the Post-Photography Era", year: "2025", medium: "Archival Pigment Print on Cotton Rag", dimensions: "100 ├ù 70 cm (39.3 ├ù 27.5 in)", edition: "1/10 + 2 AP" },
+    { img: "images/A-Life-Unbegun.png", title: "A Life Unbegun", series: "AS WE SEE", tagline: "A Manifesto for the Post-Photography Era", year: "2025", medium: "Archival Pigment Print on Cotton Rag", dimensions: "100 ├ù 70 cm (39.3 ├ù 27.5 in)", edition: "1/10 + 2 AP" },
+    { img: "images/trace.png", title: "Trace", series: "AS WE SEE", tagline: "A Manifesto for the Post-Photography Era", year: "2025", medium: "Archival Pigment Print on Cotton Rag", dimensions: "100 ├ù 70 cm (39.3 ├ù 27.5 in)", edition: "1/10 + 2 AP" },
+    { img: "images/Conceal.png", title: "Conceal", series: "AS WE SEE", tagline: "A Manifesto for the Post-Photography Era", year: "2025", medium: "Archival Pigment Print on Cotton Rag", dimensions: "100 ├ù 70 cm (39.3 ├ù 27.5 in)", edition: "1/10 + 2 AP" },
+    { img: "images/Redefining-the-Line.png", title: "Redefining the Line", series: "AS WE SEE", tagline: "A Manifesto for the Post-Photography Era", year: "2025", medium: "Archival Pigment Print on Cotton Rag", dimensions: "100 ├ù 70 cm (39.3 ├ù 27.5 in)", edition: "1/10 + 2 AP" },
+    { img: "images/Understudy-of-the-Self.png", title: "Understudy of the Self", series: "AS WE SEE", tagline: "A Manifesto for the Post-Photography Era", year: "2025", medium: "Archival Pigment Print on Cotton Rag", dimensions: "100 ├ù 70 cm (39.3 ├ù 27.5 in)", edition: "1/10 + 2 AP" },
+    { img: "images/Through-the-Quiet-Defiance.png?v=2", title: "Through the Quiet Defiance", series: "AS WE SEE", tagline: "A Manifesto for the Post-Photography Era", year: "2025", medium: "Archival Pigment Print on Cotton Rag", dimensions: "100 ├ù 70 cm (39.3 ├ù 27.5 in)", edition: "1/10 + 2 AP" },
+    { img: "images/bound in silence.png", title: "Bound in Silence", series: "AS WE SEE", tagline: "A Manifesto for the Post-Photography Era", year: "2025", medium: "Archival Pigment Print on Cotton Rag", dimensions: "100 ├ù 70 cm (39.3 ├ù 27.5 in)", edition: "1/10 + 2 AP" },
+    { img: "images/Inheritance-of-Silence.png", title: "Inheritance of Silence", series: "AS WE SEE", tagline: "A Manifesto for the Post-Photography Era", year: "2025", medium: "Archival Pigment Print on Cotton Rag", dimensions: "100 ├ù 70 cm (39.3 ├ù 27.5 in)", edition: "1/10 + 2 AP" },
+    { img: "images/Cutting-Silence.png", title: "Cutting Silence", series: "AS WE SEE", tagline: "A Manifesto for the Post-Photography Era", year: "2025", medium: "Archival Pigment Print on Cotton Rag", dimensions: "100 ├ù 70 cm (39.3 ├ù 27.5 in)", edition: "1/10 + 2 AP" }
+  ];
+
+  (() => {
+    let currentIndex = 0;
+    const modal   = document.getElementById('fullscreenImage');
+    const imgEl   = document.getElementById('fullscreen-img');
+    const panelEl = document.getElementById('labelPanel');
+    const btnPrev = document.getElementById('fs-prev');
+    const btnNext = document.getElementById('fs-next');
+    const btnClose= document.getElementById('fs-close');
+
+    function fillLabel(d) {
+      panelEl.innerHTML = `
+        <h3>${d.title}</h3>
+        <p><b>Series:</b> ${d.series}</p>
+        <p><b>Tagline:</b> <i>${d.tagline}</i></p>
+        <p><b>Year:</b> ${d.year}</p>
+        <p><b>Medium:</b> ${d.medium}</p>
+        <p><b>Dimensions:</b> ${d.dimensions}</p>
+        <p><b>Edition:</b> ${d.edition || ""}</p>
+        <p style="margin-top:1.2em;font-size:.95em;color:#eee;opacity:.65">Press ESC to close &bull; &larr; / &rarr; to navigate</p>
+      `;
+    }
+
+    function preload(i) { const item = galleryData[i]; if (!item) return; new Image().src = item.img; }
+    function updateHash(i) { const h = `#work-${i+1}`; if (location.hash !== h) history.pushState({i}, '', h); }
+
+    function openAt(i) {
+      i = Math.max(0, Math.min(galleryData.length - 1, i));
+      currentIndex = i; const d = galleryData[i];
+
+      imgEl.src = ''; imgEl.alt = d.title; fillLabel(d);
+      modal.classList.remove('hidden'); document.body.style.overflow = 'hidden';
+
+      const tmp = new Image(); tmp.onload = () => { imgEl.src = d.img; };
+      tmp.onerror = () => { imgEl.alt = 'Image failed to load'; }; tmp.src = d.img;
+
+      preload(i-1); preload(i+1); modal.setAttribute('aria-label', d.title); updateHash(i);
+    }
+
+    function closeModal() {
+      modal.classList.add('hidden'); imgEl.src = ''; document.body.style.overflow = '';
+      if (location.hash.startsWith('#work-')) history.pushState({}, '', location.pathname + location.search);
+    }
+
+    function next() { if (currentIndex < galleryData.length-1) openAt(currentIndex+1); }
+    function prev() { if (currentIndex > 0) openAt(currentIndex-1); }
+
+    window.openFullscreenImage = openAt;
+    window.closeFullscreenImage = closeModal;
+
+    modal.addEventListener('click', (e) => { const within = e.target.closest('#fullscreen-img, #labelPanel, #fs-prev, #fs-next, #fs-close'); if (!within) closeModal(); });
+    btnPrev?.addEventListener('click', (e) => { e.stopPropagation(); prev(); });
+    btnNext?.addEventListener('click', (e) => { e.stopPropagation(); next(); });
+    btnClose?.addEventListener('click', (e) => { e.stopPropagation(); closeModal(); });
+
+    window.addEventListener('keydown', (e) => {
+      if (modal.classList.contains('hidden')) return;
+      if (e.key === 'Escape') closeModal();
+      else if (e.key === 'ArrowRight') next();
+      else if (e.key === 'ArrowLeft') prev();
+    });
+
+    let touchX = null, touchY = null;
+    modal.addEventListener('touchstart', (e) => { const t = e.touches[0]; touchX = t.clientX; touchY = t.clientY; }, {passive:true});
+    modal.addEventListener('touchend', (e) => {
+      if (touchX == null || touchY == null) return;
+      const dx = (e.changedTouches[0].clientX - touchX);
+      const dy = (e.changedTouches[0].clientY - touchY);
+      touchX = touchY = null;
+      if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 40) { if (dx < 0) next(); else prev(); }
+    });
+
+    function openFromHash() { const m = location.hash.match(/^#work-(\d+)$/); if (m) { const idx = parseInt(m[1], 10) - 1; if (!Number.isNaN(idx)) openAt(idx); } }
+    window.addEventListener('hashchange', openFromHash);
+    window.addEventListener('DOMContentLoaded', openFromHash);
+  })();
+  </script>
+
+  <audio id="narration-audio" src="narration-aswesee-ok.mp3" preload="auto" loop></audio>
+  <script>
+  (function(){
+    const a = document.getElementById('narration-audio');
+    function playIt(){ a.play().catch(function(){}); }
+    a.play().catch(function(){
+      var evs = ['click','touchstart','keydown','scroll'];
+      function handler(){ playIt(); for(var i=0;i<evs.length;i++) document.removeEventListener(evs[i],handler); }
+      for(var i=0;i<evs.length;i++) document.addEventListener(evs[i], handler, {passive:true});
+    });
+  })();
+  </script>
+
+  <!-- Email copy -->
+  <script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const emailLink = document.getElementById('contact-email'); if (!emailLink) return;
+    emailLink.addEventListener('click', function(e) {
+      e.preventDefault();
+      const email = 'hello@aswesee.art';
+      try { window.location.href = `mailto:${email}`; } catch (e) {}
+      setTimeout(() => {
+        if (!document.hidden) {
+          navigator.clipboard?.writeText(email).catch(()=>{});
+          const note = document.createElement('div');
+          note.textContent = `Email address copied: ${email}`;
+          note.style.cssText = `position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#222;color:#fff;padding:10px 16px;border:1px solid rgba(255,255,255,.15);border-radius:8px;font-size:14px;z-index:9999;box-shadow:0 6px 18px rgba(0,0,0,.35)`;
+          document.body.appendChild(note);
+          setTimeout(()=>note.remove(), 2600);
+        }
+      }, 800);
+    });
+  });
+  </script>
+
+  <!-- Formspree AJAX -->
+  <script>
+  (function(){
+    const form = document.getElementById('contact-form'); if(!form) return;
+    const btn  = document.getElementById('cf-submit'); const stat = document.getElementById('cf-status');
+    function toast(msg){ const n=document.createElement('div'); n.textContent=msg; n.style.cssText='position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#1a1a1a;color:#fff;padding:10px 16px;border:1px solid rgba(255,255,255,.15);border-radius:8px;font-size:14px;z-index:9999;box-shadow:0 6px 18px rgba(0,0,0,.35)'; document.body.appendChild(n); setTimeout(()=>n.remove(),2800); }
+    form.addEventListener('submit', async (e)=>{ e.preventDefault(); stat.textContent=''; btn.disabled = true; btn.style.opacity=.6;
+      const data = new FormData(form);
+      try { const res = await fetch(form.action,{method:'POST',body:data,headers:{'Accept':'application/json'}}); if(!res.ok) throw 0; toast('Message sent. Thank you!'); form.reset(); } 
+      catch { toast('Could not send message. Please try again.'); }
+      finally { btn.disabled=false; btn.style.opacity=1; }
+    });
+  })();
+  </script>
+
+  <!-- Smooth center-scroll -->
+  <script>
+  (function(){
+    const btn=document.getElementById('enter-gallery'); const grid=document.getElementById('gallery-grid'); if(!btn||!grid) return;
+    btn.addEventListener('click', function(e){ e.preventDefault(); const rect=grid.getBoundingClientRect(); const targetY=window.scrollY + rect.top + (rect.height/2) - (window.innerHeight/2); window.scrollTo({ top: Math.max(0,targetY), behavior:'smooth' }); }, { passive:false });
+  })();
+  </script>
+
+  <!-- Attachments + 7000-char counter -->
+  <script>
+  (function(){
+    const form=document.getElementById('contact-form'), msg=document.getElementById('cf-message'), count=document.getElementById('cf-count'), drop=document.getElementById('file-drop'), input=document.getElementById('cf-files'), list=document.getElementById('cf-filelist');
+    if(!form||!msg||!count||!drop||!input||!list) return;
+    const LIMIT_CHARS=7000, LIMIT_FILES=10, LIMIT_SIZE=25*1024*1024, ACCEPT=new Set(['pdf','doc','docx','zip','rar','7z','psd','ai','indd','tif','tiff','jpg','jpeg','png','svg']);
+    function toast(m){ const n=document.createElement('div'); n.textContent=m; n.style.cssText='position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#1a1a1a;color:#fff;padding:10px 16px;border:1px solid rgba(255,255,255,.15);border-radius:8px;font-size:14px;z-index:9999;box-shadow:0 6px 18px rgba(0,0,0,.35)'; document.body.appendChild(n); setTimeout(()=>n.remove(),2800); }
+    function updateCount(){ const len=msg.value.length; count.textContent=`${len} / ${LIMIT_CHARS}`; count.style.color = (len>LIMIT_CHARS)?'#ff6b6b':''; }
+    msg.setAttribute('maxlength', LIMIT_CHARS); msg.addEventListener('input', updateCount); updateCount();
+    function extOf(n){ const i=n.lastIndexOf('.'); return i>=0?n.slice(i+1).toLowerCase():''; }
+    function renderList(files){ list.innerHTML=''; Array.from(files).forEach(f=>{ const li=document.createElement('li'); const mb=(f.size/1048576).toFixed(2); li.className='flex items-center justify-between gap-3'; li.innerHTML=`<span class="opacity-90">${f.name}</span><span class="opacity-60 text-xs">${mb} MB</span>`; list.appendChild(li); }); }
+    function validateFiles(files){ if(files.length>LIMIT_FILES){ toast(`Max ${LIMIT_FILES} files.`); return false; } for(const f of files){ if(f.size>LIMIT_SIZE){ toast(`"${f.name}" is larger than 25 MB.`); return false; } const ext=extOf(f.name); if(!ACCEPT.has(ext)){ toast(`"${f.name}" type not allowed.`); return false; } } return true; }
+    drop.addEventListener('click',()=>input.click());
+    drop.addEventListener('dragover',(e)=>{ e.preventDefault(); drop.style.borderColor='rgba(255,255,255,.35)'; });
+    drop.addEventListener('dragleave',()=>{ drop.style.borderColor='rgba(255,255,255,.15)'; });
+    drop.addEventListener('drop',(e)=>{ e.preventDefault(); drop.style.borderColor='rgba(255,255,255,.15)'; const files=Array.from(e.dataTransfer.files||[]); if(!validateFiles(files)) return; const dt=new DataTransfer(); files.forEach(f=>dt.items.add(f)); input.files=dt.files; renderList(input.files); });
+    input.addEventListener('change',()=>{ const files=Array.from(input.files||[]); if(!validateFiles(files)){ input.value=''; list.innerHTML=''; return; } renderList(files); });
+    form.addEventListener('submit',(e)=>{ if(msg.value.length>LIMIT_CHARS){ e.stopPropagation(); e.preventDefault(); toast('Message is too long (max 7000 characters).'); return; } const files=Array.from(input.files||[]); if(!validateFiles(files)){ e.stopPropagation(); e.preventDefault(); return; } }, true);
+  })();
+  </script>
 
 </body>
 </html>
