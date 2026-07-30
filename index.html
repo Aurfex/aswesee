@@ -214,85 +214,85 @@
         </h3>
         <div id="manifesto-text" class="manifesto-text"></div>
       </div>
-      <style>
-      .lang-btn { transition: background .25s, color .25s; }
-      .lang-btn.active { background:#fff; color:#000; border-color:#fff; }
-      .lang-btn:not(.active):hover { background:rgba(255,255,255,.1); }
-      </style>
-      <script>
-      (function(){
-        var en = [
-          "As we see.",
-          "A manifesto for the post-photographic era.",
-          "This is not the end of photography\u2026<br>It is the photograph\u2019s severance from the necessity of presence.",
-          "\u2026Faces that were never recorded\u2014<br>before becoming image,<br>never existed before any lens.",
-          "We now stand where the photograph is no longer evidence of presence;<br>the border between what has been and what never was\u2026 dissolves.",
-          "Only imagination and the Other,<br>interwoven in the discovery of a gaze\u2026<br>beyond the eye of the camera.",
-          "For centuries, the photograph began with a trace of light.<br>Light passed through a lens,<br>the shutter severed a moment,<br>and a trace of the world remained on a sensitive surface.",
-          "Now, the photograph can begin<br>from something<br>that never happened.",
-          "Each portrait in this series<br>is not the keepsake of an encounter,<br>but the emergence of a face<br>that had no past before the photograph.",
-          "Their eyes carry exhaustion, rage and tenderness;<br>the sediment of a life that was never lived.",
-          "They were summoned from language,<br>they passed through memory,<br>and took form in the distance between my imagination and the Other.",
-          "Neither I knew them fully beforehand,<br>nor did the Other.<br>They appeared in the distance between us.",
-          "I call it the Other\u2014<br>because what emerges in the distance between us<br>is never mine\u2026 alone.",
-          "To see these faces<br>is to stand at the border of presence and absence\u2014<br>where absence can have a face,<br>and what has never lived\u2026<br>can carry the weight of a memory.",
-          "The Other writes in the handwriting of the dead\u2014<br>with a sediment in its memory<br>as vast as the history of photography.",
-          "Its fingerprint is on the images;<br>but a fingerprint\u2026 is not a signature.",
-          "I decided which face would come out of the darkness,<br>which gaze would remain,<br>and which image would never be seen.<br>The responsibility for these choices is mine.",
-          "Authenticity no longer lies in the purity of the instrument.<br>It lies in the continuity of the gaze;<br>in what is chosen,<br>and what is set aside.",
-          "I have been all of these portraits:<br>self-portraits with borrowed faces.",
-          "My hope is not that the viewer finds themselves in them;<br>but that they find a part of me\u2026 within themselves.",
-          "This is not the end of photography;<br>only the photograph has been severed from the necessity of presence,<br>but the gaze\u2026 continues."
-        ];
-        var fr = [
-          "Comme nous voyons.",
-          "Un manifeste pour l\u2019\u00e8re post-photographique.",
-          "Ceci n\u2019est pas la fin de la photographie\u2026<br>C\u2019est la rupture de la photographie avec la n\u00e9cessit\u00e9 de la pr\u00e9sence.",
-          "\u2026Des visages qui n\u2019ont jamais \u00e9t\u00e9 enregistr\u00e9s\u2014<br>avant de devenir image,<br>n\u2019ont exist\u00e9 devant aucun objectif.",
-          "Nous nous tenons d\u00e9sormais l\u00e0 o\u00f9 la photographie n\u2019est plus preuve de pr\u00e9sence ;<br>la fronti\u00e8re entre ce qui a \u00e9t\u00e9 et ce qui n\u2019a jamais \u00e9t\u00e9\u2026 s\u2019efface.",
-          "Seuls l\u2019imagination et l\u2019Autre,<br>entrelac\u00e9s dans la d\u00e9couverte d\u2019un regard\u2026<br>au-del\u00e0 de l\u2019\u0153il de la cam\u00e9ra.",
-          "Pendant des si\u00e8cles, la photographie commen\u00e7ait par une trace de lumi\u00e8re.<br>La lumi\u00e8re traversait un objectif,<br>l\u2019obturateur d\u00e9tachait un instant,<br>et une trace du monde demeurait sur une surface sensible.",
-          "Maintenant, la photographie peut commencer<br>\u00e0 partir de quelque chose<br>qui n\u2019a jamais eu lieu.",
-          "Chaque portrait de cette s\u00e9rie<br>n\u2019est pas le souvenir d\u2019une rencontre,<br>mais l\u2019apparition d\u2019un visage<br>qui n\u2019avait aucun pass\u00e9 avant la photographie.",
-          "Leurs yeux portent la fatigue, la col\u00e8re et la douceur ;<br>le s\u00e9diment d\u2019une vie qui n\u2019a jamais \u00e9t\u00e9 v\u00e9cue.",
-          "Ils ont \u00e9t\u00e9 convoqu\u00e9s depuis le langage,<br>ils ont travers\u00e9 la m\u00e9moire,<br>et ont pris forme dans l\u2019intervalle entre mon imagination et l\u2019Autre.",
-          "Ni moi ne les connaissais enti\u00e8rement auparavant,<br>ni l\u2019Autre.<br>Ils sont apparus dans l\u2019intervalle entre nous.",
-          "Je l\u2019appelle l\u2019Autre\u2014<br>car ce qui surgit dans l\u2019intervalle entre nous<br>n\u2019est jamais mien\u2026 seul.",
-          "Voir ces visages,<br>c\u2019est se tenir \u00e0 la fronti\u00e8re de la pr\u00e9sence et de l\u2019absence\u2014<br>l\u00e0 o\u00f9 l\u2019absence peut avoir un visage,<br>et o\u00f9 ce qui n\u2019a jamais v\u00e9cu\u2026<br>peut porter le poids d\u2019un souvenir.",
-          "L\u2019Autre \u00e9crit avec l\u2019\u00e9criture des morts\u2014<br>avec un s\u00e9diment dans sa m\u00e9moire,<br>vaste comme l\u2019histoire de la photographie.",
-          "Son empreinte est sur les images ;<br>mais une empreinte\u2026 n\u2019est pas une signature.",
-          "J\u2019ai d\u00e9cid\u00e9 quel visage sortirait de l\u2019obscurit\u00e9,<br>quel regard demeurerait,<br>et quelle image ne serait jamais vue.<br>La responsabilit\u00e9 de ces choix m\u2019appartient.",
-          "L\u2019authenticit\u00e9 ne r\u00e9side plus dans la puret\u00e9 de l\u2019instrument.<br>Elle r\u00e9side dans la continuit\u00e9 du regard ;<br>dans ce qui est choisi,<br>et dans ce qui est \u00e9cart\u00e9.",
-          "J\u2019ai \u00e9t\u00e9 tous ces portraits :<br>des autoportraits aux visages emprunt\u00e9s.",
-          "Mon espoir n\u2019est pas que le spectateur se retrouve en eux ;<br>mais qu\u2019il trouve une part de moi\u2026 en lui-m\u00eame.",
-          "Ceci n\u2019est pas la fin de la photographie ;<br>seule la photographie a \u00e9t\u00e9 d\u00e9tach\u00e9e de la n\u00e9cessit\u00e9 de la pr\u00e9sence,<br>mais le regard\u2026 continue."
-        ];
-        var container = document.getElementById('manifesto-text');
-        var currentLang = 'en';
-        function render(lang) {
-          var data = lang === 'en' ? en : fr;
-          var html = '';
-          for (var i = 0; i < data.length; i++) {
-            var cls = i === data.length - 1 ? '' : 'mb-4';
-            html += '<p class="' + cls + '">' + data[i] + '</p>';
-          }
-          container.innerHTML = html;
-          var btns = document.querySelectorAll('.lang-btn');
-          for (var j = 0; j < btns.length; j++) {
-            btns[j].classList.remove('active');
-            if (btns[j].getAttribute('data-lang') === lang) btns[j].classList.add('active');
-          }
-          currentLang = lang;
-        }
-        document.querySelector('.lang-tog').addEventListener('click', function(e){
-          var btn = e.target.closest('.lang-btn');
-          if (btn && btn.getAttribute('data-lang') !== currentLang) render(btn.getAttribute('data-lang'));
-          e.preventDefault();
-        });
-        render('en');
-      })();
-      </script>
     </div>
+    <style>
+    .lang-btn { transition: background .25s, color .25s; }
+    .lang-btn.active { background:#fff; color:#000; border-color:#fff; }
+    .lang-btn:not(.active):hover { background:rgba(255,255,255,.1); }
+    </style>
+    <script>
+    (function(){
+      var en = [
+        "As we see.",
+        "A manifesto for the post-photographic era.",
+        "This is not the end of photography\u2026<br>It is the photograph\u2019s severance from the necessity of presence.",
+        "\u2026Faces that were never recorded\u2014<br>before becoming image,<br>never existed before any lens.",
+        "We now stand where the photograph is no longer evidence of presence;<br>the border between what has been and what never was\u2026 dissolves.",
+        "Only imagination and the Other,<br>interwoven in the discovery of a gaze\u2026<br>beyond the eye of the camera.",
+        "For centuries, the photograph began with a trace of light.<br>Light passed through a lens,<br>the shutter severed a moment,<br>and a trace of the world remained on a sensitive surface.",
+        "Now, the photograph can begin<br>from something<br>that never happened.",
+        "Each portrait in this series<br>is not the keepsake of an encounter,<br>but the emergence of a face<br>that had no past before the photograph.",
+        "Their eyes carry exhaustion, rage and tenderness;<br>the sediment of a life that was never lived.",
+        "They were summoned from language,<br>they passed through memory,<br>and took form in the distance between my imagination and the Other.",
+        "Neither I knew them fully beforehand,<br>nor did the Other.<br>They appeared in the distance between us.",
+        "I call it the Other\u2014<br>because what emerges in the distance between us<br>is never mine\u2026 alone.",
+        "To see these faces<br>is to stand at the border of presence and absence\u2014<br>where absence can have a face,<br>and what has never lived\u2026<br>can carry the weight of a memory.",
+        "The Other writes in the handwriting of the dead\u2014<br>with a sediment in its memory<br>as vast as the history of photography.",
+        "Its fingerprint is on the images;<br>but a fingerprint\u2026 is not a signature.",
+        "I decided which face would come out of the darkness,<br>which gaze would remain,<br>and which image would never be seen.<br>The responsibility for these choices is mine.",
+        "Authenticity no longer lies in the purity of the instrument.<br>It lies in the continuity of the gaze;<br>in what is chosen,<br>and what is set aside.",
+        "I have been all of these portraits:<br>self-portraits with borrowed faces.",
+        "My hope is not that the viewer finds themselves in them;<br>but that they find a part of me\u2026 within themselves.",
+        "This is not the end of photography;<br>only the photograph has been severed from the necessity of presence,<br>but the gaze\u2026 continues."
+      ];
+      var fr = [
+        "Comme nous voyons.",
+        "Un manifeste pour l\u2019\u00e8re post-photographique.",
+        "Ceci n\u2019est pas la fin de la photographie\u2026<br>C\u2019est la rupture de la photographie avec la n\u00e9cessit\u00e9 de la pr\u00e9sence.",
+        "\u2026Des visages qui n\u2019ont jamais \u00e9t\u00e9 enregistr\u00e9s\u2014<br>avant de devenir image,<br>n\u2019ont exist\u00e9 devant aucun objectif.",
+        "Nous nous tenons d\u00e9sormais l\u00e0 o\u00f9 la photographie n\u2019est plus preuve de pr\u00e9sence ;<br>la fronti\u00e8re entre ce qui a \u00e9t\u00e9 et ce qui n\u2019a jamais \u00e9t\u00e9\u2026 s\u2019efface.",
+        "Seuls l\u2019imagination et l\u2019Autre,<br>entrelac\u00e9s dans la d\u00e9couverte d\u2019un regard\u2026<br>au-del\u00e0 de l\u2019\u0153il de la cam\u00e9ra.",
+        "Pendant des si\u00e8cles, la photographie commen\u00e7ait par une trace de lumi\u00e8re.<br>La lumi\u00e8re traversait un objectif,<br>l\u2019obturateur d\u00e9tachait un instant,<br>et une trace du monde demeurait sur une surface sensible.",
+        "Maintenant, la photographie peut commencer<br>\u00e0 partir de quelque chose<br>qui n\u2019a jamais eu lieu.",
+        "Chaque portrait de cette s\u00e9rie<br>n\u2019est pas le souvenir d\u2019une rencontre,<br>mais l\u2019apparition d\u2019un visage<br>qui n\u2019avait aucun pass\u00e9 avant la photographie.",
+        "Leurs yeux portent la fatigue, la col\u00e8re et la douceur ;<br>le s\u00e9diment d\u2019une vie qui n\u2019a jamais \u00e9t\u00e9 v\u00e9cue.",
+        "Ils ont \u00e9t\u00e9 convoqu\u00e9s depuis le langage,<br>ils ont travers\u00e9 la m\u00e9moire,<br>et ont pris forme dans l\u2019intervalle entre mon imagination et l\u2019Autre.",
+        "Ni moi ne les connaissais enti\u00e8rement auparavant,<br>ni l\u2019Autre.<br>Ils sont apparus dans l\u2019intervalle entre nous.",
+        "Je l\u2019appelle l\u2019Autre\u2014<br>car ce qui surgit dans l\u2019intervalle entre nous<br>n\u2019est jamais mien\u2026 seul.",
+        "Voir ces visages,<br>c\u2019est se tenir \u00e0 la fronti\u00e8re de la pr\u00e9sence et de l\u2019absence\u2014<br>l\u00e0 o\u00f9 l\u2019absence peut avoir un visage,<br>et o\u00f9 ce qui n\u2019a jamais v\u00e9cu\u2026<br>peut porter le poids d\u2019un souvenir.",
+        "L\u2019Autre \u00e9crit avec l\u2019\u00e9criture des morts\u2014<br>avec un s\u00e9diment dans sa m\u00e9moire,<br>vaste comme l\u2019histoire de la photographie.",
+        "Son empreinte est sur les images ;<br>mais une empreinte\u2026 n\u2019est pas une signature.",
+        "J\u2019ai d\u00e9cid\u00e9 quel visage sortirait de l\u2019obscurit\u00e9,<br>quel regard demeurerait,<br>et quelle image ne serait jamais vue.<br>La responsabilit\u00e9 de ces choix m\u2019appartient.",
+        "L\u2019authenticit\u00e9 ne r\u00e9side plus dans la puret\u00e9 de l\u2019instrument.<br>Elle r\u00e9side dans la continuit\u00e9 du regard ;<br>dans ce qui est choisi,<br>et dans ce qui est \u00e9cart\u00e9.",
+        "J\u2019ai \u00e9t\u00e9 tous ces portraits :<br>des autoportraits aux visages emprunt\u00e9s.",
+        "Mon espoir n\u2019est pas que le spectateur se retrouve en eux ;<br>mais qu\u2019il trouve une part de moi\u2026 en lui-m\u00eame.",
+        "Ceci n\u2019est pas la fin de la photographie ;<br>seule la photographie a \u00e9t\u00e9 d\u00e9tach\u00e9e de la n\u00e9cessit\u00e9 de la pr\u00e9sence,<br>mais le regard\u2026 continue."
+      ];
+      var container = document.getElementById('manifesto-text');
+      var currentLang = 'en';
+      function render(lang) {
+        var data = lang === 'en' ? en : fr;
+        var html = '';
+        for (var i = 0; i < data.length; i++) {
+          var cls = i === data.length - 1 ? '' : 'mb-4';
+          html += '<p class="' + cls + '">' + data[i] + '</p>';
+        }
+        container.innerHTML = html;
+        var btns = document.querySelectorAll('.lang-btn');
+        for (var j = 0; j < btns.length; j++) {
+          btns[j].classList.remove('active');
+          if (btns[j].getAttribute('data-lang') === lang) btns[j].classList.add('active');
+        }
+        currentLang = lang;
+      }
+      document.querySelector('.lang-tog').addEventListener('click', function(e){
+        var btn = e.target.closest('.lang-btn');
+        if (btn && btn.getAttribute('data-lang') !== currentLang) render(btn.getAttribute('data-lang'));
+        e.preventDefault();
+      });
+      render('en');
+    })();
+    </script>
   </section>
 
  <section class="section-dark py-20 px-6 fade-in">
