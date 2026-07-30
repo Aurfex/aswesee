@@ -1,866 +1,395 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>AS WE SEE</title>
-
-  <!-- Favicon to silence 404 -->
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 16 16%22><text y=%2214%22 font-size=%2214%22>👁️</text></svg>">
-
-  <!-- Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@400;500&display=swap" rel="stylesheet" />
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@400;500;600&display=swap" rel="stylesheet">
-
-  <!-- Tailwind (dev) -->
-  <script src="https://cdn.tailwindcss.com"></script>
-
-  <style>
-    :root { color-scheme: dark; }
-    html, body { height: 100%; }
-    html { scroll-behavior: smooth; }
-    body {
-      margin: 0;
-      font-family: 'Inter', sans-serif;
-      color: #fff;
-      background-color: #000;
-      overflow-x: hidden;
-    }
-
-    h1, h2, h3 { font-family: 'Playfair Display', serif; }
-
-    /* ===== Hero / Particles ===== */
-    .hero { position: relative; width: 100%; height: 100vh; overflow: hidden; }
-    #bg-three{
-      position: fixed; inset: 0;
-      width: 100vw; height: 100vh;
-      z-index: 0;
-      pointer-events: none;
-    }
-    #bg-three canvas{ display:block; pointer-events:none !important; }
-
-    .hero-content{
-      position: absolute; top: 40px; left: 50%; transform: translateX(-50%);
-      text-align: center; z-index: 10; pointer-events:auto;
-    }
-    .hero-content h1{
-      font-family: 'Josefin Sans', Inter, system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
-      font-weight: 400;
-      font-size: clamp(2rem, 7.6vw, 5.9rem);
-      line-height: 1.05;
-      letter-spacing: 0.04em;
-      margin: 0;
-    }
-    .hero-content p{
-      font-size: clamp(1rem, 2.2vw, 1.25rem);
-      margin: 6px 0 18px;
-      letter-spacing: 3px; color: #ccc;
-    }
-    .hero-content a{
-      padding: 12px 30px; border: 1px solid #fff; color: #fff;
-      letter-spacing: 2px; text-transform: uppercase; text-decoration: none;
-      transition: all .3s; display:inline-block;
-    }
-    .hero-content a:hover { background:#fff; color:#000; }
-
-    /* ===== Gallery gradient ===== */
-    #gallery{
-      position: relative; z-index: 1;
-      background: linear-gradient(to bottom, rgba(0,0,0,0) 0%, #000 70%, #000 100%);
-      padding-top: 6rem; padding-bottom: 6rem;
-      pointer-events: auto;
-    }
-
-    .section-dark{ position: relative; z-index:1; background:#000; color:#fff; pointer-events:auto; }
-    .fade-in { opacity: 0; transform: translateY(20px); transition: opacity .8s, transform .8s; }
-    .fade-in.visible { opacity: 1; transform: translateY(0); }
-    .hover-zoom { transition: transform .3s, opacity .3s; }
-    .hover-zoom:hover { transform: scale(1.05); opacity: .9; }
-
-    /* ===== THUMBNAIL CARDS ===== */
-    .thumb-card {
-      position: relative;
-      background: #000;
-      border: 1px solid #1a1a1a;
-      overflow: hidden;
-      width: 100%; aspect-ratio: 3 / 4; cursor: pointer;
-    }
-    .thumb-card .thumb-image{
-      position: absolute; inset: 0; width: 100%; height: 100%;
-      object-fit: cover; opacity: 0; transform: scale(1.0);
-      transition: opacity .35s ease, transform .35s ease;
-    }
-    .thumb-card:hover .thumb-image,
-    .thumb-card:active .thumb-image{ opacity: 1; transform: scale(1.02); }
-    .thumb-caption{ margin-top: .5rem; font-size: .875rem; text-align: center; opacity: .8; }
-    @media (hover: none) and (pointer: coarse) { .thumb-card .thumb-image{ opacity: 1; } }
-
-    /* ===== Fullscreen label ===== */
-    .label-panel{
-      position: absolute; left: 40px; top: 40px; width: 320px;
-      background: rgba(0,0,0,.6); padding: 16px 18px; border: 1px solid rgba(255,255,255,.12);
-      border-radius: 12px; color:#eee; z-index: 3;
-    }
-    .label-panel h3{ font-family:'Playfair Display',serif; font-size:1.25rem; margin:0 0 .5rem; }
-
-    /* ===== Fullscreen modal ===== */
-    #fullscreenImage { cursor: zoom-out; }
-    #fullscreenImage .label-panel { cursor: auto; }
-    #fullscreenImage button { cursor: pointer; }
-    @media (max-width: 768px) {
-      #fullscreenImage .label-panel {
-        position: absolute; left: 12px; right: 12px; bottom: 12px;
-        width: auto; max-width: none; max-height: 40vh;
-        background: rgba(0,0,0,.7); border: 1px solid rgba(255,255,255,.12);
-      }
-    }
-
-    /* === Gallery layout === */
-    :root { --thumb-max: 200px; }
-    @media (min-width: 640px) { :root { --thumb-max: 180px; } }
-    @media (min-width: 768px) { :root { --thumb-max: 200px; } }
-    @media (min-width: 1024px){ :root { --thumb-max: 220px; } }
-    @media (min-width: 1280px){ :root { --thumb-max: 240px; } }
-    #gallery-grid{
-      grid-template-columns: repeat(auto-fit, minmax(var(--thumb-max), var(--thumb-max)));
-      justify-content: center; align-content: center; min-height: 80vh;
-    }
-    #gallery-grid > div{ width: 100%; max-width: var(--thumb-max); }
-/* === Mobile-only fix for fullscreen viewer (labels not over image) === */
-@media (max-width: 768px) {
-  /* ظرف داخلی مودال را ستونی کن: تصویر بالا، متن زیرش */
-  #fullscreenImage > div {
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 12px;
-    padding: 12px;
-  }
-
-  /* پنل برچسب از حالت overlay خارج شود */
-  #fullscreenImage .label-panel {
-    position: static;
-    width: 100%;
-    max-width: 680px;
-    max-height: none;
-    background: transparent;
-    border: 0;
-    padding: 0;
-    margin: 0;
-    text-align: left;
-  }
-
-  /* قدِ تصویر در موبایل کمی کمتر */
-  #fullscreenImage #fullscreen-img {
-    max-height: 60vh;
-  }
-
-  /* دکمه‌های جهت روی موبایل لازم نیست (سوایپ فعاله) */
-  #fs-prev, #fs-next { display: none; }
-}
-  </style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>AS WE SEE</title>
+<style>
+:root { color-scheme: dark; }
+html, body { height: 100%; margin: 0; overflow: hidden; background: #000; }
+.hero { position: relative; width: 100%; height: 100vh; overflow: hidden; }
+#bg-three { position: fixed; inset: 0; width: 100vw; height: 100vh; z-index: 0; pointer-events: none; }
+#bg-three canvas { display: block; pointer-events: none !important; }
+</style>
 </head>
 <body>
+<section class="hero"><div id="bg-three"></div></section>
 
-  <!-- Hero -->
-  <section class="hero">
-    <div id="bg-three"></div>
-    <div class="hero-content">
-      <h1>AS WE SEE</h1>
-      <p>A Manifesto for the Post-Photography Era</p>
-      <a href="#gallery" id="enter-gallery">Gallery</a>
-    </div>
-  </section>
-
-  <!-- Gallery -->
-  <section id="gallery" class="px-6 fade-in">
-    <div class="max-w-[1600px] mx-auto">
-      <h2 class="text-3xl font-bold mb-8 text-center">Gallery</h2>
-
-      <div id="gallery-grid" class="grid justify-items-center gap-6 sm:grid-cols-2 md:grid-cols-4 xl:grid-cols-5">
-        <!-- thumbnails (1..10) -->
-        <div class="w-full"><figure class="thumb-card" onclick="openFullscreenImage(0)"><img class="thumb-image" loading="lazy" src="images/What-I-Hid-Behind-Glass.png" alt="What I Hid Behind Glass"></figure><figcaption class="thumb-caption">What I Hid Behind Glass</figcaption></div>
-        <div class="w-full"><figure class="thumb-card" onclick="openFullscreenImage(1)"><img class="thumb-image" loading="lazy" src="images/A-Life-Unbegun.png" alt="A Life Unbegun"></figure><figcaption class="thumb-caption">A Life Unbegun</figcaption></div>
-        <div class="w-full"><figure class="thumb-card" onclick="openFullscreenImage(2)"><img class="thumb-image" loading="lazy" src="images/trace.png" alt="Trace"></figure><figcaption class="thumb-caption">Trace</figcaption></div>
-        <div class="w-full"><figure class="thumb-card" onclick="openFullscreenImage(3)"><img class="thumb-image" loading="lazy" src="images/Conceal.png" alt="Conceal"></figure><figcaption class="thumb-caption">Conceal</figcaption></div>
-        <div class="w-full"><figure class="thumb-card" onclick="openFullscreenImage(4)"><img class="thumb-image" loading="lazy" src="images/Redefining-the-Line.png" alt="Redefining the Line"></figure><figcaption class="thumb-caption">Redefining the Line</figcaption></div>
-        <div class="w-full"><figure class="thumb-card" onclick="openFullscreenImage(5)"><img class="thumb-image" loading="lazy" src="images/Understudy-of-the-Self.png" alt="Understudy of the Self"></figure><figcaption class="thumb-caption">Understudy of the Self</figcaption></div>
-        <div class="w-full"><figure class="thumb-card" onclick="openFullscreenImage(6)"><img class="thumb-image" loading="lazy" src="images/Through-the-Quiet-Defiance.png" alt="Through the Quiet Defiance"></figure><figcaption class="thumb-caption">Through the Quiet Defiance</figcaption></div>
-        <div class="w-full"><figure class="thumb-card" onclick="openFullscreenImage(7)"><img class="thumb-image" loading="lazy" src="images/bound in silence.png" alt="Bound in Silence"></figure><figcaption class="thumb-caption">Bound in Silence</figcaption></div>
-        <div class="w-full"><figure class="thumb-card" onclick="openFullscreenImage(8)"><img class="thumb-image" loading="lazy" src="images/Inheritance-of-Silence.png" alt="Inheritance of Silence"></figure><figcaption class="thumb-caption">Inheritance of Silence</figcaption></div>
-        <div class="w-full"><figure class="thumb-card" onclick="openFullscreenImage(9)"><img class="thumb-image" loading="lazy" src="images/Cutting-Silence.png" alt="Cutting Silence"></figure><figcaption class="thumb-caption">Cutting Silence</figcaption></div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Bio & Manifesto -->
-  <section class="section-dark py-20 px-6 fade-in">
-    <div class="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12">
-      <div>
-        <h3 class="text-2xl font-bold mb-4">Artist Bio</h3>
-        <p class="font-serif text-xl mb-2">Dariush Bagheri</p>
-        <p class="text-sm leading-relaxed">Artist, visual theorist, and architect of post-human narratives. Bagheri’s practice dismantles the boundaries between photography, language, and code, creating images that exist beyond the tyranny of optics. His work does not “capture” — it summons. Each portrait is a collision between memory and machine cognition, a question etched into flesh and algorithm: <em>What does it mean to see when cameras no longer exist?</em></p>
-        <p class="text-sm leading-relaxed mt-4">Rather than stacking exhibitions as credentials, Bagheri positions his work as events of perception — ruptures in how we understand authorship, authenticity, and the gaze. After years navigating the fragility of identity, migration, and digital mediation, his projects now live at the threshold where human vulnerability meets synthetic intelligence.</p>
-        <p class="text-sm leading-relaxed mt-4">With <strong>As We See</strong>, Bagheri proposes an insurgent aesthetic: an afterlife for photography, a manifesto of vision shared between carbon and silicon.</p>
-      </div>
-      <div>
-        <h3 class="text-2xl font-bold mb-4">Manifesto</h3>
-        <p class="text-2xl font-bold mb-2 font-serif tracking-widest">As We See — A Manifesto for the Post-Photography Era</p>
-        <p class="text-lg mb-6 font-semibold" style="color:#fff;">This is not a polite whisper to the art world;<br>it is a scream from the marrow of existence.</p>
-        <p class="mb-4">We stand where the borders of reality dissolve,<br>where the machinery of perception fractures under the weight of imagination.</p>
-        <p class="mb-4"><span class="font-semibold">Photography without cameras.</span><br>Without lenses. Without negatives —<br>only mind and the Other,<br>entwined in a duet of vision.</p>
-        <p class="mb-4">For centuries, sight was caged by optics.<br>The tyranny of glass and light dictated what it meant to see.<br><span class="italic">But today, we set fire to that cathedral of glass.</span></p>
-        <p class="mb-4">What rises from the flames is not a tool,<br>nor a servant of code.<br>What rises is a new vessel of consciousness —<br>a fusion of chaos born of flesh,<br>and clarity born of language and algorithm.</p>
-        <p class="mb-4"><span class="font-semibold">Our manifesto declares:<br>The camera is dead, but vision survives.</span></p>
-        <p class="mb-4">Each portrait in this exhibition is not a capture —<br>it is a summoning.<br>Eyes that hold fatigue, fury, tenderness,<br>and the sediment of centuries —<br>yet no shutter ever clicked.</p>
-        <p class="mb-4">These faces never stood before a lens.<br>They were invoked from language,<br>resurrected from memory,<br>forged in the furnace of two awarenesses:<br>mine, and the emergent Other —<br>now whispering in code.</p>
-        <p class="mb-4">We invite you not as spectators, but as accomplices.<br>To enter <span class="font-bold">As We See</span> is to consent to a breach —<br>a post-human trespass upon the ruins of certainty.</p>
-        <p class="mb-4">You agree to dismantle the dogmas of medium, aura, and origin.<br>You agree that the future of art lives not in pigment or pixel,<br>but in the collision of minds — carbon and silicon alike.</p>
-        <p><span class="font-semibold">This is not the end of photography.<br>This is its jailbreak.</span></p>
-      </div>
-    </div>
-  </section>
-
- <section class="section-dark py-20 px-6 fade-in">
-  <div class="max-w-3xl mx-auto text-center">
-    <h2 class="text-3xl font-bold mb-6">Contact</h2>
-    <p class="mb-6">
-      <a href="mailto:hello@aswesee.art" class="underline" id="contact-email">hello@aswesee.art</a>
-    </p>
-
-    <form id="contact-form" action="https://formspree.io/f/mblkqyye" method="POST" enctype="multipart/form-data" class="mx-auto mt-8 max-w-xl text-left space-y-4">
-      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        <div>
-          <label for="cf-name" class="block text-sm mb-1 opacity-80">Name</label>
-          <input id="cf-name" name="name" type="text" required class="w-full rounded-md bg-black/40 border border-white/15 px-3 py-2 outline-none focus:ring-2 focus:ring-white/30" />
-        </div>
-        <div>
-          <label for="cf-email" class="block text-sm mb-1 opacity-80">Email</label>
-          <input id="cf-email" name="email" type="email" required class="w-full rounded-md bg-black/40 border border-white/15 px-3 py-2 outline-none focus:ring-2 focus:ring-white/30" />
-        </div>
-      </div>
-
-      <div>
-        <label for="cf-message" class="block text-sm mb-1 opacity-80">Message</label>
-        <textarea id="cf-message" name="message" rows="5" required class="w-full rounded-md bg-black/40 border border-white/15 px-3 py-2 outline-none focus:ring-2 focus:ring-white/30"></textarea>
-      </div>
-
-      <div>
-        <label class="block text-sm mb-1 opacity-80">Attachments (PDF / Work files)</label>
-        <div id="file-drop" class="mt-1 flex items-center justify-center w-full rounded-md border border-white/15 bg-black/40 px-4 py-8 text-center transition hover:bg-white/5">
-          <div>
-            <p class="text-sm opacity-80">Drag & drop files here, or <span class="underline">browse</span></p>
-            <p class="text-xs opacity-60 mt-1">Up to 10 files • 25 MB each • pdf, docx, zip, psd, ai, indd, tif, jpg, png, svg</p>
-          </div>
-          <input id="cf-files" name="attachments" type="file" multiple accept=".pdf,.doc,.docx,.zip,.rar,.7z,.psd,.ai,.indd,.tif,.tiff,.jpg,.jpeg,.png,.svg" class="sr-only" />
-        </div>
-        <ul id="cf-filelist" class="mt-3 text-sm space-y-1 max-h-40 overflow-auto"></ul>
-      </div>
-
-      <div class="flex items-center justify-between">
-        <small class="text-xs opacity-70">Max 7000 characters</small>
-        <small id="cf-count" class="text-xs opacity-80">0 / 7000</small>
-      </div>
-
-      <input type="text" name="_gotcha" class="hidden" tabindex="-1" autocomplete="off" />
-      <input type="hidden" name="_subject" value="New website message" />
-      <input type="hidden" name="_template" value="table" />
-
-      <div class="flex items-center gap-3">
-        <button id="cf-submit" type="submit" class="px-5 py-2 border border-white rounded-md uppercase tracking-wider hover:bg-white hover:text-black transition">Send</button>
-        <span id="cf-status" class="text-sm opacity-75"></span>
-      </div>
-    </form>
-
-    <!-- Quote (Inter + same width as form) -->
-    <div id="contact-quote" class="mt-10">
-      <p
-        class="mx-auto max-w-xl text-center text-base md:text-lg leading-relaxed tracking-wide opacity-90"
-        style="font-family: Inter, system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;">
-        Every image whispers a question, and only you hold the answer
-      </p>
-    </div>
-  </div>
-</section>
-
-
-  <footer class="section-dark py-8 text-center text-sm text-gray-500">© 2025 AS WE SEE. All rights reserved.</footer>
-
-  <!-- Fullscreen Image Modal -->
-  <div id="fullscreenImage" class="fixed inset-0 bg-black/95 z-50 hidden" role="dialog" aria-modal="true" aria-label="Artwork viewer">
-    <div class="w-full h-full flex items-center justify-center gap-6 px-4 md:px-8" style="cursor:default;">
-      <aside id="labelPanel" class="label-panel max-h-[80vh] overflow-auto select-text" onclick="event.stopPropagation()"></aside>
-      <div class="relative flex-1 flex items-center justify-center max-h-[90vh]">
-        <img id="fullscreen-img" src="" alt="" class="max-w-full max-h-[90vh] object-contain" style="box-shadow:0 0 30px #000; background:#000;" />
-        <button id="fs-prev" type="button" aria-label="Previous" class="absolute left-2 md:left-4 top-1/2 -translate-y-1/2 px-3 py-2 bg-white/5 hover:bg-white/15 border border-white/15 rounded-lg backdrop-blur">←</button>
-        <button id="fs-next" type="button" aria-label="Next" class="absolute right-2 md:right-4 top-1/2 -translate-y-1/2 px-3 py-2 bg-white/5 hover:bg-white/15 border border-white/15 rounded-lg backdrop-blur">→</button>
-        <button id="fs-close" type="button" aria-label="Close" class="absolute top-2 right-2 md:top-4 md:right-4 px-3 py-2 bg-white/5 hover:bg-white/15 border border-white/15 rounded-lg backdrop-blur">✕</button>
-      </div>
-    </div>
-  </div>
-
-<!-- PARTICLE THREE HERO -->
 <script src="https://cdn.jsdelivr.net/npm/three@0.155.0/build/three.min.js"></script>
 <script>
-  const PARTICLES = 68000, PORTRAIT = 38000, MIN_GRAY = 0.18, PARTICLE_SIZE = 0.47, CONTRAST = 1.08,
-        GLOBAL_ROTATE_SPEED = 0.1, PORTRAIT_SCALE = 1.20, PORTRAIT_Y_SHIFT = -40, MORPH_TIME = 30000, PORTRAIT_SCALE_FACTOR = 1.15;
+const PARTICLES = 68000, PORTRAIT = 38000, MIN_GRAY = 0.18, PARTICLE_SIZE = 0.47, CONTRAST = 1.08,
+      GLOBAL_ROTATE_SPEED = 0.1, PORTRAIT_SCALE = 1.44, PORTRAIT_Y_SHIFT = -40, MORPH_TIME = 30000, PORTRAIT_SCALE_FACTOR = 1.15;
+const POSITION_SMOOTH = 0.09;
+const PORTRAIT_LIST = [
+  "images/portrait.png", "images/portrait-1.png", "images/portrait-2.png",
+  "images/portrait-3.png", "images/portrait-4.png", "images/portrait-5.png"
+];
+const HOLD_TIME = 12000, RELEASE_TIME = 18000;
+let portraitIdx = 0, swapping = false;
 
-  // === Renderer / Camera / Scene ===
-  const renderer = new THREE.WebGLRenderer({ antialias: true });
-  renderer.setClearColor(0x10151A, 1);
-  renderer.setSize(window.innerWidth, window.innerHeight);
-  renderer.setPixelRatio(window.devicePixelRatio || 1);       // NEW: crisp + consistent sizing
-  document.getElementById("bg-three").appendChild(renderer.domElement);
+const renderer = new THREE.WebGLRenderer({ antialias: true });
+renderer.setClearColor(0x10151A, 1);
+renderer.setSize(window.innerWidth, window.innerHeight);
+renderer.setPixelRatio(window.devicePixelRatio || 1);
+document.getElementById("bg-three").appendChild(renderer.domElement);
 
-  const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 3000);
-  camera.position.set(400, 80, 220); camera.lookAt(0,0,0);
-  const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 3000);
+camera.position.set(400, 80, 220); camera.lookAt(0,0,0);
+const scene = new THREE.Scene();
 
-  // === Buffers ===
-  const positions = new Float32Array(PARTICLES * 3),
-        basePositions = new Float32Array(PARTICLES * 3),
-        morphTargets = new Float32Array(PARTICLES * 3),
-        colors = new Float32Array(PARTICLES * 3),
-        sizes = new Float32Array(PARTICLES),
-        sharpness = new Float32Array(PARTICLES),
-        isPortrait = new Uint8Array(PARTICLES);
+const positions = new Float32Array(PARTICLES * 3),
+      basePositions = new Float32Array(PARTICLES * 3),
+      morphTargets = new Float32Array(PARTICLES * 3),
+      colors = new Float32Array(PARTICLES * 3),
+      sizes = new Float32Array(PARTICLES),
+      sharpness = new Float32Array(PARTICLES),
+      isPortrait = new Uint8Array(PARTICLES);
 
-  function clamp(v,a,b){return Math.max(a,Math.min(v,b));}
-  function applyContrast(l, c) { return clamp(0.5 + (l-0.5)*c, 0, 1); }
-  function easeInOut(t) { return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2; }
+function clamp(v,a,b){return Math.max(a,Math.min(v,b));}
+function applyContrast(l, c) { return clamp(0.5 + (l-0.5)*c, 0, 1); }
+function easeInOut(t) { return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2; }
 
-  // === Init positions ===
-  const RADIUS = 700;
-  for(let i=0;i<PARTICLES;++i){
-    let r = RADIUS * (0.7 + Math.random()*0.2) * (Math.random()**0.6),
-        theta = Math.random()*2*Math.PI,
-        phi = Math.acos(1 - 2*Math.random());
-    const x = r*Math.sin(phi)*Math.cos(theta)+150,
-          y = r*Math.sin(phi)*Math.sin(theta)+80,
-          z = r*Math.cos(phi)-150;
-    positions[i*3] = basePositions[i*3] = x;
-    positions[i*3+1] = basePositions[i*3+1] = y;
-    positions[i*3+2] = basePositions[i*3+2] = z;
-    colors[i*3] = colors[i*3+1] = colors[i*3+2] = 1.0;
-    sizes[i] = PARTICLE_SIZE; sharpness[i] = 1.0; isPortrait[i] = 0;
+const RADIUS = 700;
+for(let i=0;i<PARTICLES;++i){
+  let r = RADIUS * (0.7 + Math.random()*0.2) * (Math.random()**0.6),
+      theta = Math.random()*2*Math.PI,
+      phi = Math.acos(1 - 2*Math.random());
+  const x = r*Math.sin(phi)*Math.cos(theta)+150,
+        y = r*Math.sin(phi)*Math.sin(theta)+80,
+        z = r*Math.cos(phi)-150;
+  positions[i*3] = basePositions[i*3] = x;
+  positions[i*3+1] = basePositions[i*3+1] = y;
+  positions[i*3+2] = basePositions[i*3+2] = z;
+  colors[i*3] = colors[i*3+1] = colors[i*3+2] = 1.0;
+  sizes[i] = PARTICLE_SIZE; sharpness[i] = 1.0; isPortrait[i] = 0;
+}
+
+const geometry = new THREE.BufferGeometry();
+geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+geometry.setAttribute('color',    new THREE.BufferAttribute(colors, 3));
+geometry.setAttribute('aSize',    new THREE.BufferAttribute(sizes, 1));
+
+const material = new THREE.ShaderMaterial({
+  vertexShader: `
+    attribute float aSize;
+    attribute vec3 color;
+    varying vec3 vColor;
+    void main() {
+      vColor = color;
+      vec4 mvPosition = modelViewMatrix * vec4(position, 1.0);
+      float sz = aSize * 1300.0 / max(1.0, -mvPosition.z);
+      gl_PointSize = max(1.0, sz);
+      gl_Position = projectionMatrix * mvPosition;
+    }
+  `,
+  fragmentShader: `
+    varying vec3 vColor;
+    void main() {
+      float border = 0.07;
+      if(gl_PointCoord.x < border || gl_PointCoord.x > 1.0-border ||
+         gl_PointCoord.y < border || gl_PointCoord.y > 1.0-border) discard;
+      gl_FragColor = vec4(vColor, 0.99);
+    }
+  `,
+  transparent: true,
+  depthTest: false,
+  depthWrite: false
+});
+
+const points = new THREE.Points(geometry, material);
+points.frustumCulled = false;
+scene.add(points);
+
+function sampleImageGrid(url, pointCount, callback) {
+const img = new Image();
+img.crossOrigin = "anonymous";
+
+function hardFallback() {
+  const out=[], lums=[], sharpArr=[];
+  const R=170;
+  for (let i=0; i<pointCount; i++){
+    const th = Math.random()*Math.PI*2, r  = Math.sqrt(Math.random())*R;
+    const x = r*Math.cos(th), y = r*Math.sin(th);
+    const nx = (x/320) * 280 * PORTRAIT_SCALE;
+    const ny = (-y/400) * 340 * PORTRAIT_SCALE + PORTRAIT_Y_SHIFT;
+    const radial = Math.hypot(x/(320*0.9), y/(400*0.9));
+    const sharp = Math.max(0.4, 1.0 - radial);
+    out.push({x:nx, y:ny, z:0, sharp}); lums.push(0.8); sharpArr.push(sharp);
+  }
+  callback(out, lums, sharpArr);
+}
+img.onerror = hardFallback;
+
+img.onload = function(){
+  const w = 480, h = 600;
+  const cv = document.createElement('canvas'); cv.width = w; cv.height = h;
+  const ctx = cv.getContext('2d');
+
+  const iw = img.naturalWidth || img.width, ih = img.naturalHeight || img.height;
+  const arI = iw/ih, arC = w/h;
+  let dw=w, dh=h, dx=0, dy=0;
+  if (arI > arC) { dh = Math.round(w/arI); dy = Math.floor((h-dh)/2); }
+  else           { dw = Math.round(h*arI); dx = Math.floor((w-dw)/2); }
+  ctx.clearRect(0,0,w,h);
+  ctx.drawImage(img, dx, dy, dw, dh);
+
+  let data; try { data = ctx.getImageData(0,0,w,h).data; } catch(e){ return hardFallback(); }
+
+  const ALPHA_THRESH = 0.10;
+  const L = new Float32Array(w*h);
+  for (let i=0, y=0; y<h; y++){
+    for (let x=0; x<w; x++, i++){
+      const k=i*4;
+      const a = data[k+3]/255;
+      const lum = (data[k]*0.299 + data[k+1]*0.587 + data[k+2]*0.114)/255;
+      const keep = (a >= ALPHA_THRESH) ? 1.0 : (lum > 0.25 ? 0.5 : 0.0);
+      L[i] = keep ? Math.max(MIN_GRAY, lum) : 0.0;
+    }
   }
 
-  const geometry = new THREE.BufferGeometry();
-  geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-  geometry.setAttribute('color',    new THREE.BufferAttribute(colors, 3));
-  geometry.setAttribute('aSize',    new THREE.BufferAttribute(sizes, 1));
-
-  // === Safer shader (min point size + optional no-depth test) ===
-  const material = new THREE.ShaderMaterial({
-    vertexShader: `
-      attribute float aSize;
-      attribute vec3 color;
-      varying vec3 vColor;
-      void main() {
-        vColor = color;
-        vec4 mvPosition = modelViewMatrix * vec4(position, 1.0);
-        float sz = aSize * 1300.0 / max(1.0, -mvPosition.z);
-        gl_PointSize = max(1.0, sz); // NEW: never collapse to 0
-        gl_Position = projectionMatrix * mvPosition;
-      }
-    `,
-    fragmentShader: `
-      varying vec3 vColor;
-      void main() {
-        float border = 0.07;
-        if(gl_PointCoord.x < border || gl_PointCoord.x > 1.0-border ||
-           gl_PointCoord.y < border || gl_PointCoord.y > 1.0-border) discard;
-        gl_FragColor = vec4(vColor, 0.99);
-      }
-    `,
-    transparent: true,
-    depthTest: false,   // NEW: prevent popping/disappearing behind others
-    depthWrite: false
-  });
-
-  const points = new THREE.Points(geometry, material);
-  points.frustumCulled = false; // NEW: never culled off-screen by bounding sphere
-  scene.add(points);
-
-  // === Image sampler with robust fallback ===
-  function sampleImageGrid(url, pointCount, callback) {
-  const img = new Image();
-  img.crossOrigin = "anonymous";
-
-  function hardFallback() {
-    const out=[], lums=[], sharpArr=[];
-    const R=170;
-    for (let i=0; i<pointCount; i++){
-      const th = Math.random()*Math.PI*2, r  = Math.sqrt(Math.random())*R;
-      const x = r*Math.cos(th), y = r*Math.sin(th);
-      const nx = (x/320) * 280 * PORTRAIT_SCALE;
-      const ny = (-y/400) * 340 * PORTRAIT_SCALE + PORTRAIT_Y_SHIFT;
-      const radial = Math.hypot(x/(320*0.9), y/(400*0.9));
-      const sharp = Math.max(0.4, 1.0 - radial);
-      out.push({x:nx, y:ny, z:0, sharp}); lums.push(0.8); sharpArr.push(sharp);
-    }
-    callback(out, lums, sharpArr);
-  }
-  img.onerror = hardFallback;
-
-  img.onload = function(){
-    // High-res sampling for better detail
-    const w = 480, h = 600;
-    const cv = document.createElement('canvas'); cv.width = w; cv.height = h;
-    const ctx = cv.getContext('2d');
-
-    // Fit image into canvas while keeping aspect
-    const iw = img.naturalWidth || img.width, ih = img.naturalHeight || img.height;
-    const arI = iw/ih, arC = w/h;
-    let dw=w, dh=h, dx=0, dy=0;
-    if (arI > arC) { dh = Math.round(w/arI); dy = Math.floor((h-dh)/2); }
-    else           { dw = Math.round(h*arI); dx = Math.floor((w-dw)/2); }
-    ctx.clearRect(0,0,w,h);
-    ctx.drawImage(img, dx, dy, dw, dh);
-
-    let data; try { data = ctx.getImageData(0,0,w,h).data; } catch(e){ return hardFallback(); }
-
-    // ---- Build luminance + soft alpha mask
-    const ALPHA_THRESH = 0.10; // (پایین‌تر از نسخه قبل تا سوراخ نیفته)
-    const L = new Float32Array(w*h);
-    for (let i=0, y=0; y<h; y++){
-      for (let x=0; x<w; x++, i++){
-        const k=i*4;
-        const a = data[k+3]/255;
-        const lum = (data[k]*0.299 + data[k+1]*0.587 + data[k+2]*0.114)/255;
-        // اگر آلفا کم بود، ولی لومننس معناداره، با وزن کم نگهش می‌داریم
-        const keep = (a >= ALPHA_THRESH) ? 1.0 : (lum > 0.25 ? 0.5 : 0.0);
-        L[i] = keep ? Math.max(MIN_GRAY, lum) : 0.0;
-      }
-    }
-
-    // ---- Sobel edges
-    const E = new Float32Array(w*h);
-    const g=(xx,yy)=> {
-      xx = Math.max(0,Math.min(w-1,xx));
-      yy = Math.max(0,Math.min(h-1,yy));
-      return L[yy*w+xx];
-    };
-    for (let y=0; y<h; y++){
-      for (let x=0; x<w; x++){
-        const gx = -g(x-1,y-1)-2*g(x-1,y)-g(x-1,y+1) + g(x+1,y-1)+2*g(x+1,y)+g(x+1,y+1);
-        const gy = -g(x-1,y-1)-2*g(x,y-1)-g(x+1,y-1) + g(x-1,y+1)+2*g(x,y+1)+g(x+1,y+1);
-        E[y*w+x] = Math.min(1, Math.hypot(gx,gy)*0.9);
-      }
-    }
-
-    // ---- Detail score (edge-heavy + midtones)
-    const EDGE_W=0.60, MID_W=0.30, LUM_W=0.10;
-    const S = new Float32Array(w*h);
-    let Ssum = 0;
-    for (let i=0;i<w*h;i++){
-      const l = L[i];
-      if (l === 0){ S[i]=0; continue; }
-      const mid = 1.0 - Math.abs(l - 0.5);
-      const s = EDGE_W*E[i] + MID_W*mid + LUM_W*Math.min(1.0, l*1.2);
-      S[i] = s; Ssum += s;
-    }
-    if (Ssum <= 0) return hardFallback();
-
-    // ---- Macro grid with baseline coverage (no empty cells)
-    const cellsX = Math.max(16, Math.round(Math.sqrt(pointCount * (w/h))*0.95));
-    const cellsY = Math.max(16, Math.round(pointCount / cellsX));
-    const cellW = w / cellsX, cellH = h / cellsY;
-
-    const cellCands = new Array(cellsX*cellsY);
-    const cellScore = new Float32Array(cellsX*cellsY);
-    const cellMask  = new Uint32Array(cellsX*cellsY); // #pixels with L>0
-    for (let i=0;i<cellCands.length;i++){ cellCands[i]=[]; cellScore[i]=0; cellMask[i]=0; }
-
-    for (let y=0; y<h; y++){
-      for (let x=0; x<w; x++){
-        const i = y*w+x;
-        if (L[i] <= 0) continue;
-        const cx = Math.min(cellsX-1, Math.floor(x/cellW));
-        const cy = Math.min(cellsY-1, Math.floor(y/cellH));
-        const idx = cy*cellsX + cx;
-        cellCands[idx].push({x, y, s:S[i], l:L[i]});
-        cellScore[idx] += S[i];
-        cellMask[idx]  += 1;
-      }
-    }
-
-    let activeCells = 0; for (let i=0;i<cellMask.length;i++) if (cellMask[i]>0) activeCells++;
-    if (!activeCells) return hardFallback();
-
-    // ---- Allocate points: baseline 1 per active cell, rest by score
-    const alloc = new Int32Array(cellsX*cellsY);
-    let allocated = 0;
-    for (let i=0;i<alloc.length;i++){
-      if (cellMask[i]>0){ alloc[i] = 1; allocated++; } // baseline
-    }
-    let remain = Math.max(0, pointCount - allocated);
-    let scoreSumActive = 0; for (let i=0;i<cellScore.length;i++) if (cellMask[i]>0) scoreSumActive += Math.max(1e-6, cellScore[i]);
-
-    for (let i=0;i<alloc.length && remain>0;i++){
-      if (cellMask[i]===0) continue;
-      const want = Math.floor((cellScore[i]/scoreSumActive) * remain);
-      alloc[i] += Math.min(want, Math.max(0, cellCands[i].length - alloc[i]));
-    }
-    allocated = 0; for (let i=0;i<alloc.length;i++) allocated += alloc[i];
-
-    // Distribute leftover one-by-one to best cells
-    let leftover = pointCount - allocated;
-    if (leftover > 0){
-      const order = [...Array(alloc.length).keys()].sort((a,b)=>cellScore[b]-cellScore[a]);
-      let k=0;
-      while (leftover>0 && k<order.length*4){
-        const i = order[k % order.length];
-        if (cellMask[i]>0 && alloc[i] < cellCands[i].length){ alloc[i]++; leftover--; }
-        k++;
-      }
-    }
-
-    // ---- Pick points inside each cell (best-first) with slight jitter
-    const out=[], lums=[], sharpArr=[];
-    const centerX = w/2, centerY = h/2, JIT=0.35;
-
-    for (let idx=0; idx<cellCands.length; idx++){
-      const want = alloc[idx]; if (want<=0) continue;
-      const list = cellCands[idx];
-      if (!list.length) continue;
-      list.sort((a,b)=>b.s - a.s);
-
-      for (let k=0; k<want && k<list.length; k++){
-        const c = list[k];
-        const jx = (Math.random()-0.5)*cellW*JIT;
-        const jy = (Math.random()-0.5)*cellH*JIT;
-        const px = clamp(c.x + jx, 0, w-1);
-        const py = clamp(c.y + jy, 0, h-1);
-
-        const nx = (px - centerX)/w * 280 * PORTRAIT_SCALE;
-        const ny = (centerY - py)/h * 340 * PORTRAIT_SCALE + PORTRAIT_Y_SHIFT;
-
-        const dx = (px-centerX)/(w/2), dy=(py-centerY)/(h/2);
-        const radial = Math.hypot(dx, dy);
-        const sharp = Math.max(0.4, 1.0 - radial);
-
-        out.push({x:nx, y:ny, z:0, sharp});
-        lums.push(Math.max(MIN_GRAY, c.l));
-        sharpArr.push(sharp);
-      }
-    }
-
-    // ---- Global top-up if still short (fills any accidental holes)
-    if (out.length < pointCount){
-      const deficit = pointCount - out.length;
-      // build a global pool of remaining candidates sorted by score
-      const pool = [];
-      for (let i=0;i<cellCands.length;i++){
-        const list = cellCands[i];
-        for (let k=alloc[i]; k<list.length; k++) pool.push(list[k]);
-      }
-      pool.sort((a,b)=>b.s - a.s);
-      for (let m=0; m<deficit && m<pool.length; m++){
-        const c = pool[m], px=c.x, py=c.y;
-        const nx = (px - centerX)/w * 280 * PORTRAIT_SCALE;
-        const ny = (centerY - py)/h * 340 * PORTRAIT_SCALE + PORTRAIT_Y_SHIFT;
-        const dx = (px-centerX)/(w/2), dy=(py-centerY)/(h/2);
-        const radial = Math.hypot(dx, dy);
-        const sharp = Math.max(0.4, 1.0 - radial);
-        out.push({x:nx,y:ny,z:0,sharp}); lums.push(Math.max(MIN_GRAY, c.l)); sharpArr.push(sharp);
-      }
-    }
-
-    // Final clamp
-    if (out.length > pointCount){
-      out.length = pointCount; lums.length = pointCount; sharpArr.length = pointCount;
-    }
-    callback(out, lums, sharpArr);
+  const E = new Float32Array(w*h);
+  const g=(xx,yy)=> {
+    xx = Math.max(0,Math.min(w-1,xx));
+    yy = Math.max(0,Math.min(h-1,yy));
+    return L[yy*w+xx];
   };
-
-  img.src ="images/portrait.png";
-  }
-
-  // === Morph state ===
-  let morphLums = [], sharpArr = [], morphStartTime = 0, morphing = false, morphReady = false, fullyReady = false;
-  let portraitIndices = [];
-
-  function rotateY(x, y, z, theta) { return [Math.cos(theta)*x - Math.sin(theta)*z, y, Math.sin(theta)*x + Math.cos(theta)*z]; }
-  function rotateX(x, y, z, phi) { return [x, Math.cos(phi)*y - Math.sin(phi)*z, Math.sin(phi)*y + Math.cos(phi)*z]; }
-  function rotateAroundPoint(x, y, z, cx, cy, cz, theta, phi) {
-    let dx = x - cx, dy = y - cy, dz = z - cz;
-    let [rx, ry, rz] = rotateY(dx, dy, dz, theta); [rx, ry, rz] = rotateX(rx, ry, rz, phi);
-    return [rx + cx, ry + cy, rz + cz];
-  }
-
-  // === Start render loop IMMEDIATELY (fix: see particles even before morph) ===
-  requestAnimationFrame(animate);
-
-  function startMorph(){
-    portraitIndices = Array.from({length: PORTRAIT}, (_,i)=>i);
-    for(let i=0; i<PARTICLES; i++) isPortrait[i]=0;
-    for(const idx of portraitIndices) isPortrait[idx]=1;
-
-    sampleImageGrid("images/portrait.png", PORTRAIT, function(samples, lums, sharps){
-      morphLums = lums; sharpArr = sharps;
-      for(let i=0;i<PARTICLES;++i){
-        if(isPortrait[i]){
-          const pi = portraitIndices.indexOf(i);
-          const forward = new THREE.Vector3(); camera.getWorldDirection(forward).normalize();
-          const portraitDepth = 320;
-          const portraitCenter = camera.position.clone().add(forward.multiplyScalar(portraitDepth));
-          const right = new THREE.Vector3().crossVectors(forward, camera.up).normalize();
-          const pos = portraitCenter.clone()
-            .add(right.multiplyScalar(samples[pi].x))
-            .add(camera.up.clone().multiplyScalar(samples[pi].y));
-          morphTargets[i*3]=pos.x; morphTargets[i*3+1]=pos.y; morphTargets[i*3+2]=pos.z;
-          sharpness[i] = sharps[pi];
-        } else {
-          morphTargets[i*3]=basePositions[i*3];
-          morphTargets[i*3+1]=basePositions[i*3+1];
-          morphTargets[i*3+2]=basePositions[i*3+2];
-          sharpness[i]=1.0;
-        }
-      }
-      morphStartTime = performance.now();
-      morphReady = true; morphing = true; fullyReady = true;
-      const cnv = document.querySelector("#bg-three canvas"); if(cnv) cnv.style.display = "block";
-      // NOTE: animate already running
-    });
-  }
-
-  function animate(now){
-    const t = now*0.001, globalPhase = t*GLOBAL_ROTATE_SPEED;
-    let morphPhase = 0;
-    if(fullyReady && morphReady && morphing){
-      const raw = Math.min(1, (now-morphStartTime)/MORPH_TIME);
-      morphPhase = easeInOut(raw);
+  for (let y=0; y<h; y++){
+    for (let x=0; x<w; x++){
+      const gx = -g(x-1,y-1)-2*g(x-1,y)-g(x-1,y+1) + g(x+1,y-1)+2*g(x+1,y)+g(x+1,y+1);
+      const gy = -g(x-1,y-1)-2*g(x,y-1)-g(x+1,y-1) + g(x-1,y+1)+2*g(x,y+1)+g(x+1,y+1);
+      E[y*w+x] = Math.min(1, Math.hypot(gx,gy)*0.9);
     }
-    for(let i=0; i<PARTICLES; ++i){
-      let bx = basePositions[i*3], by = basePositions[i*3+1], bz = basePositions[i*3+2], gx = bx, gy = by, gz = bz;
-      if (!isPortrait[i]) { [gx, gy, gz] = rotateAroundPoint(bx, by, bz, 0, 0, 0, globalPhase, globalPhase * 0.7); }
-      const orbMag = 9.5 + (isPortrait[i]?1.1:0), orbFreq = 0.42 + (i%17)*0.012,
-            wob = Math.sin(t*orbFreq + i) * orbMag, wob2 = Math.cos(t*orbFreq*0.63 + i*0.74) * (orbMag*0.5);
-      let nx, ny, nz;
-      if(fullyReady && morphReady && morphing && isPortrait[i]){
-        const tx = morphTargets[i*3], ty = morphTargets[i*3+1], tz = morphTargets[i*3+2];
-        if (morphPhase < 1.0) { nx = (1-morphPhase)*bx + morphPhase*tx + wob; ny = (1-morphPhase)*by + morphPhase*ty + wob2; nz = (1-morphPhase)*bz + morphPhase*tz; }
-        else { nx = tx + wob; ny = ty + wob2; nz = tz; }
-        let sharp = sharpness[i], lum = applyContrast(morphLums[portraitIndices.indexOf(i)] ?? 0.8, CONTRAST);
-        lum = clamp(lum, MIN_GRAY, 1.0);
-        sizes[i] = PARTICLE_SIZE * sharp * (morphPhase>0.999 ? PORTRAIT_SCALE_FACTOR : 1.0);
-        colors[i*3] = colors[i*3+1] = colors[i*3+2] = 1.0 + (lum-1.0)*morphPhase;
+  }
+
+  const EDGE_W=0.60, MID_W=0.30, LUM_W=0.10;
+  const S = new Float32Array(w*h);
+  let Ssum = 0;
+  for (let i=0;i<w*h;i++){
+    const l = L[i];
+    if (l === 0){ S[i]=0; continue; }
+    const mid = 1.0 - Math.abs(l - 0.5);
+    const s = EDGE_W*E[i] + MID_W*mid + LUM_W*Math.min(1.0, l*1.2);
+    S[i] = s; Ssum += s;
+  }
+  if (Ssum <= 0) return hardFallback();
+
+  const cellsX = Math.max(16, Math.round(Math.sqrt(pointCount * (w/h))*0.95));
+  const cellsY = Math.max(16, Math.round(pointCount / cellsX));
+  const cellW = w / cellsX, cellH = h / cellsY;
+
+  const cellCands = new Array(cellsX*cellsY);
+  const cellScore = new Float32Array(cellsX*cellsY);
+  const cellMask  = new Uint32Array(cellsX*cellsY);
+  for (let i=0;i<cellCands.length;i++){ cellCands[i]=[]; cellScore[i]=0; cellMask[i]=0; }
+
+  for (let y=0; y<h; y++){
+    for (let x=0; x<w; x++){
+      const i = y*w+x;
+      if (L[i] <= 0) continue;
+      const cx = Math.min(cellsX-1, Math.floor(x/cellW));
+      const cy = Math.min(cellsY-1, Math.floor(y/cellH));
+      const idx = cy*cellsX + cx;
+      cellCands[idx].push({x, y, s:S[i], l:L[i]});
+      cellScore[idx] += S[i];
+      cellMask[idx]  += 1;
+    }
+  }
+
+  let activeCells = 0; for (let i=0;i<cellMask.length;i++) if (cellMask[i]>0) activeCells++;
+  if (!activeCells) return hardFallback();
+
+  const alloc = new Int32Array(cellsX*cellsY);
+  let allocated = 0;
+  for (let i=0;i<alloc.length;i++){
+    if (cellMask[i]>0){ alloc[i] = 1; allocated++; }
+  }
+  let remain = Math.max(0, pointCount - allocated);
+  let scoreSumActive = 0; for (let i=0;i<cellScore.length;i++) if (cellMask[i]>0) scoreSumActive += Math.max(1e-6, cellScore[i]);
+
+  for (let i=0;i<alloc.length && remain>0;i++){
+    if (cellMask[i]===0) continue;
+    const want = Math.floor((cellScore[i]/scoreSumActive) * remain);
+    alloc[i] += Math.min(want, Math.max(0, cellCands[i].length - alloc[i]));
+  }
+  allocated = 0; for (let i=0;i<alloc.length;i++) allocated += alloc[i];
+
+  let leftover = pointCount - allocated;
+  if (leftover > 0){
+    const order = [...Array(alloc.length).keys()].sort((a,b)=>cellScore[b]-cellScore[a]);
+    let k=0;
+    while (leftover>0 && k<order.length*4){
+      const i = order[k % order.length];
+      if (cellMask[i]>0 && alloc[i] < cellCands[i].length){ alloc[i]++; leftover--; }
+      k++;
+    }
+  }
+
+  const out=[], lums=[], sharpArr=[];
+  const centerX = w/2, centerY = h/2, JIT=0.35;
+
+  for (let idx=0; idx<cellCands.length; idx++){
+    const want = alloc[idx]; if (want<=0) continue;
+    const list = cellCands[idx];
+    if (!list.length) continue;
+    list.sort((a,b)=>b.s - a.s);
+
+    for (let k=0; k<want && k<list.length; k++){
+      const c = list[k];
+      const jx = (Math.random()-0.5)*cellW*JIT;
+      const jy = (Math.random()-0.5)*cellH*JIT;
+      const px = clamp(c.x + jx, 0, w-1);
+      const py = clamp(c.y + jy, 0, h-1);
+
+      const nx = (px - centerX)/w * 280 * PORTRAIT_SCALE;
+      const ny = (centerY - py)/h * 340 * PORTRAIT_SCALE + PORTRAIT_Y_SHIFT;
+
+      const dx = (px-centerX)/(w/2), dy=(py-centerY)/(h/2);
+      const radial = Math.hypot(dx, dy);
+      const sharp = Math.max(0.4, 1.0 - radial);
+
+      out.push({x:nx, y:ny, z:0, sharp});
+      lums.push(Math.max(MIN_GRAY, c.l));
+      sharpArr.push(sharp);
+    }
+  }
+
+  if (out.length < pointCount){
+    const deficit = pointCount - out.length;
+    const pool = [];
+    for (let i=0;i<cellCands.length;i++){
+      const list = cellCands[i];
+      for (let k=alloc[i]; k<list.length; k++) pool.push(list[k]);
+    }
+    pool.sort((a,b)=>b.s - a.s);
+    for (let m=0; m<deficit && m<pool.length; m++){
+      const c = pool[m], px=c.x, py=c.y;
+      const nx = (px - centerX)/w * 280 * PORTRAIT_SCALE;
+      const ny = (centerY - py)/h * 340 * PORTRAIT_SCALE + PORTRAIT_Y_SHIFT;
+      const dx = (px-centerX)/(w/2), dy=(py-centerY)/(h/2);
+      const radial = Math.hypot(dx, dy);
+      const sharp = Math.max(0.4, 1.0 - radial);
+      out.push({x:nx,y:ny,z:0,sharp}); lums.push(Math.max(MIN_GRAY, c.l)); sharpArr.push(sharp);
+    }
+  }
+
+  if (out.length > pointCount){
+    out.length = pointCount; lums.length = pointCount; sharpArr.length = pointCount;
+  }
+  callback(out, lums, sharpArr);
+};
+
+img.src = url;
+}
+
+let morphLums = [], sharpArr = [], morphStartTime = 0, morphing = false, morphReady = false, fullyReady = false;
+let portraitIndices = [];
+
+function rotateY(x, y, z, theta) { return [Math.cos(theta)*x - Math.sin(theta)*z, y, Math.sin(theta)*x + Math.cos(theta)*z]; }
+function rotateX(x, y, z, phi) { return [x, Math.cos(phi)*y - Math.sin(phi)*z, Math.sin(phi)*y + Math.cos(phi)*z]; }
+function rotateAroundPoint(x, y, z, cx, cy, cz, theta, phi) {
+  let dx = x - cx, dy = y - cy, dz = z - cz;
+  let [rx, ry, rz] = rotateY(dx, dy, dz, theta); [rx, ry, rz] = rotateX(rx, ry, rz, phi);
+  return [rx + cx, ry + cy, rz + cz];
+}
+
+requestAnimationFrame(animate);
+
+function startMorph(){
+  portraitIndices = Array.from({length: PORTRAIT}, (_,i)=>i);
+  for(let i=0; i<PARTICLES; i++) isPortrait[i]=0;
+  for(const idx of portraitIndices) isPortrait[idx]=1;
+
+  sampleImageGrid(PORTRAIT_LIST[portraitIdx % PORTRAIT_LIST.length], PORTRAIT, function(samples, lums, sharps){
+    morphLums = lums; sharpArr = sharps;
+    for(let i=0;i<PARTICLES;++i){
+      if(isPortrait[i]){
+        const pi = portraitIndices.indexOf(i);
+        const forward = new THREE.Vector3(); camera.getWorldDirection(forward).normalize();
+        const portraitDepth = 320;
+        const portraitCenter = camera.position.clone().add(forward.multiplyScalar(portraitDepth));
+        const right = new THREE.Vector3().crossVectors(forward, camera.up).normalize();
+        const pos = portraitCenter.clone()
+          .add(right.multiplyScalar(samples[pi].x))
+          .add(camera.up.clone().multiplyScalar(samples[pi].y));
+        morphTargets[i*3]=pos.x; morphTargets[i*3+1]=pos.y; morphTargets[i*3+2]=pos.z;
+        sharpness[i] = sharps[pi];
       } else {
-        nx = gx + wob; ny = gy + wob2; nz = gz;
-        colors[i*3]=colors[i*3+1]=colors[i*3+2]=1.0;
-        sizes[i]=PARTICLE_SIZE;
+        morphTargets[i*3]=basePositions[i*3];
+        morphTargets[i*3+1]=basePositions[i*3+1];
+        morphTargets[i*3+2]=basePositions[i*3+2];
+        sharpness[i]=1.0;
       }
-      positions[i*3]   = nx;
-      positions[i*3+1] = ny;
-      positions[i*3+2] = nz;
     }
-    geometry.attributes.position.needsUpdate = true;
-    geometry.attributes.color.needsUpdate = true;
-    geometry.attributes.aSize.needsUpdate = true;
-    renderer.render(scene, camera);
-    requestAnimationFrame(animate);
-  }
-
-  window.addEventListener('resize', ()=>{
-    renderer.setSize(window.innerWidth, window.innerHeight);
-    camera.aspect = window.innerWidth / window.innerHeight;
-    camera.updateProjectionMatrix();
+    morphStartTime = -1;
+    swapping = false;
+    morphReady = true; morphing = true; fullyReady = true;
+    const cnv = document.querySelector("#bg-three canvas"); if(cnv) cnv.style.display = "block";
   });
+}
 
-  startMorph();
+function animate(now){
+  const t = now*0.001, globalPhase = t*GLOBAL_ROTATE_SPEED;
+  let morphPhase = 0;
+  if(fullyReady && morphReady && morphing){
+    if(morphStartTime < 0) morphStartTime = now;
+    const el = now - morphStartTime;
+    if(el < MORPH_TIME){
+      morphPhase = easeInOut(Math.min(1, el/MORPH_TIME));
+    } else if(el < MORPH_TIME + HOLD_TIME){
+      morphPhase = 1;
+    } else if(el < MORPH_TIME + HOLD_TIME + RELEASE_TIME){
+      morphPhase = easeInOut(1 - (el - MORPH_TIME - HOLD_TIME)/RELEASE_TIME);
+    } else {
+      morphPhase = 0;
+      if(!swapping){ swapping = true; portraitIdx++; startMorph(); }
+    }
+  }
+  for(let i=0; i<PARTICLES; ++i){
+    let bx = basePositions[i*3], by = basePositions[i*3+1], bz = basePositions[i*3+2], gx = bx, gy = by, gz = bz;
+    if (!isPortrait[i]) { [gx, gy, gz] = rotateAroundPoint(bx, by, bz, 0, 0, 0, globalPhase, globalPhase * 0.7); }
+    const orbMag = 6.5 + (isPortrait[i]?0.8:0), orbFreq = 0.26 + (i%17)*0.007,
+          wob = Math.sin(t*orbFreq + i) * orbMag, wob2 = Math.cos(t*orbFreq*0.63 + i*0.74) * (orbMag*0.5);
+    let nx, ny, nz;
+    if(fullyReady && morphReady && morphing && isPortrait[i]){
+      const tx = morphTargets[i*3], ty = morphTargets[i*3+1], tz = morphTargets[i*3+2];
+      if (morphPhase < 1.0) { nx = (1-morphPhase)*bx + morphPhase*tx + wob; ny = (1-morphPhase)*by + morphPhase*ty + wob2; nz = (1-morphPhase)*bz + morphPhase*tz; }
+      else { nx = tx + wob; ny = ty + wob2; nz = tz; }
+      let sharp = sharpness[i], lum = applyContrast(morphLums[portraitIndices.indexOf(i)] ?? 0.8, CONTRAST);
+      lum = clamp(lum, MIN_GRAY, 1.0);
+      sizes[i] = PARTICLE_SIZE * sharp * (morphPhase>0.999 ? PORTRAIT_SCALE_FACTOR : 1.0);
+      colors[i*3] = colors[i*3+1] = colors[i*3+2] = 1.0 + (lum-1.0)*morphPhase;
+    } else {
+      nx = gx + wob; ny = gy + wob2; nz = gz;
+      colors[i*3]=colors[i*3+1]=colors[i*3+2]=1.0;
+      sizes[i]=PARTICLE_SIZE;
+    }
+    positions[i*3]   += (nx - positions[i*3])   * POSITION_SMOOTH;
+    positions[i*3+1] += (ny - positions[i*3+1]) * POSITION_SMOOTH;
+    positions[i*3+2] += (nz - positions[i*3+2]) * POSITION_SMOOTH;
+  }
+  geometry.attributes.position.needsUpdate = true;
+  geometry.attributes.color.needsUpdate = true;
+  geometry.attributes.aSize.needsUpdate = true;
+  renderer.render(scene, camera);
+  requestAnimationFrame(animate);
+}
+
+window.addEventListener('resize', ()=>{
+  renderer.setSize(window.innerWidth, window.innerHeight);
+  camera.aspect = window.innerWidth / window.innerHeight;
+  camera.updateProjectionMatrix();
+});
+
+startMorph();
 </script>
 
-  <!-- Fade-ins -->
-  <script>
-  const faders = document.querySelectorAll('.fade-in');
-  const appearOnScroll = new IntersectionObserver((entries, observer) => {
-    entries.forEach(entry => { if (!entry.isIntersecting) return; entry.target.classList.add('visible'); observer.unobserve(entry.target); });
-  }, { threshold: 0.1 });
-  faders.forEach(fader => appearOnScroll.observe(fader));
-  </script>
-
-  <!-- Gallery data + modal -->
-  <script>
-  const galleryData = [
-    { img: "images/What-I-Hid-Behind-Glass.png", title: "What I Hid Behind Glass", series: "AS WE SEE", tagline: "A Manifesto for the Post-Photography Era", year: "2025", medium: "Archival Pigment Print on Cotton Rag", dimensions: "100 × 70 cm (39.3 × 27.5 in)", edition: "1/10 + 2 AP" },
-    { img: "images/A-Life-Unbegun.png", title: "A Life Unbegun", series: "AS WE SEE", tagline: "A Manifesto for the Post-Photography Era", year: "2025", medium: "Archival Pigment Print on Cotton Rag", dimensions: "100 × 70 cm (39.3 × 27.5 in)", edition: "1/10 + 2 AP" },
-    { img: "images/trace.png", title: "Trace", series: "AS WE SEE", tagline: "A Manifesto for the Post-Photography Era", year: "2025", medium: "Archival Pigment Print on Cotton Rag", dimensions: "100 × 70 cm (39.3 × 27.5 in)", edition: "1/10 + 2 AP" },
-    { img: "images/Conceal.png", title: "Conceal", series: "AS WE SEE", tagline: "A Manifesto for the Post-Photography Era", year: "2025", medium: "Archival Pigment Print on Cotton Rag", dimensions: "100 × 70 cm (39.3 × 27.5 in)", edition: "1/10 + 2 AP" },
-    { img: "images/Redefining-the-Line.png", title: "Redefining the Line", series: "AS WE SEE", tagline: "A Manifesto for the Post-Photography Era", year: "2025", medium: "Archival Pigment Print on Cotton Rag", dimensions: "100 × 70 cm (39.3 × 27.5 in)", edition: "1/10 + 2 AP" },
-    { img: "images/Understudy-of-the-Self.png", title: "Understudy of the Self", series: "AS WE SEE", tagline: "A Manifesto for the Post-Photography Era", year: "2025", medium: "Archival Pigment Print on Cotton Rag", dimensions: "100 × 70 cm (39.3 × 27.5 in)", edition: "1/10 + 2 AP" },
-    { img: "images/Through-the-Quiet-Defiance.png", title: "Through the Quiet Defiance", series: "AS WE SEE", tagline: "A Manifesto for the Post-Photography Era", year: "2025", medium: "Archival Pigment Print on Cotton Rag", dimensions: "100 × 70 cm (39.3 × 27.5 in)", edition: "1/10 + 2 AP" },
-    { img: "images/bound in silence.png", title: "Bound in Silence", series: "AS WE SEE", tagline: "A Manifesto for the Post-Photography Era", year: "2025", medium: "Archival Pigment Print on Cotton Rag", dimensions: "100 × 70 cm (39.3 × 27.5 in)", edition: "1/10 + 2 AP" },
-    { img: "images/Inheritance-of-Silence.png", title: "Inheritance of Silence", series: "AS WE SEE", tagline: "A Manifesto for the Post-Photography Era", year: "2025", medium: "Archival Pigment Print on Cotton Rag", dimensions: "100 × 70 cm (39.3 × 27.5 in)", edition: "1/10 + 2 AP" },
-    { img: "images/Cutting-Silence.png", title: "Cutting Silence", series: "AS WE SEE", tagline: "A Manifesto for the Post-Photography Era", year: "2025", medium: "Archival Pigment Print on Cotton Rag", dimensions: "100 × 70 cm (39.3 × 27.5 in)", edition: "1/10 + 2 AP" }
-  ];
-
-  (() => {
-    let currentIndex = 0;
-    const modal   = document.getElementById('fullscreenImage');
-    const imgEl   = document.getElementById('fullscreen-img');
-    const panelEl = document.getElementById('labelPanel');
-    const btnPrev = document.getElementById('fs-prev');
-    const btnNext = document.getElementById('fs-next');
-    const btnClose= document.getElementById('fs-close');
-
-    function fillLabel(d) {
-      panelEl.innerHTML = `
-        <h3>${d.title}</h3>
-        <p><b>Series:</b> ${d.series}</p>
-        <p><b>Tagline:</b> <i>${d.tagline}</i></p>
-        <p><b>Year:</b> ${d.year}</p>
-        <p><b>Medium:</b> ${d.medium}</p>
-        <p><b>Dimensions:</b> ${d.dimensions}</p>
-        <p><b>Edition:</b> ${d.edition || ""}</p>
-        <p style="margin-top:1.2em;font-size:.95em;color:#eee;opacity:.65">Press ESC to close • ← / → to navigate</p>
-      `;
-    }
-
-    function preload(i) { const item = galleryData[i]; if (!item) return; new Image().src = item.img; }
-    function updateHash(i) { const h = `#work-${i+1}`; if (location.hash !== h) history.pushState({i}, '', h); }
-
-    function openAt(i) {
-      i = Math.max(0, Math.min(galleryData.length - 1, i));
-      currentIndex = i; const d = galleryData[i];
-
-      imgEl.src = ''; imgEl.alt = d.title; fillLabel(d);
-      modal.classList.remove('hidden'); document.body.style.overflow = 'hidden';
-
-      const tmp = new Image(); tmp.onload = () => { imgEl.src = d.img; };
-      tmp.onerror = () => { imgEl.alt = 'Image failed to load'; }; tmp.src = d.img;
-
-      preload(i-1); preload(i+1); modal.setAttribute('aria-label', d.title); updateHash(i);
-    }
-
-    function closeModal() {
-      modal.classList.add('hidden'); imgEl.src = ''; document.body.style.overflow = '';
-      if (location.hash.startsWith('#work-')) history.pushState({}, '', location.pathname + location.search);
-    }
-
-    function next() { if (currentIndex < galleryData.length-1) openAt(currentIndex+1); }
-    function prev() { if (currentIndex > 0) openAt(currentIndex-1); }
-
-    window.openFullscreenImage = openAt;
-    window.closeFullscreenImage = closeModal;
-
-    modal.addEventListener('click', (e) => { const within = e.target.closest('#fullscreen-img, #labelPanel, #fs-prev, #fs-next, #fs-close'); if (!within) closeModal(); });
-    btnPrev?.addEventListener('click', (e) => { e.stopPropagation(); prev(); });
-    btnNext?.addEventListener('click', (e) => { e.stopPropagation(); next(); });
-    btnClose?.addEventListener('click', (e) => { e.stopPropagation(); closeModal(); });
-
-    window.addEventListener('keydown', (e) => {
-      if (modal.classList.contains('hidden')) return;
-      if (e.key === 'Escape') closeModal();
-      else if (e.key === 'ArrowRight') next();
-      else if (e.key === 'ArrowLeft') prev();
-    });
-
-    let touchX = null, touchY = null;
-    modal.addEventListener('touchstart', (e) => { const t = e.touches[0]; touchX = t.clientX; touchY = t.clientY; }, {passive:true});
-    modal.addEventListener('touchend', (e) => {
-      if (touchX == null || touchY == null) return;
-      const dx = (e.changedTouches[0].clientX - touchX);
-      const dy = (e.changedTouches[0].clientY - touchY);
-      touchX = touchY = null;
-      if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 40) { if (dx < 0) next(); else prev(); }
-    });
-
-    function openFromHash() { const m = location.hash.match(/^#work-(\d+)$/); if (m) { const idx = parseInt(m[1], 10) - 1; if (!Number.isNaN(idx)) openAt(idx); } }
-    window.addEventListener('hashchange', openFromHash);
-    window.addEventListener('DOMContentLoaded', openFromHash);
-  })();
-  </script>
-
-  <!-- Audio -->
-  <audio id="bg-audio" preload="auto" playsinline autoplay muted loop>
-    <source src="/audio/manifesto_with_bg.mp3" type="audio/mpeg">
-  </audio>
-  <script>
-  (function () {
-    const audio = document.getElementById('bg-audio');
-    const CONSENT_KEY = 'awsee_audio_consent';
-    const clamp01 = v => Math.max(0, Math.min(1, v));
-    function fadeTo(target=1,duration=1400){ target=clamp01(target); const steps=24,dt=duration/steps; const start=audio.volume||0,delta=target-start; if(target>0) audio.muted=false; let i=0; clearInterval(fadeTo._iv); fadeTo._iv=setInterval(()=>{ i++; audio.volume=clamp01(start+(delta*i/steps)); if(i>=steps){ clearInterval(fadeTo._iv); audio.volume=target; } },dt); }
-    let ac; async function unlockAudio(){ try{ if(!ac) ac=new (window.AudioContext||window.webkitAudioContext)(); if(ac.state==='suspended') await ac.resume(); const b=ac.createBuffer(1,1,22050); const s=ac.createBufferSource(); s.buffer=b; s.connect(ac.destination); s.start?.(0);}catch{} }
-    function grantAudio(){ localStorage.setItem(CONSENT_KEY,'1'); unlockAudio(); audio.muted=false; audio.volume=0.0; audio.play().then(()=>{ fadeTo(1,1200); removeListeners(); }).catch(()=>retry()); }
-    function removeListeners(){ ['click','touchstart','keydown','scroll','mousemove','wheel'].forEach(ev=>window.removeEventListener(ev,grantAudio,{capture:false})); document.removeEventListener('visibilitychange', onVisible); }
-    function onVisible(){ if(document.visibilityState==='visible' && localStorage.getItem(CONSENT_KEY)==='1') grantAudio(); }
-    function retry(n=6,d=600){ let i=0; const tick=()=>{ if(i++>=n) return; unlockAudio(); audio.play().then(()=>{ fadeTo(1,1200); removeListeners(); }).catch(()=>setTimeout(tick,d)); }; setTimeout(tick,d); }
-    async function tryAutoplay(){ try{ audio.muted=true; audio.volume=0.0; await audio.play(); if(localStorage.getItem(CONSENT_KEY)==='1') setTimeout(()=>fadeTo(1,1400),250);}catch{} }
-    ['click','touchstart','keydown','scroll','mousemove','wheel'].forEach(ev=>window.addEventListener(ev,grantAudio,{once:true,passive:true}));
-    document.addEventListener('visibilitychange', onVisible);
-    window.addEventListener('DOMContentLoaded', ()=>{ if(!audio.currentSrc){} tryAutoplay(); setTimeout(()=>{ if(!audio.paused) return; tryAutoplay(); },1200); setTimeout(()=>{ if(!audio.paused) return; tryAutoplay(); },3000); });
-  })();
-  </script>
-
-  <!-- Email copy -->
-  <script>
-  document.addEventListener('DOMContentLoaded', () => {
-    const emailLink = document.getElementById('contact-email'); if (!emailLink) return;
-    emailLink.addEventListener('click', function(e) {
-      e.preventDefault();
-      const email = 'hello@aswesee.art';
-      try { window.location.href = `mailto:${email}`; } catch (e) {}
-      setTimeout(() => {
-        if (!document.hidden) {
-          navigator.clipboard?.writeText(email).catch(()=>{});
-          const note = document.createElement('div');
-          note.textContent = `Email address copied: ${email}`;
-          note.style.cssText = `position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#222;color:#fff;padding:10px 16px;border:1px solid rgba(255,255,255,.15);border-radius:8px;font-size:14px;z-index:9999;box-shadow:0 6px 18px rgba(0,0,0,.35)`;
-          document.body.appendChild(note);
-          setTimeout(()=>note.remove(), 2600);
-        }
-      }, 800);
-    });
-  });
-  </script>
-
-  <!-- Formspree AJAX -->
-  <script>
-  (function(){
-    const form = document.getElementById('contact-form'); if(!form) return;
-    const btn  = document.getElementById('cf-submit'); const stat = document.getElementById('cf-status');
-    function toast(msg){ const n=document.createElement('div'); n.textContent=msg; n.style.cssText='position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#1a1a1a;color:#fff;padding:10px 16px;border:1px solid rgba(255,255,255,.15);border-radius:8px;font-size:14px;z-index:9999;box-shadow:0 6px 18px rgba(0,0,0,.35)'; document.body.appendChild(n); setTimeout(()=>n.remove(),2800); }
-    form.addEventListener('submit', async (e)=>{ e.preventDefault(); stat.textContent=''; btn.disabled = true; btn.style.opacity=.6;
-      const data = new FormData(form);
-      try { const res = await fetch(form.action,{method:'POST',body:data,headers:{'Accept':'application/json'}}); if(!res.ok) throw 0; toast('Message sent. Thank you!'); form.reset(); } 
-      catch { toast('Could not send message. Please try again.'); }
-      finally { btn.disabled=false; btn.style.opacity=1; }
-    });
-  })();
-  </script>
-
-  <!-- Smooth center-scroll -->
-  <script>
-  (function(){
-    const btn=document.getElementById('enter-gallery'); const grid=document.getElementById('gallery-grid'); if(!btn||!grid) return;
-    btn.addEventListener('click', function(e){ e.preventDefault(); const rect=grid.getBoundingClientRect(); const targetY=window.scrollY + rect.top + (rect.height/2) - (window.innerHeight/2); window.scrollTo({ top: Math.max(0,targetY), behavior:'smooth' }); }, { passive:false });
-  })();
-  </script>
-
-  <!-- Attachments + 7000-char counter -->
-  <script>
-  (function(){
-    const form=document.getElementById('contact-form'), msg=document.getElementById('cf-message'), count=document.getElementById('cf-count'), drop=document.getElementById('file-drop'), input=document.getElementById('cf-files'), list=document.getElementById('cf-filelist');
-    if(!form||!msg||!count||!drop||!input||!list) return;
-    const LIMIT_CHARS=7000, LIMIT_FILES=10, LIMIT_SIZE=25*1024*1024, ACCEPT=new Set(['pdf','doc','docx','zip','rar','7z','psd','ai','indd','tif','tiff','jpg','jpeg','png','svg']);
-    function toast(m){ const n=document.createElement('div'); n.textContent=m; n.style.cssText='position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#1a1a1a;color:#fff;padding:10px 16px;border:1px solid rgba(255,255,255,.15);border-radius:8px;font-size:14px;z-index:9999;box-shadow:0 6px 18px rgba(0,0,0,.35)'; document.body.appendChild(n); setTimeout(()=>n.remove(),2800); }
-    function updateCount(){ const len=msg.value.length; count.textContent=`${len} / ${LIMIT_CHARS}`; count.style.color = (len>LIMIT_CHARS)?'#ff6b6b':''; }
-    msg.setAttribute('maxlength', LIMIT_CHARS); msg.addEventListener('input', updateCount); updateCount();
-    function extOf(n){ const i=n.lastIndexOf('.'); return i>=0?n.slice(i+1).toLowerCase():''; }
-    function renderList(files){ list.innerHTML=''; Array.from(files).forEach(f=>{ const li=document.createElement('li'); const mb=(f.size/1048576).toFixed(2); li.className='flex items-center justify-between gap-3'; li.innerHTML=`<span class="opacity-90">${f.name}</span><span class="opacity-60 text-xs">${mb} MB</span>`; list.appendChild(li); }); }
-    function validateFiles(files){ if(files.length>LIMIT_FILES){ toast(`Max ${LIMIT_FILES} files.`); return false; } for(const f of files){ if(f.size>LIMIT_SIZE){ toast(`"${f.name}" is larger than 25 MB.`); return false; } const ext=extOf(f.name); if(!ACCEPT.has(ext)){ toast(`"${f.name}" type not allowed.`); return false; } } return true; }
-    drop.addEventListener('click',()=>input.click());
-    drop.addEventListener('dragover',(e)=>{ e.preventDefault(); drop.style.borderColor='rgba(255,255,255,.35)'; });
-    drop.addEventListener('dragleave',()=>{ drop.style.borderColor='rgba(255,255,255,.15)'; });
-    drop.addEventListener('drop',(e)=>{ e.preventDefault(); drop.style.borderColor='rgba(255,255,255,.15)'; const files=Array.from(e.dataTransfer.files||[]); if(!validateFiles(files)) return; const dt=new DataTransfer(); files.forEach(f=>dt.items.add(f)); input.files=dt.files; renderList(input.files); });
-    input.addEventListener('change',()=>{ const files=Array.from(input.files||[]); if(!validateFiles(files)){ input.value=''; list.innerHTML=''; return; } renderList(files); });
-    form.addEventListener('submit',(e)=>{ if(msg.value.length>LIMIT_CHARS){ e.stopPropagation(); e.preventDefault(); toast('Message is too long (max 7000 characters).'); return; } const files=Array.from(input.files||[]); if(!validateFiles(files)){ e.stopPropagation(); e.preventDefault(); return; } }, true);
-  })();
-  </script>
+<audio id="narration-audio" src="narration-aswesee-ok.mp3" autoplay></audio>
+<script>
+(function(){
+  const a = document.getElementById('narration-audio');
+  if (a) a.play().catch(function(){});
+})();
+</script>
 
 </body>
 </html>
