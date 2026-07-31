@@ -1,0 +1,1010 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<flipbookmaker version="4.3.4" IsQuick="false" QuickFile="" ProjectName="C:\Users\baghe\Desktop\aswesee\I Live in the Dark — A5 Master -philipbook\I Live in the Dark — A5 Master -philipbook.fb" DefaultName="I Live in the Dark — A5 Master -philipbook" SearchOrder="ltr" Google="" UseMiniMode="true" UsePSW="false" MiniWidth="400" MiniHeight="300" PSW="" StartPage="0" UseFlipSound="true" UseBackSound="false" UseSingleSound="false" BackSoundPath="" IsRight2Left="false" IsFastene="false" IsHardCover="0" IsHardPage="0" IsAnimate="true" IsCenterBook="true" IsLandScape="0" IsOpenBook="1" DragArea="top,middle,bottom" FlipSpeed="0.25" PageThick="0.1" SpineColor="13421772" Curvature="-0.5" PageBackColor="13421772" PageTranColor="0" FoldLine="0.5" Loaded="22" ZoomStep="0.25, 0.5, 1, 2, 4, 8" UseReflection="false" RefTransparent="75" RefOffset="0" IsAutoPlay="false" IsRepeat="false" DurationPlay="3" Preloader="bookcase" LoadText="" PowerBy="" NavigationStyle="" ButtonStyle="" ShowCover="true" ShowPreNext="true" ShowPlayStop="true" ShowScreen="true" ShowToc="true" ShowZoom="true" ShowBookmark="true" ShowDownload="true" DownloadUrl="" ShowText="true" ShowSlider="false" ShowShare="true" ShowPrint="true" ShowZoomBar="true" ShowSearch="true" ShowSearchBox="true" ShowMusic="true" ShowThumbnail="true" ShowExit="true" ShowBookCase="true" ButtonScale="0" IntroMovie="" IntroEffect="" Scene="" ShowAbout="true" ShowDraw="true" ShowLang="true" UseGradient="true" Edge="1" EdgeColor="13421772" TemplateGroup="normal" TemplateName="classic01" ExeTitle="" HtmlTitle="" HtmlKeywords="" HtmlDescription="" HtmlScript="" PageWidth="562" PageHeight="800" CoverWidth="562" CoverHeight="800" Langs="en" LangHints="English" BookLangs="en,jp,fr,de,ar">
+  <book title="I Live in the Dark — A5 Master -philipbook" plugins="navigationbar, keyboardnavigation, links, password, pdflinks, anchors, index, titles, search, gestures, draw, tuio, slideshow,javascript,swfaddress,print,thumbnails,bookmarks,select,musicplayers, toc, share, about, bookcase" pagewidth="562" pageheight="800" searchindex="files/search_index/en.txt" stiffskew="1" guipath="files/gui/" asulextension="xml" lang="en,jp,fr,de,ar" langpath="files/langs/" flagpath="files/flags/" pluginpath="files/plugins/" priorities="vid(20); snd(15); area(5); nav(5); txt(5); gal(30)" sndpath="files/snd/" password="" pwstart="0" thumbloadtext="Loading" zoommaxscale="2" zoomminscale="0.1" zoomsnap="0.25, 0.5, 1, 2, 4, 8" zoomstep="" slidestart="false" slidedelay="3" sliderepeat="false" toc="files/data/toc.xml" bookcase="files/data/bookcase.xml" download="" minimode="true" miniwidth="400" miniheight="300" layout="files/data/layout.xml" buttoncfg="files/data/buttoncfg.xml" about="files/data/about.xml" abc="bdgc">
+    <background>
+      <box name="" anchors="0,0,ph,pw"/>
+    </background>
+    <bookmarks/>
+    <chapter pagewidth="562" pageheight="800">
+      <page stiffskew="1">
+        <img width="563" height="800" widthorg="419" heightorg="595" position="center middle" alpha="1" rotation="0" caption="" event="0" mask="" filetype="1" id="" ytparam="autoplay=0&amp;loop=0">
+          <action actionid="0" gui="" widthpop="400" heightpop="300" galxml="">
+            <wincontents>
+              <![CDATA[]]>
+            </wincontents>
+          </action>
+          <effmenter Param1="" Param2=""/>
+          <effenter value="" funname="" delay="0" loop="0" rollback="false" loopdelay="0" speed="0" stagger="0"/>
+          <effleave value="" funname="" delay="0" loop="0" rollback="false" loopdelay="0" speed="0" stagger="0"/>
+          <src lang="en">C:\Users\baghe\AppData\Local\Temp\flipbook_{00D19837-1D5C-4A87-B888-920128599ADF}\files\pages\en\high\I Live in the Dark — A5 Master -philipbook_1_{C6CD50C9-FA4E-438A-9DD2-04100C3361FF}_en.swf</src>
+        </img>
+      </page>
+      <page stiffskew="1">
+        <img width="563" height="800" widthorg="419" heightorg="595" position="center middle" alpha="1" rotation="0" caption="" event="0" mask="" filetype="1" id="" ytparam="autoplay=0&amp;loop=0">
+          <action actionid="0" gui="" widthpop="400" heightpop="300" galxml="">
+            <wincontents>
+              <![CDATA[]]>
+            </wincontents>
+          </action>
+          <effmenter Param1="" Param2=""/>
+          <effenter value="" funname="" delay="0" loop="0" rollback="false" loopdelay="0" speed="0" stagger="0"/>
+          <effleave value="" funname="" delay="0" loop="0" rollback="false" loopdelay="0" speed="0" stagger="0"/>
+          <src lang="en">C:\Users\baghe\AppData\Local\Temp\flipbook_{00D19837-1D5C-4A87-B888-920128599ADF}\files\pages\en\high\I Live in the Dark — A5 Master -philipbook_2_{C6CD50C9-FA4E-438A-9DD2-04100C3361FF}_en.swf</src>
+        </img>
+      </page>
+    </chapter>
+    <chapter pagewidth="562" pageheight="800">
+      <page stiffskew="1">
+        <img width="563" height="800" widthorg="419" heightorg="595" position="center middle" alpha="1" rotation="0" caption="" event="0" mask="" filetype="1" id="" ytparam="autoplay=0&amp;loop=0">
+          <action actionid="0" gui="" widthpop="400" heightpop="300" galxml="">
+            <wincontents>
+              <![CDATA[]]>
+            </wincontents>
+          </action>
+          <effmenter Param1="" Param2=""/>
+          <effenter value="" funname="" delay="0" loop="0" rollback="false" loopdelay="0" speed="0" stagger="0"/>
+          <effleave value="" funname="" delay="0" loop="0" rollback="false" loopdelay="0" speed="0" stagger="0"/>
+          <src lang="en">C:\Users\baghe\AppData\Local\Temp\flipbook_{00D19837-1D5C-4A87-B888-920128599ADF}\files\pages\en\high\I Live in the Dark — A5 Master -philipbook_3_{C6CD50C9-FA4E-438A-9DD2-04100C3361FF}_en.swf</src>
+        </img>
+      </page>
+      <page stiffskew="1">
+        <img width="563" height="800" widthorg="419" heightorg="595" position="center middle" alpha="1" rotation="0" caption="" event="0" mask="" filetype="1" id="" ytparam="autoplay=0&amp;loop=0">
+          <action actionid="0" gui="" widthpop="400" heightpop="300" galxml="">
+            <wincontents>
+              <![CDATA[]]>
+            </wincontents>
+          </action>
+          <effmenter Param1="" Param2=""/>
+          <effenter value="" funname="" delay="0" loop="0" rollback="false" loopdelay="0" speed="0" stagger="0"/>
+          <effleave value="" funname="" delay="0" loop="0" rollback="false" loopdelay="0" speed="0" stagger="0"/>
+          <src lang="en">C:\Users\baghe\AppData\Local\Temp\flipbook_{00D19837-1D5C-4A87-B888-920128599ADF}\files\pages\en\high\I Live in the Dark — A5 Master -philipbook_4_{C6CD50C9-FA4E-438A-9DD2-04100C3361FF}_en.swf</src>
+        </img>
+      </page>
+      <page stiffskew="1">
+        <img width="563" height="800" widthorg="419" heightorg="595" position="center middle" alpha="1" rotation="0" caption="" event="0" mask="" filetype="1" id="" ytparam="autoplay=0&amp;loop=0">
+          <action actionid="0" gui="" widthpop="400" heightpop="300" galxml="">
+            <wincontents>
+              <![CDATA[]]>
+            </wincontents>
+          </action>
+          <effmenter Param1="" Param2=""/>
+          <effenter value="" funname="" delay="0" loop="0" rollback="false" loopdelay="0" speed="0" stagger="0"/>
+          <effleave value="" funname="" delay="0" loop="0" rollback="false" loopdelay="0" speed="0" stagger="0"/>
+          <src lang="en">C:\Users\baghe\AppData\Local\Temp\flipbook_{00D19837-1D5C-4A87-B888-920128599ADF}\files\pages\en\high\I Live in the Dark — A5 Master -philipbook_5_{C6CD50C9-FA4E-438A-9DD2-04100C3361FF}_en.swf</src>
+        </img>
+      </page>
+      <page stiffskew="1">
+        <img width="563" height="800" widthorg="419" heightorg="595" position="center middle" alpha="1" rotation="0" caption="" event="0" mask="" filetype="1" id="" ytparam="autoplay=0&amp;loop=0">
+          <action actionid="0" gui="" widthpop="400" heightpop="300" galxml="">
+            <wincontents>
+              <![CDATA[]]>
+            </wincontents>
+          </action>
+          <effmenter Param1="" Param2=""/>
+          <effenter value="" funname="" delay="0" loop="0" rollback="false" loopdelay="0" speed="0" stagger="0"/>
+          <effleave value="" funname="" delay="0" loop="0" rollback="false" loopdelay="0" speed="0" stagger="0"/>
+          <src lang="en">C:\Users\baghe\AppData\Local\Temp\flipbook_{00D19837-1D5C-4A87-B888-920128599ADF}\files\pages\en\high\I Live in the Dark — A5 Master -philipbook_6_{C6CD50C9-FA4E-438A-9DD2-04100C3361FF}_en.swf</src>
+        </img>
+      </page>
+      <page stiffskew="1">
+        <img width="563" height="800" widthorg="419" heightorg="595" position="center middle" alpha="1" rotation="0" caption="" event="0" mask="" filetype="1" id="" ytparam="autoplay=0&amp;loop=0">
+          <action actionid="0" gui="" widthpop="400" heightpop="300" galxml="">
+            <wincontents>
+              <![CDATA[]]>
+            </wincontents>
+          </action>
+          <effmenter Param1="" Param2=""/>
+          <effenter value="" funname="" delay="0" loop="0" rollback="false" loopdelay="0" speed="0" stagger="0"/>
+          <effleave value="" funname="" delay="0" loop="0" rollback="false" loopdelay="0" speed="0" stagger="0"/>
+          <src lang="en">C:\Users\baghe\AppData\Local\Temp\flipbook_{00D19837-1D5C-4A87-B888-920128599ADF}\files\pages\en\high\I Live in the Dark — A5 Master -philipbook_7_{C6CD50C9-FA4E-438A-9DD2-04100C3361FF}_en.swf</src>
+        </img>
+      </page>
+      <page stiffskew="1">
+        <img width="563" height="800" widthorg="419" heightorg="595" position="center middle" alpha="1" rotation="0" caption="" event="0" mask="" filetype="1" id="" ytparam="autoplay=0&amp;loop=0">
+          <action actionid="0" gui="" widthpop="400" heightpop="300" galxml="">
+            <wincontents>
+              <![CDATA[]]>
+            </wincontents>
+          </action>
+          <effmenter Param1="" Param2=""/>
+          <effenter value="" funname="" delay="0" loop="0" rollback="false" loopdelay="0" speed="0" stagger="0"/>
+          <effleave value="" funname="" delay="0" loop="0" rollback="false" loopdelay="0" speed="0" stagger="0"/>
+          <src lang="en">C:\Users\baghe\AppData\Local\Temp\flipbook_{00D19837-1D5C-4A87-B888-920128599ADF}\files\pages\en\high\I Live in the Dark — A5 Master -philipbook_8_{C6CD50C9-FA4E-438A-9DD2-04100C3361FF}_en.swf</src>
+        </img>
+      </page>
+      <page stiffskew="1">
+        <img width="563" height="800" widthorg="419" heightorg="595" position="center middle" alpha="1" rotation="0" caption="" event="0" mask="" filetype="1" id="" ytparam="autoplay=0&amp;loop=0">
+          <action actionid="0" gui="" widthpop="400" heightpop="300" galxml="">
+            <wincontents>
+              <![CDATA[]]>
+            </wincontents>
+          </action>
+          <effmenter Param1="" Param2=""/>
+          <effenter value="" funname="" delay="0" loop="0" rollback="false" loopdelay="0" speed="0" stagger="0"/>
+          <effleave value="" funname="" delay="0" loop="0" rollback="false" loopdelay="0" speed="0" stagger="0"/>
+          <src lang="en">C:\Users\baghe\AppData\Local\Temp\flipbook_{00D19837-1D5C-4A87-B888-920128599ADF}\files\pages\en\high\I Live in the Dark — A5 Master -philipbook_9_{C6CD50C9-FA4E-438A-9DD2-04100C3361FF}_en.swf</src>
+        </img>
+      </page>
+      <page stiffskew="1">
+        <img width="563" height="800" widthorg="419" heightorg="595" position="center middle" alpha="1" rotation="0" caption="" event="0" mask="" filetype="1" id="" ytparam="autoplay=0&amp;loop=0">
+          <action actionid="0" gui="" widthpop="400" heightpop="300" galxml="">
+            <wincontents>
+              <![CDATA[]]>
+            </wincontents>
+          </action>
+          <effmenter Param1="" Param2=""/>
+          <effenter value="" funname="" delay="0" loop="0" rollback="false" loopdelay="0" speed="0" stagger="0"/>
+          <effleave value="" funname="" delay="0" loop="0" rollback="false" loopdelay="0" speed="0" stagger="0"/>
+          <src lang="en">C:\Users\baghe\AppData\Local\Temp\flipbook_{00D19837-1D5C-4A87-B888-920128599ADF}\files\pages\en\high\I Live in the Dark — A5 Master -philipbook_10_{C6CD50C9-FA4E-438A-9DD2-04100C3361FF}_en.swf</src>
+        </img>
+      </page>
+      <page stiffskew="1">
+        <img width="563" height="800" widthorg="419" heightorg="595" position="center middle" alpha="1" rotation="0" caption="" event="0" mask="" filetype="1" id="" ytparam="autoplay=0&amp;loop=0">
+          <action actionid="0" gui="" widthpop="400" heightpop="300" galxml="">
+            <wincontents>
+              <![CDATA[]]>
+            </wincontents>
+          </action>
+          <effmenter Param1="" Param2=""/>
+          <effenter value="" funname="" delay="0" loop="0" rollback="false" loopdelay="0" speed="0" stagger="0"/>
+          <effleave value="" funname="" delay="0" loop="0" rollback="false" loopdelay="0" speed="0" stagger="0"/>
+          <src lang="en">C:\Users\baghe\AppData\Local\Temp\flipbook_{00D19837-1D5C-4A87-B888-920128599ADF}\files\pages\en\high\I Live in the Dark — A5 Master -philipbook_11_{C6CD50C9-FA4E-438A-9DD2-04100C3361FF}_en.swf</src>
+        </img>
+      </page>
+      <page stiffskew="1">
+        <img width="563" height="800" widthorg="419" heightorg="595" position="center middle" alpha="1" rotation="0" caption="" event="0" mask="" filetype="1" id="" ytparam="autoplay=0&amp;loop=0">
+          <action actionid="0" gui="" widthpop="400" heightpop="300" galxml="">
+            <wincontents>
+              <![CDATA[]]>
+            </wincontents>
+          </action>
+          <effmenter Param1="" Param2=""/>
+          <effenter value="" funname="" delay="0" loop="0" rollback="false" loopdelay="0" speed="0" stagger="0"/>
+          <effleave value="" funname="" delay="0" loop="0" rollback="false" loopdelay="0" speed="0" stagger="0"/>
+          <src lang="en">C:\Users\baghe\AppData\Local\Temp\flipbook_{00D19837-1D5C-4A87-B888-920128599ADF}\files\pages\en\high\I Live in the Dark — A5 Master -philipbook_12_{C6CD50C9-FA4E-438A-9DD2-04100C3361FF}_en.swf</src>
+        </img>
+      </page>
+      <page stiffskew="1">
+        <img width="563" height="800" widthorg="419" heightorg="595" position="center middle" alpha="1" rotation="0" caption="" event="0" mask="" filetype="1" id="" ytparam="autoplay=0&amp;loop=0">
+          <action actionid="0" gui="" widthpop="400" heightpop="300" galxml="">
+            <wincontents>
+              <![CDATA[]]>
+            </wincontents>
+          </action>
+          <effmenter Param1="" Param2=""/>
+          <effenter value="" funname="" delay="0" loop="0" rollback="false" loopdelay="0" speed="0" stagger="0"/>
+          <effleave value="" funname="" delay="0" loop="0" rollback="false" loopdelay="0" speed="0" stagger="0"/>
+          <src lang="en">C:\Users\baghe\AppData\Local\Temp\flipbook_{00D19837-1D5C-4A87-B888-920128599ADF}\files\pages\en\high\I Live in the Dark — A5 Master -philipbook_13_{C6CD50C9-FA4E-438A-9DD2-04100C3361FF}_en.swf</src>
+        </img>
+      </page>
+      <page stiffskew="1">
+        <img width="563" height="800" widthorg="419" heightorg="595" position="center middle" alpha="1" rotation="0" caption="" event="0" mask="" filetype="1" id="" ytparam="autoplay=0&amp;loop=0">
+          <action actionid="0" gui="" widthpop="400" heightpop="300" galxml="">
+            <wincontents>
+              <![CDATA[]]>
+            </wincontents>
+          </action>
+          <effmenter Param1="" Param2=""/>
+          <effenter value="" funname="" delay="0" loop="0" rollback="false" loopdelay="0" speed="0" stagger="0"/>
+          <effleave value="" funname="" delay="0" loop="0" rollback="false" loopdelay="0" speed="0" stagger="0"/>
+          <src lang="en">C:\Users\baghe\AppData\Local\Temp\flipbook_{00D19837-1D5C-4A87-B888-920128599ADF}\files\pages\en\high\I Live in the Dark — A5 Master -philipbook_14_{C6CD50C9-FA4E-438A-9DD2-04100C3361FF}_en.swf</src>
+        </img>
+      </page>
+      <page stiffskew="1">
+        <img width="563" height="800" widthorg="419" heightorg="595" position="center middle" alpha="1" rotation="0" caption="" event="0" mask="" filetype="1" id="" ytparam="autoplay=0&amp;loop=0">
+          <action actionid="0" gui="" widthpop="400" heightpop="300" galxml="">
+            <wincontents>
+              <![CDATA[]]>
+            </wincontents>
+          </action>
+          <effmenter Param1="" Param2=""/>
+          <effenter value="" funname="" delay="0" loop="0" rollback="false" loopdelay="0" speed="0" stagger="0"/>
+          <effleave value="" funname="" delay="0" loop="0" rollback="false" loopdelay="0" speed="0" stagger="0"/>
+          <src lang="en">C:\Users\baghe\AppData\Local\Temp\flipbook_{00D19837-1D5C-4A87-B888-920128599ADF}\files\pages\en\high\I Live in the Dark — A5 Master -philipbook_15_{C6CD50C9-FA4E-438A-9DD2-04100C3361FF}_en.swf</src>
+        </img>
+      </page>
+      <page stiffskew="1">
+        <img width="563" height="800" widthorg="419" heightorg="595" position="center middle" alpha="1" rotation="0" caption="" event="0" mask="" filetype="1" id="" ytparam="autoplay=0&amp;loop=0">
+          <action actionid="0" gui="" widthpop="400" heightpop="300" galxml="">
+            <wincontents>
+              <![CDATA[]]>
+            </wincontents>
+          </action>
+          <effmenter Param1="" Param2=""/>
+          <effenter value="" funname="" delay="0" loop="0" rollback="false" loopdelay="0" speed="0" stagger="0"/>
+          <effleave value="" funname="" delay="0" loop="0" rollback="false" loopdelay="0" speed="0" stagger="0"/>
+          <src lang="en">C:\Users\baghe\AppData\Local\Temp\flipbook_{00D19837-1D5C-4A87-B888-920128599ADF}\files\pages\en\high\I Live in the Dark — A5 Master -philipbook_16_{C6CD50C9-FA4E-438A-9DD2-04100C3361FF}_en.swf</src>
+        </img>
+      </page>
+      <page stiffskew="1">
+        <img width="563" height="800" widthorg="419" heightorg="595" position="center middle" alpha="1" rotation="0" caption="" event="0" mask="" filetype="1" id="" ytparam="autoplay=0&amp;loop=0">
+          <action actionid="0" gui="" widthpop="400" heightpop="300" galxml="">
+            <wincontents>
+              <![CDATA[]]>
+            </wincontents>
+          </action>
+          <effmenter Param1="" Param2=""/>
+          <effenter value="" funname="" delay="0" loop="0" rollback="false" loopdelay="0" speed="0" stagger="0"/>
+          <effleave value="" funname="" delay="0" loop="0" rollback="false" loopdelay="0" speed="0" stagger="0"/>
+          <src lang="en">C:\Users\baghe\AppData\Local\Temp\flipbook_{00D19837-1D5C-4A87-B888-920128599ADF}\files\pages\en\high\I Live in the Dark — A5 Master -philipbook_17_{C6CD50C9-FA4E-438A-9DD2-04100C3361FF}_en.swf</src>
+        </img>
+      </page>
+      <page stiffskew="1">
+        <img width="563" height="800" widthorg="419" heightorg="595" position="center middle" alpha="1" rotation="0" caption="" event="0" mask="" filetype="1" id="" ytparam="autoplay=0&amp;loop=0">
+          <action actionid="0" gui="" widthpop="400" heightpop="300" galxml="">
+            <wincontents>
+              <![CDATA[]]>
+            </wincontents>
+          </action>
+          <effmenter Param1="" Param2=""/>
+          <effenter value="" funname="" delay="0" loop="0" rollback="false" loopdelay="0" speed="0" stagger="0"/>
+          <effleave value="" funname="" delay="0" loop="0" rollback="false" loopdelay="0" speed="0" stagger="0"/>
+          <src lang="en">C:\Users\baghe\AppData\Local\Temp\flipbook_{00D19837-1D5C-4A87-B888-920128599ADF}\files\pages\en\high\I Live in the Dark — A5 Master -philipbook_18_{C6CD50C9-FA4E-438A-9DD2-04100C3361FF}_en.swf</src>
+        </img>
+      </page>
+      <page stiffskew="1">
+        <img width="563" height="800" widthorg="419" heightorg="595" position="center middle" alpha="1" rotation="0" caption="" event="0" mask="" filetype="1" id="" ytparam="autoplay=0&amp;loop=0">
+          <action actionid="0" gui="" widthpop="400" heightpop="300" galxml="">
+            <wincontents>
+              <![CDATA[]]>
+            </wincontents>
+          </action>
+          <effmenter Param1="" Param2=""/>
+          <effenter value="" funname="" delay="0" loop="0" rollback="false" loopdelay="0" speed="0" stagger="0"/>
+          <effleave value="" funname="" delay="0" loop="0" rollback="false" loopdelay="0" speed="0" stagger="0"/>
+          <src lang="en">C:\Users\baghe\AppData\Local\Temp\flipbook_{00D19837-1D5C-4A87-B888-920128599ADF}\files\pages\en\high\I Live in the Dark — A5 Master -philipbook_19_{C6CD50C9-FA4E-438A-9DD2-04100C3361FF}_en.swf</src>
+        </img>
+      </page>
+      <page stiffskew="1">
+        <img width="563" height="800" widthorg="419" heightorg="595" position="center middle" alpha="1" rotation="0" caption="" event="0" mask="" filetype="1" id="" ytparam="autoplay=0&amp;loop=0">
+          <action actionid="0" gui="" widthpop="400" heightpop="300" galxml="">
+            <wincontents>
+              <![CDATA[]]>
+            </wincontents>
+          </action>
+          <effmenter Param1="" Param2=""/>
+          <effenter value="" funname="" delay="0" loop="0" rollback="false" loopdelay="0" speed="0" stagger="0"/>
+          <effleave value="" funname="" delay="0" loop="0" rollback="false" loopdelay="0" speed="0" stagger="0"/>
+          <src lang="en">C:\Users\baghe\AppData\Local\Temp\flipbook_{00D19837-1D5C-4A87-B888-920128599ADF}\files\pages\en\high\I Live in the Dark — A5 Master -philipbook_20_{C6CD50C9-FA4E-438A-9DD2-04100C3361FF}_en.swf</src>
+        </img>
+      </page>
+      <page stiffskew="1">
+        <img width="563" height="800" widthorg="419" heightorg="595" position="center middle" alpha="1" rotation="0" caption="" event="0" mask="" filetype="1" id="" ytparam="autoplay=0&amp;loop=0">
+          <action actionid="0" gui="" widthpop="400" heightpop="300" galxml="">
+            <wincontents>
+              <![CDATA[]]>
+            </wincontents>
+          </action>
+          <effmenter Param1="" Param2=""/>
+          <effenter value="" funname="" delay="0" loop="0" rollback="false" loopdelay="0" speed="0" stagger="0"/>
+          <effleave value="" funname="" delay="0" loop="0" rollback="false" loopdelay="0" speed="0" stagger="0"/>
+          <src lang="en">C:\Users\baghe\AppData\Local\Temp\flipbook_{00D19837-1D5C-4A87-B888-920128599ADF}\files\pages\en\high\I Live in the Dark — A5 Master -philipbook_21_{C6CD50C9-FA4E-438A-9DD2-04100C3361FF}_en.swf</src>
+        </img>
+      </page>
+      <page stiffskew="1">
+        <img width="563" height="800" widthorg="419" heightorg="595" position="center middle" alpha="1" rotation="0" caption="" event="0" mask="" filetype="1" id="" ytparam="autoplay=0&amp;loop=0">
+          <action actionid="0" gui="" widthpop="400" heightpop="300" galxml="">
+            <wincontents>
+              <![CDATA[]]>
+            </wincontents>
+          </action>
+          <effmenter Param1="" Param2=""/>
+          <effenter value="" funname="" delay="0" loop="0" rollback="false" loopdelay="0" speed="0" stagger="0"/>
+          <effleave value="" funname="" delay="0" loop="0" rollback="false" loopdelay="0" speed="0" stagger="0"/>
+          <src lang="en">C:\Users\baghe\AppData\Local\Temp\flipbook_{00D19837-1D5C-4A87-B888-920128599ADF}\files\pages\en\high\I Live in the Dark — A5 Master -philipbook_22_{C6CD50C9-FA4E-438A-9DD2-04100C3361FF}_en.swf</src>
+        </img>
+      </page>
+      <page stiffskew="1">
+        <img width="563" height="800" widthorg="419" heightorg="595" position="center middle" alpha="1" rotation="0" caption="" event="0" mask="" filetype="1" id="" ytparam="autoplay=0&amp;loop=0">
+          <action actionid="0" gui="" widthpop="400" heightpop="300" galxml="">
+            <wincontents>
+              <![CDATA[]]>
+            </wincontents>
+          </action>
+          <effmenter Param1="" Param2=""/>
+          <effenter value="" funname="" delay="0" loop="0" rollback="false" loopdelay="0" speed="0" stagger="0"/>
+          <effleave value="" funname="" delay="0" loop="0" rollback="false" loopdelay="0" speed="0" stagger="0"/>
+          <src lang="en">C:\Users\baghe\AppData\Local\Temp\flipbook_{00D19837-1D5C-4A87-B888-920128599ADF}\files\pages\en\high\I Live in the Dark — A5 Master -philipbook_23_{C6CD50C9-FA4E-438A-9DD2-04100C3361FF}_en.swf</src>
+        </img>
+      </page>
+      <page stiffskew="1">
+        <img width="563" height="800" widthorg="419" heightorg="595" position="center middle" alpha="1" rotation="0" caption="" event="0" mask="" filetype="1" id="" ytparam="autoplay=0&amp;loop=0">
+          <action actionid="0" gui="" widthpop="400" heightpop="300" galxml="">
+            <wincontents>
+              <![CDATA[]]>
+            </wincontents>
+          </action>
+          <effmenter Param1="" Param2=""/>
+          <effenter value="" funname="" delay="0" loop="0" rollback="false" loopdelay="0" speed="0" stagger="0"/>
+          <effleave value="" funname="" delay="0" loop="0" rollback="false" loopdelay="0" speed="0" stagger="0"/>
+          <src lang="en">C:\Users\baghe\AppData\Local\Temp\flipbook_{00D19837-1D5C-4A87-B888-920128599ADF}\files\pages\en\high\I Live in the Dark — A5 Master -philipbook_24_{C6CD50C9-FA4E-438A-9DD2-04100C3361FF}_en.swf</src>
+        </img>
+      </page>
+      <page stiffskew="1">
+        <img width="563" height="800" widthorg="419" heightorg="595" position="center middle" alpha="1" rotation="0" caption="" event="0" mask="" filetype="1" id="" ytparam="autoplay=0&amp;loop=0">
+          <action actionid="0" gui="" widthpop="400" heightpop="300" galxml="">
+            <wincontents>
+              <![CDATA[]]>
+            </wincontents>
+          </action>
+          <effmenter Param1="" Param2=""/>
+          <effenter value="" funname="" delay="0" loop="0" rollback="false" loopdelay="0" speed="0" stagger="0"/>
+          <effleave value="" funname="" delay="0" loop="0" rollback="false" loopdelay="0" speed="0" stagger="0"/>
+          <src lang="en">C:\Users\baghe\AppData\Local\Temp\flipbook_{00D19837-1D5C-4A87-B888-920128599ADF}\files\pages\en\high\I Live in the Dark — A5 Master -philipbook_25_{C6CD50C9-FA4E-438A-9DD2-04100C3361FF}_en.swf</src>
+        </img>
+      </page>
+      <page stiffskew="1">
+        <img width="563" height="800" widthorg="419" heightorg="595" position="center middle" alpha="1" rotation="0" caption="" event="0" mask="" filetype="1" id="" ytparam="autoplay=0&amp;loop=0">
+          <action actionid="0" gui="" widthpop="400" heightpop="300" galxml="">
+            <wincontents>
+              <![CDATA[]]>
+            </wincontents>
+          </action>
+          <effmenter Param1="" Param2=""/>
+          <effenter value="" funname="" delay="0" loop="0" rollback="false" loopdelay="0" speed="0" stagger="0"/>
+          <effleave value="" funname="" delay="0" loop="0" rollback="false" loopdelay="0" speed="0" stagger="0"/>
+          <src lang="en">C:\Users\baghe\AppData\Local\Temp\flipbook_{00D19837-1D5C-4A87-B888-920128599ADF}\files\pages\en\high\I Live in the Dark — A5 Master -philipbook_26_{C6CD50C9-FA4E-438A-9DD2-04100C3361FF}_en.swf</src>
+        </img>
+      </page>
+      <page stiffskew="1">
+        <img width="563" height="800" widthorg="419" heightorg="595" position="center middle" alpha="1" rotation="0" caption="" event="0" mask="" filetype="1" id="" ytparam="autoplay=0&amp;loop=0">
+          <action actionid="0" gui="" widthpop="400" heightpop="300" galxml="">
+            <wincontents>
+              <![CDATA[]]>
+            </wincontents>
+          </action>
+          <effmenter Param1="" Param2=""/>
+          <effenter value="" funname="" delay="0" loop="0" rollback="false" loopdelay="0" speed="0" stagger="0"/>
+          <effleave value="" funname="" delay="0" loop="0" rollback="false" loopdelay="0" speed="0" stagger="0"/>
+          <src lang="en">C:\Users\baghe\AppData\Local\Temp\flipbook_{00D19837-1D5C-4A87-B888-920128599ADF}\files\pages\en\high\I Live in the Dark — A5 Master -philipbook_27_{C6CD50C9-FA4E-438A-9DD2-04100C3361FF}_en.swf</src>
+        </img>
+      </page>
+      <page stiffskew="1">
+        <img width="563" height="800" widthorg="419" heightorg="595" position="center middle" alpha="1" rotation="0" caption="" event="0" mask="" filetype="1" id="" ytparam="autoplay=0&amp;loop=0">
+          <action actionid="0" gui="" widthpop="400" heightpop="300" galxml="">
+            <wincontents>
+              <![CDATA[]]>
+            </wincontents>
+          </action>
+          <effmenter Param1="" Param2=""/>
+          <effenter value="" funname="" delay="0" loop="0" rollback="false" loopdelay="0" speed="0" stagger="0"/>
+          <effleave value="" funname="" delay="0" loop="0" rollback="false" loopdelay="0" speed="0" stagger="0"/>
+          <src lang="en">C:\Users\baghe\AppData\Local\Temp\flipbook_{00D19837-1D5C-4A87-B888-920128599ADF}\files\pages\en\high\I Live in the Dark — A5 Master -philipbook_28_{C6CD50C9-FA4E-438A-9DD2-04100C3361FF}_en.swf</src>
+        </img>
+      </page>
+      <page stiffskew="1">
+        <img width="563" height="800" widthorg="419" heightorg="595" position="center middle" alpha="1" rotation="0" caption="" event="0" mask="" filetype="1" id="" ytparam="autoplay=0&amp;loop=0">
+          <action actionid="0" gui="" widthpop="400" heightpop="300" galxml="">
+            <wincontents>
+              <![CDATA[]]>
+            </wincontents>
+          </action>
+          <effmenter Param1="" Param2=""/>
+          <effenter value="" funname="" delay="0" loop="0" rollback="false" loopdelay="0" speed="0" stagger="0"/>
+          <effleave value="" funname="" delay="0" loop="0" rollback="false" loopdelay="0" speed="0" stagger="0"/>
+          <src lang="en">C:\Users\baghe\AppData\Local\Temp\flipbook_{00D19837-1D5C-4A87-B888-920128599ADF}\files\pages\en\high\I Live in the Dark — A5 Master -philipbook_29_{C6CD50C9-FA4E-438A-9DD2-04100C3361FF}_en.swf</src>
+        </img>
+      </page>
+      <page stiffskew="1">
+        <img width="563" height="800" widthorg="419" heightorg="595" position="center middle" alpha="1" rotation="0" caption="" event="0" mask="" filetype="1" id="" ytparam="autoplay=0&amp;loop=0">
+          <action actionid="0" gui="" widthpop="400" heightpop="300" galxml="">
+            <wincontents>
+              <![CDATA[]]>
+            </wincontents>
+          </action>
+          <effmenter Param1="" Param2=""/>
+          <effenter value="" funname="" delay="0" loop="0" rollback="false" loopdelay="0" speed="0" stagger="0"/>
+          <effleave value="" funname="" delay="0" loop="0" rollback="false" loopdelay="0" speed="0" stagger="0"/>
+          <src lang="en">C:\Users\baghe\AppData\Local\Temp\flipbook_{00D19837-1D5C-4A87-B888-920128599ADF}\files\pages\en\high\I Live in the Dark — A5 Master -philipbook_30_{C6CD50C9-FA4E-438A-9DD2-04100C3361FF}_en.swf</src>
+        </img>
+      </page>
+      <page stiffskew="1">
+        <img width="563" height="800" widthorg="419" heightorg="595" position="center middle" alpha="1" rotation="0" caption="" event="0" mask="" filetype="1" id="" ytparam="autoplay=0&amp;loop=0">
+          <action actionid="0" gui="" widthpop="400" heightpop="300" galxml="">
+            <wincontents>
+              <![CDATA[]]>
+            </wincontents>
+          </action>
+          <effmenter Param1="" Param2=""/>
+          <effenter value="" funname="" delay="0" loop="0" rollback="false" loopdelay="0" speed="0" stagger="0"/>
+          <effleave value="" funname="" delay="0" loop="0" rollback="false" loopdelay="0" speed="0" stagger="0"/>
+          <src lang="en">C:\Users\baghe\AppData\Local\Temp\flipbook_{00D19837-1D5C-4A87-B888-920128599ADF}\files\pages\en\high\I Live in the Dark — A5 Master -philipbook_31_{C6CD50C9-FA4E-438A-9DD2-04100C3361FF}_en.swf</src>
+        </img>
+      </page>
+      <page stiffskew="1">
+        <img width="563" height="800" widthorg="419" heightorg="595" position="center middle" alpha="1" rotation="0" caption="" event="0" mask="" filetype="1" id="" ytparam="autoplay=0&amp;loop=0">
+          <action actionid="0" gui="" widthpop="400" heightpop="300" galxml="">
+            <wincontents>
+              <![CDATA[]]>
+            </wincontents>
+          </action>
+          <effmenter Param1="" Param2=""/>
+          <effenter value="" funname="" delay="0" loop="0" rollback="false" loopdelay="0" speed="0" stagger="0"/>
+          <effleave value="" funname="" delay="0" loop="0" rollback="false" loopdelay="0" speed="0" stagger="0"/>
+          <src lang="en">C:\Users\baghe\AppData\Local\Temp\flipbook_{00D19837-1D5C-4A87-B888-920128599ADF}\files\pages\en\high\I Live in the Dark — A5 Master -philipbook_32_{C6CD50C9-FA4E-438A-9DD2-04100C3361FF}_en.swf</src>
+        </img>
+      </page>
+      <page stiffskew="1">
+        <img width="563" height="800" widthorg="419" heightorg="595" position="center middle" alpha="1" rotation="0" caption="" event="0" mask="" filetype="1" id="" ytparam="autoplay=0&amp;loop=0">
+          <action actionid="0" gui="" widthpop="400" heightpop="300" galxml="">
+            <wincontents>
+              <![CDATA[]]>
+            </wincontents>
+          </action>
+          <effmenter Param1="" Param2=""/>
+          <effenter value="" funname="" delay="0" loop="0" rollback="false" loopdelay="0" speed="0" stagger="0"/>
+          <effleave value="" funname="" delay="0" loop="0" rollback="false" loopdelay="0" speed="0" stagger="0"/>
+          <src lang="en">C:\Users\baghe\AppData\Local\Temp\flipbook_{00D19837-1D5C-4A87-B888-920128599ADF}\files\pages\en\high\I Live in the Dark — A5 Master -philipbook_33_{C6CD50C9-FA4E-438A-9DD2-04100C3361FF}_en.swf</src>
+        </img>
+      </page>
+      <page stiffskew="1">
+        <img width="563" height="800" widthorg="419" heightorg="595" position="center middle" alpha="1" rotation="0" caption="" event="0" mask="" filetype="1" id="" ytparam="autoplay=0&amp;loop=0">
+          <action actionid="0" gui="" widthpop="400" heightpop="300" galxml="">
+            <wincontents>
+              <![CDATA[]]>
+            </wincontents>
+          </action>
+          <effmenter Param1="" Param2=""/>
+          <effenter value="" funname="" delay="0" loop="0" rollback="false" loopdelay="0" speed="0" stagger="0"/>
+          <effleave value="" funname="" delay="0" loop="0" rollback="false" loopdelay="0" speed="0" stagger="0"/>
+          <src lang="en">C:\Users\baghe\AppData\Local\Temp\flipbook_{00D19837-1D5C-4A87-B888-920128599ADF}\files\pages\en\high\I Live in the Dark — A5 Master -philipbook_34_{C6CD50C9-FA4E-438A-9DD2-04100C3361FF}_en.swf</src>
+        </img>
+      </page>
+      <page stiffskew="1">
+        <img width="563" height="800" widthorg="419" heightorg="595" position="center middle" alpha="1" rotation="0" caption="" event="0" mask="" filetype="1" id="" ytparam="autoplay=0&amp;loop=0">
+          <action actionid="0" gui="" widthpop="400" heightpop="300" galxml="">
+            <wincontents>
+              <![CDATA[]]>
+            </wincontents>
+          </action>
+          <effmenter Param1="" Param2=""/>
+          <effenter value="" funname="" delay="0" loop="0" rollback="false" loopdelay="0" speed="0" stagger="0"/>
+          <effleave value="" funname="" delay="0" loop="0" rollback="false" loopdelay="0" speed="0" stagger="0"/>
+          <src lang="en">C:\Users\baghe\AppData\Local\Temp\flipbook_{00D19837-1D5C-4A87-B888-920128599ADF}\files\pages\en\high\I Live in the Dark — A5 Master -philipbook_35_{C6CD50C9-FA4E-438A-9DD2-04100C3361FF}_en.swf</src>
+        </img>
+      </page>
+      <page stiffskew="1">
+        <img width="563" height="800" widthorg="419" heightorg="595" position="center middle" alpha="1" rotation="0" caption="" event="0" mask="" filetype="1" id="" ytparam="autoplay=0&amp;loop=0">
+          <action actionid="0" gui="" widthpop="400" heightpop="300" galxml="">
+            <wincontents>
+              <![CDATA[]]>
+            </wincontents>
+          </action>
+          <effmenter Param1="" Param2=""/>
+          <effenter value="" funname="" delay="0" loop="0" rollback="false" loopdelay="0" speed="0" stagger="0"/>
+          <effleave value="" funname="" delay="0" loop="0" rollback="false" loopdelay="0" speed="0" stagger="0"/>
+          <src lang="en">C:\Users\baghe\AppData\Local\Temp\flipbook_{00D19837-1D5C-4A87-B888-920128599ADF}\files\pages\en\high\I Live in the Dark — A5 Master -philipbook_36_{C6CD50C9-FA4E-438A-9DD2-04100C3361FF}_en.swf</src>
+        </img>
+      </page>
+      <page stiffskew="1">
+        <img width="563" height="800" widthorg="419" heightorg="595" position="center middle" alpha="1" rotation="0" caption="" event="0" mask="" filetype="1" id="" ytparam="autoplay=0&amp;loop=0">
+          <action actionid="0" gui="" widthpop="400" heightpop="300" galxml="">
+            <wincontents>
+              <![CDATA[]]>
+            </wincontents>
+          </action>
+          <effmenter Param1="" Param2=""/>
+          <effenter value="" funname="" delay="0" loop="0" rollback="false" loopdelay="0" speed="0" stagger="0"/>
+          <effleave value="" funname="" delay="0" loop="0" rollback="false" loopdelay="0" speed="0" stagger="0"/>
+          <src lang="en">C:\Users\baghe\AppData\Local\Temp\flipbook_{00D19837-1D5C-4A87-B888-920128599ADF}\files\pages\en\high\I Live in the Dark — A5 Master -philipbook_37_{C6CD50C9-FA4E-438A-9DD2-04100C3361FF}_en.swf</src>
+        </img>
+      </page>
+      <page stiffskew="1">
+        <img width="563" height="800" widthorg="419" heightorg="595" position="center middle" alpha="1" rotation="0" caption="" event="0" mask="" filetype="1" id="" ytparam="autoplay=0&amp;loop=0">
+          <action actionid="0" gui="" widthpop="400" heightpop="300" galxml="">
+            <wincontents>
+              <![CDATA[]]>
+            </wincontents>
+          </action>
+          <effmenter Param1="" Param2=""/>
+          <effenter value="" funname="" delay="0" loop="0" rollback="false" loopdelay="0" speed="0" stagger="0"/>
+          <effleave value="" funname="" delay="0" loop="0" rollback="false" loopdelay="0" speed="0" stagger="0"/>
+          <src lang="en">C:\Users\baghe\AppData\Local\Temp\flipbook_{00D19837-1D5C-4A87-B888-920128599ADF}\files\pages\en\high\I Live in the Dark — A5 Master -philipbook_38_{C6CD50C9-FA4E-438A-9DD2-04100C3361FF}_en.swf</src>
+        </img>
+      </page>
+      <page stiffskew="1">
+        <img width="563" height="800" widthorg="419" heightorg="595" position="center middle" alpha="1" rotation="0" caption="" event="0" mask="" filetype="1" id="" ytparam="autoplay=0&amp;loop=0">
+          <action actionid="0" gui="" widthpop="400" heightpop="300" galxml="">
+            <wincontents>
+              <![CDATA[]]>
+            </wincontents>
+          </action>
+          <effmenter Param1="" Param2=""/>
+          <effenter value="" funname="" delay="0" loop="0" rollback="false" loopdelay="0" speed="0" stagger="0"/>
+          <effleave value="" funname="" delay="0" loop="0" rollback="false" loopdelay="0" speed="0" stagger="0"/>
+          <src lang="en">C:\Users\baghe\AppData\Local\Temp\flipbook_{00D19837-1D5C-4A87-B888-920128599ADF}\files\pages\en\high\I Live in the Dark — A5 Master -philipbook_39_{C6CD50C9-FA4E-438A-9DD2-04100C3361FF}_en.swf</src>
+        </img>
+      </page>
+      <page stiffskew="1">
+        <img width="563" height="800" widthorg="419" heightorg="595" position="center middle" alpha="1" rotation="0" caption="" event="0" mask="" filetype="1" id="" ytparam="autoplay=0&amp;loop=0">
+          <action actionid="0" gui="" widthpop="400" heightpop="300" galxml="">
+            <wincontents>
+              <![CDATA[]]>
+            </wincontents>
+          </action>
+          <effmenter Param1="" Param2=""/>
+          <effenter value="" funname="" delay="0" loop="0" rollback="false" loopdelay="0" speed="0" stagger="0"/>
+          <effleave value="" funname="" delay="0" loop="0" rollback="false" loopdelay="0" speed="0" stagger="0"/>
+          <src lang="en">C:\Users\baghe\AppData\Local\Temp\flipbook_{00D19837-1D5C-4A87-B888-920128599ADF}\files\pages\en\high\I Live in the Dark — A5 Master -philipbook_40_{C6CD50C9-FA4E-438A-9DD2-04100C3361FF}_en.swf</src>
+        </img>
+      </page>
+      <page stiffskew="1">
+        <img width="563" height="800" widthorg="419" heightorg="595" position="center middle" alpha="1" rotation="0" caption="" event="0" mask="" filetype="1" id="" ytparam="autoplay=0&amp;loop=0">
+          <action actionid="0" gui="" widthpop="400" heightpop="300" galxml="">
+            <wincontents>
+              <![CDATA[]]>
+            </wincontents>
+          </action>
+          <effmenter Param1="" Param2=""/>
+          <effenter value="" funname="" delay="0" loop="0" rollback="false" loopdelay="0" speed="0" stagger="0"/>
+          <effleave value="" funname="" delay="0" loop="0" rollback="false" loopdelay="0" speed="0" stagger="0"/>
+          <src lang="en">C:\Users\baghe\AppData\Local\Temp\flipbook_{00D19837-1D5C-4A87-B888-920128599ADF}\files\pages\en\high\I Live in the Dark — A5 Master -philipbook_41_{C6CD50C9-FA4E-438A-9DD2-04100C3361FF}_en.swf</src>
+        </img>
+      </page>
+      <page stiffskew="1">
+        <img width="563" height="800" widthorg="419" heightorg="595" position="center middle" alpha="1" rotation="0" caption="" event="0" mask="" filetype="1" id="" ytparam="autoplay=0&amp;loop=0">
+          <action actionid="0" gui="" widthpop="400" heightpop="300" galxml="">
+            <wincontents>
+              <![CDATA[]]>
+            </wincontents>
+          </action>
+          <effmenter Param1="" Param2=""/>
+          <effenter value="" funname="" delay="0" loop="0" rollback="false" loopdelay="0" speed="0" stagger="0"/>
+          <effleave value="" funname="" delay="0" loop="0" rollback="false" loopdelay="0" speed="0" stagger="0"/>
+          <src lang="en">C:\Users\baghe\AppData\Local\Temp\flipbook_{00D19837-1D5C-4A87-B888-920128599ADF}\files\pages\en\high\I Live in the Dark — A5 Master -philipbook_42_{C6CD50C9-FA4E-438A-9DD2-04100C3361FF}_en.swf</src>
+        </img>
+      </page>
+      <page stiffskew="1">
+        <img width="563" height="800" widthorg="419" heightorg="595" position="center middle" alpha="1" rotation="0" caption="" event="0" mask="" filetype="1" id="" ytparam="autoplay=0&amp;loop=0">
+          <action actionid="0" gui="" widthpop="400" heightpop="300" galxml="">
+            <wincontents>
+              <![CDATA[]]>
+            </wincontents>
+          </action>
+          <effmenter Param1="" Param2=""/>
+          <effenter value="" funname="" delay="0" loop="0" rollback="false" loopdelay="0" speed="0" stagger="0"/>
+          <effleave value="" funname="" delay="0" loop="0" rollback="false" loopdelay="0" speed="0" stagger="0"/>
+          <src lang="en">C:\Users\baghe\AppData\Local\Temp\flipbook_{00D19837-1D5C-4A87-B888-920128599ADF}\files\pages\en\high\I Live in the Dark — A5 Master -philipbook_43_{C6CD50C9-FA4E-438A-9DD2-04100C3361FF}_en.swf</src>
+        </img>
+      </page>
+      <page stiffskew="1">
+        <img width="563" height="800" widthorg="419" heightorg="595" position="center middle" alpha="1" rotation="0" caption="" event="0" mask="" filetype="1" id="" ytparam="autoplay=0&amp;loop=0">
+          <action actionid="0" gui="" widthpop="400" heightpop="300" galxml="">
+            <wincontents>
+              <![CDATA[]]>
+            </wincontents>
+          </action>
+          <effmenter Param1="" Param2=""/>
+          <effenter value="" funname="" delay="0" loop="0" rollback="false" loopdelay="0" speed="0" stagger="0"/>
+          <effleave value="" funname="" delay="0" loop="0" rollback="false" loopdelay="0" speed="0" stagger="0"/>
+          <src lang="en">C:\Users\baghe\AppData\Local\Temp\flipbook_{00D19837-1D5C-4A87-B888-920128599ADF}\files\pages\en\high\I Live in the Dark — A5 Master -philipbook_44_{C6CD50C9-FA4E-438A-9DD2-04100C3361FF}_en.swf</src>
+        </img>
+      </page>
+      <page stiffskew="1">
+        <img width="563" height="800" widthorg="419" heightorg="595" position="center middle" alpha="1" rotation="0" caption="" event="0" mask="" filetype="1" id="" ytparam="autoplay=0&amp;loop=0">
+          <action actionid="0" gui="" widthpop="400" heightpop="300" galxml="">
+            <wincontents>
+              <![CDATA[]]>
+            </wincontents>
+          </action>
+          <effmenter Param1="" Param2=""/>
+          <effenter value="" funname="" delay="0" loop="0" rollback="false" loopdelay="0" speed="0" stagger="0"/>
+          <effleave value="" funname="" delay="0" loop="0" rollback="false" loopdelay="0" speed="0" stagger="0"/>
+          <src lang="en">C:\Users\baghe\AppData\Local\Temp\flipbook_{00D19837-1D5C-4A87-B888-920128599ADF}\files\pages\en\high\I Live in the Dark — A5 Master -philipbook_45_{C6CD50C9-FA4E-438A-9DD2-04100C3361FF}_en.swf</src>
+        </img>
+      </page>
+      <page stiffskew="1">
+        <img width="563" height="800" widthorg="419" heightorg="595" position="center middle" alpha="1" rotation="0" caption="" event="0" mask="" filetype="1" id="" ytparam="autoplay=0&amp;loop=0">
+          <action actionid="0" gui="" widthpop="400" heightpop="300" galxml="">
+            <wincontents>
+              <![CDATA[]]>
+            </wincontents>
+          </action>
+          <effmenter Param1="" Param2=""/>
+          <effenter value="" funname="" delay="0" loop="0" rollback="false" loopdelay="0" speed="0" stagger="0"/>
+          <effleave value="" funname="" delay="0" loop="0" rollback="false" loopdelay="0" speed="0" stagger="0"/>
+          <src lang="en">C:\Users\baghe\AppData\Local\Temp\flipbook_{00D19837-1D5C-4A87-B888-920128599ADF}\files\pages\en\high\I Live in the Dark — A5 Master -philipbook_46_{C6CD50C9-FA4E-438A-9DD2-04100C3361FF}_en.swf</src>
+        </img>
+      </page>
+      <page stiffskew="1">
+        <img width="563" height="800" widthorg="419" heightorg="595" position="center middle" alpha="1" rotation="0" caption="" event="0" mask="" filetype="1" id="" ytparam="autoplay=0&amp;loop=0">
+          <action actionid="0" gui="" widthpop="400" heightpop="300" galxml="">
+            <wincontents>
+              <![CDATA[]]>
+            </wincontents>
+          </action>
+          <effmenter Param1="" Param2=""/>
+          <effenter value="" funname="" delay="0" loop="0" rollback="false" loopdelay="0" speed="0" stagger="0"/>
+          <effleave value="" funname="" delay="0" loop="0" rollback="false" loopdelay="0" speed="0" stagger="0"/>
+          <src lang="en">C:\Users\baghe\AppData\Local\Temp\flipbook_{00D19837-1D5C-4A87-B888-920128599ADF}\files\pages\en\high\I Live in the Dark — A5 Master -philipbook_47_{C6CD50C9-FA4E-438A-9DD2-04100C3361FF}_en.swf</src>
+        </img>
+      </page>
+      <page stiffskew="1">
+        <img width="563" height="800" widthorg="419" heightorg="595" position="center middle" alpha="1" rotation="0" caption="" event="0" mask="" filetype="1" id="" ytparam="autoplay=0&amp;loop=0">
+          <action actionid="0" gui="" widthpop="400" heightpop="300" galxml="">
+            <wincontents>
+              <![CDATA[]]>
+            </wincontents>
+          </action>
+          <effmenter Param1="" Param2=""/>
+          <effenter value="" funname="" delay="0" loop="0" rollback="false" loopdelay="0" speed="0" stagger="0"/>
+          <effleave value="" funname="" delay="0" loop="0" rollback="false" loopdelay="0" speed="0" stagger="0"/>
+          <src lang="en">C:\Users\baghe\AppData\Local\Temp\flipbook_{00D19837-1D5C-4A87-B888-920128599ADF}\files\pages\en\high\I Live in the Dark — A5 Master -philipbook_48_{C6CD50C9-FA4E-438A-9DD2-04100C3361FF}_en.swf</src>
+        </img>
+      </page>
+      <page stiffskew="1">
+        <img width="563" height="800" widthorg="419" heightorg="595" position="center middle" alpha="1" rotation="0" caption="" event="0" mask="" filetype="1" id="" ytparam="autoplay=0&amp;loop=0">
+          <action actionid="0" gui="" widthpop="400" heightpop="300" galxml="">
+            <wincontents>
+              <![CDATA[]]>
+            </wincontents>
+          </action>
+          <effmenter Param1="" Param2=""/>
+          <effenter value="" funname="" delay="0" loop="0" rollback="false" loopdelay="0" speed="0" stagger="0"/>
+          <effleave value="" funname="" delay="0" loop="0" rollback="false" loopdelay="0" speed="0" stagger="0"/>
+          <src lang="en">C:\Users\baghe\AppData\Local\Temp\flipbook_{00D19837-1D5C-4A87-B888-920128599ADF}\files\pages\en\high\I Live in the Dark — A5 Master -philipbook_49_{C6CD50C9-FA4E-438A-9DD2-04100C3361FF}_en.swf</src>
+        </img>
+      </page>
+      <page stiffskew="1">
+        <img width="563" height="800" widthorg="419" heightorg="595" position="center middle" alpha="1" rotation="0" caption="" event="0" mask="" filetype="1" id="" ytparam="autoplay=0&amp;loop=0">
+          <action actionid="0" gui="" widthpop="400" heightpop="300" galxml="">
+            <wincontents>
+              <![CDATA[]]>
+            </wincontents>
+          </action>
+          <effmenter Param1="" Param2=""/>
+          <effenter value="" funname="" delay="0" loop="0" rollback="false" loopdelay="0" speed="0" stagger="0"/>
+          <effleave value="" funname="" delay="0" loop="0" rollback="false" loopdelay="0" speed="0" stagger="0"/>
+          <src lang="en">C:\Users\baghe\AppData\Local\Temp\flipbook_{00D19837-1D5C-4A87-B888-920128599ADF}\files\pages\en\high\I Live in the Dark — A5 Master -philipbook_50_{C6CD50C9-FA4E-438A-9DD2-04100C3361FF}_en.swf</src>
+        </img>
+      </page>
+      <page stiffskew="1">
+        <img width="563" height="800" widthorg="419" heightorg="595" position="center middle" alpha="1" rotation="0" caption="" event="0" mask="" filetype="1" id="" ytparam="autoplay=0&amp;loop=0">
+          <action actionid="0" gui="" widthpop="400" heightpop="300" galxml="">
+            <wincontents>
+              <![CDATA[]]>
+            </wincontents>
+          </action>
+          <effmenter Param1="" Param2=""/>
+          <effenter value="" funname="" delay="0" loop="0" rollback="false" loopdelay="0" speed="0" stagger="0"/>
+          <effleave value="" funname="" delay="0" loop="0" rollback="false" loopdelay="0" speed="0" stagger="0"/>
+          <src lang="en">C:\Users\baghe\AppData\Local\Temp\flipbook_{00D19837-1D5C-4A87-B888-920128599ADF}\files\pages\en\high\I Live in the Dark — A5 Master -philipbook_51_{C6CD50C9-FA4E-438A-9DD2-04100C3361FF}_en.swf</src>
+        </img>
+      </page>
+      <page stiffskew="1">
+        <img width="563" height="800" widthorg="419" heightorg="595" position="center middle" alpha="1" rotation="0" caption="" event="0" mask="" filetype="1" id="" ytparam="autoplay=0&amp;loop=0">
+          <action actionid="0" gui="" widthpop="400" heightpop="300" galxml="">
+            <wincontents>
+              <![CDATA[]]>
+            </wincontents>
+          </action>
+          <effmenter Param1="" Param2=""/>
+          <effenter value="" funname="" delay="0" loop="0" rollback="false" loopdelay="0" speed="0" stagger="0"/>
+          <effleave value="" funname="" delay="0" loop="0" rollback="false" loopdelay="0" speed="0" stagger="0"/>
+          <src lang="en">C:\Users\baghe\AppData\Local\Temp\flipbook_{00D19837-1D5C-4A87-B888-920128599ADF}\files\pages\en\high\I Live in the Dark — A5 Master -philipbook_52_{C6CD50C9-FA4E-438A-9DD2-04100C3361FF}_en.swf</src>
+        </img>
+      </page>
+      <page stiffskew="1">
+        <img width="563" height="800" widthorg="419" heightorg="595" position="center middle" alpha="1" rotation="0" caption="" event="0" mask="" filetype="1" id="" ytparam="autoplay=0&amp;loop=0">
+          <action actionid="0" gui="" widthpop="400" heightpop="300" galxml="">
+            <wincontents>
+              <![CDATA[]]>
+            </wincontents>
+          </action>
+          <effmenter Param1="" Param2=""/>
+          <effenter value="" funname="" delay="0" loop="0" rollback="false" loopdelay="0" speed="0" stagger="0"/>
+          <effleave value="" funname="" delay="0" loop="0" rollback="false" loopdelay="0" speed="0" stagger="0"/>
+          <src lang="en">C:\Users\baghe\AppData\Local\Temp\flipbook_{00D19837-1D5C-4A87-B888-920128599ADF}\files\pages\en\high\I Live in the Dark — A5 Master -philipbook_53_{C6CD50C9-FA4E-438A-9DD2-04100C3361FF}_en.swf</src>
+        </img>
+      </page>
+      <page stiffskew="1">
+        <img width="563" height="800" widthorg="419" heightorg="595" position="center middle" alpha="1" rotation="0" caption="" event="0" mask="" filetype="1" id="" ytparam="autoplay=0&amp;loop=0">
+          <action actionid="0" gui="" widthpop="400" heightpop="300" galxml="">
+            <wincontents>
+              <![CDATA[]]>
+            </wincontents>
+          </action>
+          <effmenter Param1="" Param2=""/>
+          <effenter value="" funname="" delay="0" loop="0" rollback="false" loopdelay="0" speed="0" stagger="0"/>
+          <effleave value="" funname="" delay="0" loop="0" rollback="false" loopdelay="0" speed="0" stagger="0"/>
+          <src lang="en">C:\Users\baghe\AppData\Local\Temp\flipbook_{00D19837-1D5C-4A87-B888-920128599ADF}\files\pages\en\high\I Live in the Dark — A5 Master -philipbook_54_{C6CD50C9-FA4E-438A-9DD2-04100C3361FF}_en.swf</src>
+        </img>
+      </page>
+      <page stiffskew="1">
+        <img width="563" height="800" widthorg="419" heightorg="595" position="center middle" alpha="1" rotation="0" caption="" event="0" mask="" filetype="1" id="" ytparam="autoplay=0&amp;loop=0">
+          <action actionid="0" gui="" widthpop="400" heightpop="300" galxml="">
+            <wincontents>
+              <![CDATA[]]>
+            </wincontents>
+          </action>
+          <effmenter Param1="" Param2=""/>
+          <effenter value="" funname="" delay="0" loop="0" rollback="false" loopdelay="0" speed="0" stagger="0"/>
+          <effleave value="" funname="" delay="0" loop="0" rollback="false" loopdelay="0" speed="0" stagger="0"/>
+          <src lang="en">C:\Users\baghe\AppData\Local\Temp\flipbook_{00D19837-1D5C-4A87-B888-920128599ADF}\files\pages\en\high\I Live in the Dark — A5 Master -philipbook_55_{C6CD50C9-FA4E-438A-9DD2-04100C3361FF}_en.swf</src>
+        </img>
+      </page>
+      <page stiffskew="1">
+        <img width="563" height="800" widthorg="419" heightorg="595" position="center middle" alpha="1" rotation="0" caption="" event="0" mask="" filetype="1" id="" ytparam="autoplay=0&amp;loop=0">
+          <action actionid="0" gui="" widthpop="400" heightpop="300" galxml="">
+            <wincontents>
+              <![CDATA[]]>
+            </wincontents>
+          </action>
+          <effmenter Param1="" Param2=""/>
+          <effenter value="" funname="" delay="0" loop="0" rollback="false" loopdelay="0" speed="0" stagger="0"/>
+          <effleave value="" funname="" delay="0" loop="0" rollback="false" loopdelay="0" speed="0" stagger="0"/>
+          <src lang="en">C:\Users\baghe\AppData\Local\Temp\flipbook_{00D19837-1D5C-4A87-B888-920128599ADF}\files\pages\en\high\I Live in the Dark — A5 Master -philipbook_56_{C6CD50C9-FA4E-438A-9DD2-04100C3361FF}_en.swf</src>
+        </img>
+      </page>
+      <page stiffskew="1">
+        <img width="563" height="800" widthorg="419" heightorg="595" position="center middle" alpha="1" rotation="0" caption="" event="0" mask="" filetype="1" id="" ytparam="autoplay=0&amp;loop=0">
+          <action actionid="0" gui="" widthpop="400" heightpop="300" galxml="">
+            <wincontents>
+              <![CDATA[]]>
+            </wincontents>
+          </action>
+          <effmenter Param1="" Param2=""/>
+          <effenter value="" funname="" delay="0" loop="0" rollback="false" loopdelay="0" speed="0" stagger="0"/>
+          <effleave value="" funname="" delay="0" loop="0" rollback="false" loopdelay="0" speed="0" stagger="0"/>
+          <src lang="en">C:\Users\baghe\AppData\Local\Temp\flipbook_{00D19837-1D5C-4A87-B888-920128599ADF}\files\pages\en\high\I Live in the Dark — A5 Master -philipbook_57_{C6CD50C9-FA4E-438A-9DD2-04100C3361FF}_en.swf</src>
+        </img>
+      </page>
+      <page stiffskew="1">
+        <img width="563" height="800" widthorg="419" heightorg="595" position="center middle" alpha="1" rotation="0" caption="" event="0" mask="" filetype="1" id="" ytparam="autoplay=0&amp;loop=0">
+          <action actionid="0" gui="" widthpop="400" heightpop="300" galxml="">
+            <wincontents>
+              <![CDATA[]]>
+            </wincontents>
+          </action>
+          <effmenter Param1="" Param2=""/>
+          <effenter value="" funname="" delay="0" loop="0" rollback="false" loopdelay="0" speed="0" stagger="0"/>
+          <effleave value="" funname="" delay="0" loop="0" rollback="false" loopdelay="0" speed="0" stagger="0"/>
+          <src lang="en">C:\Users\baghe\AppData\Local\Temp\flipbook_{00D19837-1D5C-4A87-B888-920128599ADF}\files\pages\en\high\I Live in the Dark — A5 Master -philipbook_58_{C6CD50C9-FA4E-438A-9DD2-04100C3361FF}_en.swf</src>
+        </img>
+      </page>
+      <page stiffskew="1">
+        <img width="563" height="800" widthorg="419" heightorg="595" position="center middle" alpha="1" rotation="0" caption="" event="0" mask="" filetype="1" id="" ytparam="autoplay=0&amp;loop=0">
+          <action actionid="0" gui="" widthpop="400" heightpop="300" galxml="">
+            <wincontents>
+              <![CDATA[]]>
+            </wincontents>
+          </action>
+          <effmenter Param1="" Param2=""/>
+          <effenter value="" funname="" delay="0" loop="0" rollback="false" loopdelay="0" speed="0" stagger="0"/>
+          <effleave value="" funname="" delay="0" loop="0" rollback="false" loopdelay="0" speed="0" stagger="0"/>
+          <src lang="en">C:\Users\baghe\AppData\Local\Temp\flipbook_{00D19837-1D5C-4A87-B888-920128599ADF}\files\pages\en\high\I Live in the Dark — A5 Master -philipbook_59_{C6CD50C9-FA4E-438A-9DD2-04100C3361FF}_en.swf</src>
+        </img>
+      </page>
+      <page stiffskew="1">
+        <img width="563" height="800" widthorg="419" heightorg="595" position="center middle" alpha="1" rotation="0" caption="" event="0" mask="" filetype="1" id="" ytparam="autoplay=0&amp;loop=0">
+          <action actionid="0" gui="" widthpop="400" heightpop="300" galxml="">
+            <wincontents>
+              <![CDATA[]]>
+            </wincontents>
+          </action>
+          <effmenter Param1="" Param2=""/>
+          <effenter value="" funname="" delay="0" loop="0" rollback="false" loopdelay="0" speed="0" stagger="0"/>
+          <effleave value="" funname="" delay="0" loop="0" rollback="false" loopdelay="0" speed="0" stagger="0"/>
+          <src lang="en">C:\Users\baghe\AppData\Local\Temp\flipbook_{00D19837-1D5C-4A87-B888-920128599ADF}\files\pages\en\high\I Live in the Dark — A5 Master -philipbook_60_{C6CD50C9-FA4E-438A-9DD2-04100C3361FF}_en.swf</src>
+        </img>
+      </page>
+      <page stiffskew="1">
+        <img width="563" height="800" widthorg="419" heightorg="595" position="center middle" alpha="1" rotation="0" caption="" event="0" mask="" filetype="1" id="" ytparam="autoplay=0&amp;loop=0">
+          <action actionid="0" gui="" widthpop="400" heightpop="300" galxml="">
+            <wincontents>
+              <![CDATA[]]>
+            </wincontents>
+          </action>
+          <effmenter Param1="" Param2=""/>
+          <effenter value="" funname="" delay="0" loop="0" rollback="false" loopdelay="0" speed="0" stagger="0"/>
+          <effleave value="" funname="" delay="0" loop="0" rollback="false" loopdelay="0" speed="0" stagger="0"/>
+          <src lang="en">C:\Users\baghe\AppData\Local\Temp\flipbook_{00D19837-1D5C-4A87-B888-920128599ADF}\files\pages\en\high\I Live in the Dark — A5 Master -philipbook_61_{C6CD50C9-FA4E-438A-9DD2-04100C3361FF}_en.swf</src>
+        </img>
+      </page>
+      <page stiffskew="1">
+        <img width="563" height="800" widthorg="419" heightorg="595" position="center middle" alpha="1" rotation="0" caption="" event="0" mask="" filetype="1" id="" ytparam="autoplay=0&amp;loop=0">
+          <action actionid="0" gui="" widthpop="400" heightpop="300" galxml="">
+            <wincontents>
+              <![CDATA[]]>
+            </wincontents>
+          </action>
+          <effmenter Param1="" Param2=""/>
+          <effenter value="" funname="" delay="0" loop="0" rollback="false" loopdelay="0" speed="0" stagger="0"/>
+          <effleave value="" funname="" delay="0" loop="0" rollback="false" loopdelay="0" speed="0" stagger="0"/>
+          <src lang="en">C:\Users\baghe\AppData\Local\Temp\flipbook_{00D19837-1D5C-4A87-B888-920128599ADF}\files\pages\en\high\I Live in the Dark — A5 Master -philipbook_62_{C6CD50C9-FA4E-438A-9DD2-04100C3361FF}_en.swf</src>
+        </img>
+      </page>
+      <page stiffskew="1">
+        <img width="563" height="800" widthorg="419" heightorg="595" position="center middle" alpha="1" rotation="0" caption="" event="0" mask="" filetype="1" id="" ytparam="autoplay=0&amp;loop=0">
+          <action actionid="0" gui="" widthpop="400" heightpop="300" galxml="">
+            <wincontents>
+              <![CDATA[]]>
+            </wincontents>
+          </action>
+          <effmenter Param1="" Param2=""/>
+          <effenter value="" funname="" delay="0" loop="0" rollback="false" loopdelay="0" speed="0" stagger="0"/>
+          <effleave value="" funname="" delay="0" loop="0" rollback="false" loopdelay="0" speed="0" stagger="0"/>
+          <src lang="en">C:\Users\baghe\AppData\Local\Temp\flipbook_{00D19837-1D5C-4A87-B888-920128599ADF}\files\pages\en\high\I Live in the Dark — A5 Master -philipbook_63_{C6CD50C9-FA4E-438A-9DD2-04100C3361FF}_en.swf</src>
+        </img>
+      </page>
+      <page stiffskew="1">
+        <img width="563" height="800" widthorg="419" heightorg="595" position="center middle" alpha="1" rotation="0" caption="" event="0" mask="" filetype="1" id="" ytparam="autoplay=0&amp;loop=0">
+          <action actionid="0" gui="" widthpop="400" heightpop="300" galxml="">
+            <wincontents>
+              <![CDATA[]]>
+            </wincontents>
+          </action>
+          <effmenter Param1="" Param2=""/>
+          <effenter value="" funname="" delay="0" loop="0" rollback="false" loopdelay="0" speed="0" stagger="0"/>
+          <effleave value="" funname="" delay="0" loop="0" rollback="false" loopdelay="0" speed="0" stagger="0"/>
+          <src lang="en">C:\Users\baghe\AppData\Local\Temp\flipbook_{00D19837-1D5C-4A87-B888-920128599ADF}\files\pages\en\high\I Live in the Dark — A5 Master -philipbook_64_{C6CD50C9-FA4E-438A-9DD2-04100C3361FF}_en.swf</src>
+        </img>
+      </page>
+      <page stiffskew="1">
+        <img width="563" height="800" widthorg="419" heightorg="595" position="center middle" alpha="1" rotation="0" caption="" event="0" mask="" filetype="1" id="" ytparam="autoplay=0&amp;loop=0">
+          <action actionid="0" gui="" widthpop="400" heightpop="300" galxml="">
+            <wincontents>
+              <![CDATA[]]>
+            </wincontents>
+          </action>
+          <effmenter Param1="" Param2=""/>
+          <effenter value="" funname="" delay="0" loop="0" rollback="false" loopdelay="0" speed="0" stagger="0"/>
+          <effleave value="" funname="" delay="0" loop="0" rollback="false" loopdelay="0" speed="0" stagger="0"/>
+          <src lang="en">C:\Users\baghe\AppData\Local\Temp\flipbook_{00D19837-1D5C-4A87-B888-920128599ADF}\files\pages\en\high\I Live in the Dark — A5 Master -philipbook_65_{C6CD50C9-FA4E-438A-9DD2-04100C3361FF}_en.swf</src>
+        </img>
+      </page>
+      <page stiffskew="1">
+        <img width="563" height="800" widthorg="419" heightorg="595" position="center middle" alpha="1" rotation="0" caption="" event="0" mask="" filetype="1" id="" ytparam="autoplay=0&amp;loop=0">
+          <action actionid="0" gui="" widthpop="400" heightpop="300" galxml="">
+            <wincontents>
+              <![CDATA[]]>
+            </wincontents>
+          </action>
+          <effmenter Param1="" Param2=""/>
+          <effenter value="" funname="" delay="0" loop="0" rollback="false" loopdelay="0" speed="0" stagger="0"/>
+          <effleave value="" funname="" delay="0" loop="0" rollback="false" loopdelay="0" speed="0" stagger="0"/>
+          <src lang="en">C:\Users\baghe\AppData\Local\Temp\flipbook_{00D19837-1D5C-4A87-B888-920128599ADF}\files\pages\en\high\I Live in the Dark — A5 Master -philipbook_66_{C6CD50C9-FA4E-438A-9DD2-04100C3361FF}_en.swf</src>
+        </img>
+      </page>
+      <page stiffskew="1">
+        <img width="563" height="800" widthorg="419" heightorg="595" position="center middle" alpha="1" rotation="0" caption="" event="0" mask="" filetype="1" id="" ytparam="autoplay=0&amp;loop=0">
+          <action actionid="0" gui="" widthpop="400" heightpop="300" galxml="">
+            <wincontents>
+              <![CDATA[]]>
+            </wincontents>
+          </action>
+          <effmenter Param1="" Param2=""/>
+          <effenter value="" funname="" delay="0" loop="0" rollback="false" loopdelay="0" speed="0" stagger="0"/>
+          <effleave value="" funname="" delay="0" loop="0" rollback="false" loopdelay="0" speed="0" stagger="0"/>
+          <src lang="en">C:\Users\baghe\AppData\Local\Temp\flipbook_{00D19837-1D5C-4A87-B888-920128599ADF}\files\pages\en\high\I Live in the Dark — A5 Master -philipbook_67_{C6CD50C9-FA4E-438A-9DD2-04100C3361FF}_en.swf</src>
+        </img>
+      </page>
+      <page stiffskew="1">
+        <img width="563" height="800" widthorg="419" heightorg="595" position="center middle" alpha="1" rotation="0" caption="" event="0" mask="" filetype="1" id="" ytparam="autoplay=0&amp;loop=0">
+          <action actionid="0" gui="" widthpop="400" heightpop="300" galxml="">
+            <wincontents>
+              <![CDATA[]]>
+            </wincontents>
+          </action>
+          <effmenter Param1="" Param2=""/>
+          <effenter value="" funname="" delay="0" loop="0" rollback="false" loopdelay="0" speed="0" stagger="0"/>
+          <effleave value="" funname="" delay="0" loop="0" rollback="false" loopdelay="0" speed="0" stagger="0"/>
+          <src lang="en">C:\Users\baghe\AppData\Local\Temp\flipbook_{00D19837-1D5C-4A87-B888-920128599ADF}\files\pages\en\high\I Live in the Dark — A5 Master -philipbook_68_{C6CD50C9-FA4E-438A-9DD2-04100C3361FF}_en.swf</src>
+        </img>
+      </page>
+      <page stiffskew="1">
+        <img width="563" height="800" widthorg="419" heightorg="595" position="center middle" alpha="1" rotation="0" caption="" event="0" mask="" filetype="1" id="" ytparam="autoplay=0&amp;loop=0">
+          <action actionid="0" gui="" widthpop="400" heightpop="300" galxml="">
+            <wincontents>
+              <![CDATA[]]>
+            </wincontents>
+          </action>
+          <effmenter Param1="" Param2=""/>
+          <effenter value="" funname="" delay="0" loop="0" rollback="false" loopdelay="0" speed="0" stagger="0"/>
+          <effleave value="" funname="" delay="0" loop="0" rollback="false" loopdelay="0" speed="0" stagger="0"/>
+          <src lang="en">C:\Users\baghe\AppData\Local\Temp\flipbook_{00D19837-1D5C-4A87-B888-920128599ADF}\files\pages\en\high\I Live in the Dark — A5 Master -philipbook_69_{C6CD50C9-FA4E-438A-9DD2-04100C3361FF}_en.swf</src>
+        </img>
+      </page>
+      <page stiffskew="1">
+        <img width="563" height="800" widthorg="419" heightorg="595" position="center middle" alpha="1" rotation="0" caption="" event="0" mask="" filetype="1" id="" ytparam="autoplay=0&amp;loop=0">
+          <action actionid="0" gui="" widthpop="400" heightpop="300" galxml="">
+            <wincontents>
+              <![CDATA[]]>
+            </wincontents>
+          </action>
+          <effmenter Param1="" Param2=""/>
+          <effenter value="" funname="" delay="0" loop="0" rollback="false" loopdelay="0" speed="0" stagger="0"/>
+          <effleave value="" funname="" delay="0" loop="0" rollback="false" loopdelay="0" speed="0" stagger="0"/>
+          <src lang="en">C:\Users\baghe\AppData\Local\Temp\flipbook_{00D19837-1D5C-4A87-B888-920128599ADF}\files\pages\en\high\I Live in the Dark — A5 Master -philipbook_70_{C6CD50C9-FA4E-438A-9DD2-04100C3361FF}_en.swf</src>
+        </img>
+      </page>
+      <page stiffskew="1">
+        <img width="563" height="800" widthorg="419" heightorg="595" position="center middle" alpha="1" rotation="0" caption="" event="0" mask="" filetype="1" id="" ytparam="autoplay=0&amp;loop=0">
+          <action actionid="0" gui="" widthpop="400" heightpop="300" galxml="">
+            <wincontents>
+              <![CDATA[]]>
+            </wincontents>
+          </action>
+          <effmenter Param1="" Param2=""/>
+          <effenter value="" funname="" delay="0" loop="0" rollback="false" loopdelay="0" speed="0" stagger="0"/>
+          <effleave value="" funname="" delay="0" loop="0" rollback="false" loopdelay="0" speed="0" stagger="0"/>
+          <src lang="en">C:\Users\baghe\AppData\Local\Temp\flipbook_{00D19837-1D5C-4A87-B888-920128599ADF}\files\pages\en\high\I Live in the Dark — A5 Master -philipbook_71_{C6CD50C9-FA4E-438A-9DD2-04100C3361FF}_en.swf</src>
+        </img>
+      </page>
+      <page stiffskew="1">
+        <img width="563" height="800" widthorg="419" heightorg="595" position="center middle" alpha="1" rotation="0" caption="" event="0" mask="" filetype="1" id="" ytparam="autoplay=0&amp;loop=0">
+          <action actionid="0" gui="" widthpop="400" heightpop="300" galxml="">
+            <wincontents>
+              <![CDATA[]]>
+            </wincontents>
+          </action>
+          <effmenter Param1="" Param2=""/>
+          <effenter value="" funname="" delay="0" loop="0" rollback="false" loopdelay="0" speed="0" stagger="0"/>
+          <effleave value="" funname="" delay="0" loop="0" rollback="false" loopdelay="0" speed="0" stagger="0"/>
+          <src lang="en">C:\Users\baghe\AppData\Local\Temp\flipbook_{00D19837-1D5C-4A87-B888-920128599ADF}\files\pages\en\high\I Live in the Dark — A5 Master -philipbook_72_{C6CD50C9-FA4E-438A-9DD2-04100C3361FF}_en.swf</src>
+        </img>
+      </page>
+      <page stiffskew="1">
+        <img width="563" height="800" widthorg="419" heightorg="595" position="center middle" alpha="1" rotation="0" caption="" event="0" mask="" filetype="1" id="" ytparam="autoplay=0&amp;loop=0">
+          <action actionid="0" gui="" widthpop="400" heightpop="300" galxml="">
+            <wincontents>
+              <![CDATA[]]>
+            </wincontents>
+          </action>
+          <effmenter Param1="" Param2=""/>
+          <effenter value="" funname="" delay="0" loop="0" rollback="false" loopdelay="0" speed="0" stagger="0"/>
+          <effleave value="" funname="" delay="0" loop="0" rollback="false" loopdelay="0" speed="0" stagger="0"/>
+          <src lang="en">C:\Users\baghe\AppData\Local\Temp\flipbook_{00D19837-1D5C-4A87-B888-920128599ADF}\files\pages\en\high\I Live in the Dark — A5 Master -philipbook_73_{C6CD50C9-FA4E-438A-9DD2-04100C3361FF}_en.swf</src>
+        </img>
+      </page>
+      <page stiffskew="1">
+        <img width="563" height="800" widthorg="419" heightorg="595" position="center middle" alpha="1" rotation="0" caption="" event="0" mask="" filetype="1" id="" ytparam="autoplay=0&amp;loop=0">
+          <action actionid="0" gui="" widthpop="400" heightpop="300" galxml="">
+            <wincontents>
+              <![CDATA[]]>
+            </wincontents>
+          </action>
+          <effmenter Param1="" Param2=""/>
+          <effenter value="" funname="" delay="0" loop="0" rollback="false" loopdelay="0" speed="0" stagger="0"/>
+          <effleave value="" funname="" delay="0" loop="0" rollback="false" loopdelay="0" speed="0" stagger="0"/>
+          <src lang="en">C:\Users\baghe\AppData\Local\Temp\flipbook_{00D19837-1D5C-4A87-B888-920128599ADF}\files\pages\en\high\I Live in the Dark — A5 Master -philipbook_74_{C6CD50C9-FA4E-438A-9DD2-04100C3361FF}_en.swf</src>
+        </img>
+      </page>
+    </chapter>
+    <chapter pagewidth="562" pageheight="800">
+      <page stiffskew="1">
+        <img width="563" height="800" widthorg="419" heightorg="595" position="center middle" alpha="1" rotation="0" caption="" event="0" mask="" filetype="1" id="" ytparam="autoplay=0&amp;loop=0">
+          <action actionid="0" gui="" widthpop="400" heightpop="300" galxml="">
+            <wincontents>
+              <![CDATA[]]>
+            </wincontents>
+          </action>
+          <effmenter Param1="" Param2=""/>
+          <effenter value="" funname="" delay="0" loop="0" rollback="false" loopdelay="0" speed="0" stagger="0"/>
+          <effleave value="" funname="" delay="0" loop="0" rollback="false" loopdelay="0" speed="0" stagger="0"/>
+          <src lang="en">C:\Users\baghe\AppData\Local\Temp\flipbook_{00D19837-1D5C-4A87-B888-920128599ADF}\files\pages\en\high\I Live in the Dark — A5 Master -philipbook_75_{C6CD50C9-FA4E-438A-9DD2-04100C3361FF}_en.swf</src>
+        </img>
+      </page>
+      <page stiffskew="1">
+        <img width="563" height="800" widthorg="419" heightorg="595" position="center middle" alpha="1" rotation="0" caption="" event="0" mask="" filetype="1" id="" ytparam="autoplay=0&amp;loop=0">
+          <action actionid="0" gui="" widthpop="400" heightpop="300" galxml="">
+            <wincontents>
+              <![CDATA[]]>
+            </wincontents>
+          </action>
+          <effmenter Param1="" Param2=""/>
+          <effenter value="" funname="" delay="0" loop="0" rollback="false" loopdelay="0" speed="0" stagger="0"/>
+          <effleave value="" funname="" delay="0" loop="0" rollback="false" loopdelay="0" speed="0" stagger="0"/>
+          <src lang="en">C:\Users\baghe\AppData\Local\Temp\flipbook_{00D19837-1D5C-4A87-B888-920128599ADF}\files\pages\en\high\I Live in the Dark — A5 Master -philipbook_76_{C6CD50C9-FA4E-438A-9DD2-04100C3361FF}_en.swf</src>
+        </img>
+      </page>
+    </chapter>
+  </book>
+  <MyFont Name="Verdana" Color="3355443" Size="12" Style="1" Text="I Live in the Dark — A5 Master -philipbook" Url=""/>
+  <Backgd UseBackImg="false" BackColor1="10066329" BackColor2="335544" ColorStyle="radial" ImagePath="" ImageStyle="Stretch" TransParent="10" AType="1"/>
+  <Logo Name="" Color="0" Size="0" Style="0" Text="" Url="" UseLogo="false" UseImage="false" ImagePath="" ImageTrans="0" BackColor="0" Width="100" Height="100" Target="_blank"/>
+  <FontObj Name="" Color="0" Size="0" Style="0"/>
+  <Bookmarks/>
+  <Playlist skin="" miniskin="" startmini="false" onlywhenactive="false" playmode="1" loopmode="1"/>
+  <BookCase/>
+</flipbookmaker>
