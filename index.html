@@ -852,17 +852,20 @@ startMorph();
   </script>
 
   <audio id="narration-audio" src="narration-aswesee-ok.mp3" preload="auto" loop></audio>
-  <script>
-  (function(){
-    const a = document.getElementById('narration-audio');
-    function playIt(){ a.play().catch(function(){}); }
-    a.play().catch(function(){
-      var evs = ['click','touchstart','keydown','scroll'];
-      function handler(){ playIt(); for(var i=0;i<evs.length;i++) document.removeEventListener(evs[i],handler); }
+<script>
+    (function(){
+      const a = document.getElementById('narration-audio');
+          var evs = ['click','touchstart','keydown'];
+          var unlocked = false;
+      function cleanup(){ for(var i=0;i<evs.length;i++) document.removeEventListener(evs[i], handler); }
+      function handler(){
+        if (unlocked) return;
+          a.play().then(function(){ unlocked = true; cleanup(); }).catch(function(){});
+      }
       for(var i=0;i<evs.length;i++) document.addEventListener(evs[i], handler, {passive:true});
-    });
-  })();
-  </script>
+      a.play().then(function(){ unlocked = true; cleanup(); }).catch(function(){});
+    })();
+</script>
 
   <!-- Email copy -->
   <script>
